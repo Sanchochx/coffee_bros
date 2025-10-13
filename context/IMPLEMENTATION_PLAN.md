@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 3
+- **Completed:** 5
 - **In Progress:** 0
-- **Remaining:** 69
-- **Progress:** 4.2%
+- **Remaining:** 67
+- **Progress:** 6.9%
 
 ---
 
@@ -40,12 +40,12 @@
   - Path: `context/user_stories/epic_01_foundation/US-003_basic_player_movement.md`
   - [Details](context/user_stories/epic_01_foundation/US-003_basic_player_movement.md)
 
-- [ ] **US-004** - Gravity System
+- [x] **US-004** - Gravity System
   - *Add gravity physics to player*
   - Path: `context/user_stories/epic_01_foundation/US-004_gravity_system.md`
   - [Details](context/user_stories/epic_01_foundation/US-004_gravity_system.md)
 
-- [ ] **US-005** - Jumping Mechanics
+- [x] **US-005** - Jumping Mechanics
   - *Implement jump controls and physics*
   - Path: `context/user_stories/epic_01_foundation/US-005_jumping_mechanics.md`
   - [Details](context/user_stories/epic_01_foundation/US-005_jumping_mechanics.md)
@@ -477,4 +477,4 @@ After completing each epic:
 **Project Start Date:** TBD
 **Target Completion Date:** TBD
 **Current Epic:** Epic 1 - Foundation
-**Current Story:** US-001 - Basic Game Window Setup
+**Current Story:** US-006 - Platform Creation

@@ -5,12 +5,12 @@
 **So that** I can navigate obstacles and platforms
 
 ## Acceptance Criteria
-- [ ] Pressing UP/W/SPACE makes player jump when on ground
-- [ ] Jump has initial upward velocity of -15 pixels/frame
-- [ ] Player can only jump when touching a platform (no double-jump)
-- [ ] Jump height varies based on how long button is held
-- [ ] Releasing jump button early results in lower jump
-- [ ] Jump feels responsive and natural
+- [x] Pressing UP/W/SPACE makes player jump when on ground
+- [x] Jump has initial upward velocity of -15 pixels/frame
+- [x] Player can only jump when touching a platform (no double-jump)
+- [x] Jump height varies based on how long button is held
+- [x] Releasing jump button early results in lower jump
+- [x] Jump feels responsive and natural
 
 ## Technical Notes
 - Track `is_grounded` state

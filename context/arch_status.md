@@ -3,7 +3,7 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 3 / 72
+**Completed User Stories:** 5 / 72
 **Current Phase:** Epic 1 - Foundation
 
 ---
@@ -33,6 +33,24 @@
   - Instant direction changes with no momentum
   - Smooth and responsive movement at 60 FPS
 
+- **US-004: Gravity System** ✓
+  - Gravity acceleration of 0.8 pixels/frame²
+  - Terminal velocity cap at 20 pixels/frame downward
+  - velocity_y variable for vertical velocity tracking
+  - Continuous gravity application during gameplay
+  - Smooth falling motion without jittering
+  - Player falls naturally when in air
+
+- **US-005: Jumping Mechanics** ✓
+  - Jump input detection (UP arrow, W key, SPACE bar)
+  - Initial jump velocity of -15 pixels/frame (upward)
+  - is_grounded state tracking to prevent double-jumping
+  - Variable jump height based on button hold duration
+  - Jump cutoff velocity of -3 pixels/frame for short hops
+  - Simple ground collision at y=500 (temporary until platforms)
+  - Responsive and natural jump feel
+  - Can only jump when touching ground
+
 ---
 
 ## File Structure
@@ -60,6 +78,10 @@ sancho_bros/
   - `WINDOW_WIDTH`, `WINDOW_HEIGHT`: Window dimensions (800x600)
   - `FPS`: Frame rate constant (60)
   - `PLAYER_SPEED`: Movement speed constant (5 pixels/frame)
+  - `GRAVITY`: Gravity acceleration constant (0.8 pixels/frame²)
+  - `TERMINAL_VELOCITY`: Maximum fall speed constant (20 pixels/frame)
+  - `JUMP_VELOCITY`: Initial jump velocity constant (-15 pixels/frame)
+  - `JUMP_CUTOFF_VELOCITY`: Variable jump cutoff constant (-3 pixels/frame)
   - `BLACK`, `YELLOW`: Color constants
   - `Player`: Sprite class for the player character
   - `main()`: Main game function containing initialization and game loop
@@ -70,18 +92,26 @@ sancho_bros/
   - Event handling (QUIT and ESC key)
   - Player sprite creation and rendering
   - Sprite group management (all_sprites)
-  - Sprite updates via all_sprites.update()
+  - Key state polling via pygame.key.get_pressed()
+  - Player updates with key states passed to update()
   - Screen rendering with sprite drawing
   - Clean shutdown with pygame.quit()
 - **Player Class:**
   - Extends pygame.sprite.Sprite
-  - Properties: width (40), height (60), image, rect
+  - Properties: width (40), height (60), image, rect, velocity_y, is_grounded
   - Positioned using x, y coordinates
   - Yellow colored rectangle placeholder
-  - **update() method:** Handles keyboard input and movement
-    - Detects LEFT/A and RIGHT/D key presses
+  - **update(keys_pressed) method:** Handles keyboard input, movement, gravity, and jumping
+    - Detects LEFT/A and RIGHT/D key presses for horizontal movement
     - Updates horizontal position based on PLAYER_SPEED
-    - Clamps position to screen boundaries
+    - Clamps horizontal position to screen boundaries
+    - Detects UP/W/SPACE key presses for jumping (only when grounded)
+    - Applies JUMP_VELOCITY when jump initiated
+    - Implements variable jump height by cutting velocity early
+    - Applies gravity acceleration to velocity_y each frame
+    - Caps velocity_y at TERMINAL_VELOCITY
+    - Updates vertical position based on velocity_y
+    - Checks ground collision at y=500 and sets is_grounded flag
 
 ---
 
@@ -106,24 +136,36 @@ sancho_bros/
 - Sprite groups (pygame.sprite.Group) for batch rendering
 - Player sprite uses Surface and Rect for positioning and rendering
 
+### Physics System
+- Gravity-based physics for vertical movement
+- Acceleration: 0.8 pixels/frame² provides natural falling feel
+- Terminal velocity: 20 pixels/frame prevents unrealistic speeds
+- Velocity-based position updates for smooth motion
+- Per-frame physics updates integrated with game loop
+
 ---
 
 ## Next Steps
 
-**Next User Story:** US-004 - Gravity System
-- Add gravity physics to player
-- Implement vertical velocity and acceleration
-- Make player fall when not on solid ground
+**Next User Story:** US-006 - Platform Creation
+- Create platform objects for the game world
+- Design Platform class with collision detection
+- Add multiple platforms at different positions
+- Enable player to stand on platforms
 
-**Dependencies:** US-001, US-002, and US-003 are complete
+**Dependencies:** US-001 through US-005 are complete
 
 ---
 
 ## Notes
 
 - Project is in initial foundation phase
-- US-001, US-002, and US-003 completed successfully
-- Player can now move left and right with keyboard controls
+- US-001 through US-005 completed successfully
+- Player can move left and right with keyboard controls
+- Gravity system implemented - player now falls naturally
+- Jumping mechanics fully functional with variable jump height
+- Physics feel natural with smooth acceleration and terminal velocity
 - Movement is smooth and responsive with proper boundary checking
-- Ready to implement gravity system for vertical movement
+- Ground collision temporarily set at y=500 until platforms are implemented
+- Ready to implement platform system
 - Pygame must be installed: `pip install pygame`

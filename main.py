@@ -18,6 +18,10 @@ YELLOW = (255, 209, 0)  # Colombian yellow for Sancho
 
 # Player constants
 PLAYER_SPEED = 5  # pixels per frame
+GRAVITY = 0.8  # pixels per frame² - acceleration due to gravity
+TERMINAL_VELOCITY = 20  # pixels per frame - maximum fall speed
+JUMP_VELOCITY = -15  # pixels per frame - initial upward velocity when jumping
+JUMP_CUTOFF_VELOCITY = -3  # velocity threshold for variable jump height
 
 
 class Player(pygame.sprite.Sprite):
@@ -46,27 +50,64 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-    def update(self):
-        """
-        Update player state based on keyboard input
-        Handles horizontal movement and screen boundaries
-        """
-        # Get currently pressed keys
-        keys = pygame.key.get_pressed()
+        # Velocity for gravity physics
+        self.velocity_y = 0  # vertical velocity in pixels per frame
 
+        # Ground state tracking
+        self.is_grounded = False  # True when player is standing on ground/platform
+
+    def update(self, keys_pressed):
+        """
+        Update player state based on keyboard input and gravity
+        Handles horizontal movement, gravity physics, jumping, and screen boundaries
+
+        Args:
+            keys_pressed (tuple): Result from pygame.key.get_pressed()
+        """
         # Handle left movement (LEFT arrow or A key)
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+        if keys_pressed[pygame.K_LEFT] or keys_pressed[pygame.K_a]:
             self.rect.x -= PLAYER_SPEED
 
         # Handle right movement (RIGHT arrow or D key)
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        if keys_pressed[pygame.K_RIGHT] or keys_pressed[pygame.K_d]:
             self.rect.x += PLAYER_SPEED
 
-        # Keep player within screen boundaries
+        # Keep player within screen boundaries (horizontal)
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.right > WINDOW_WIDTH:
             self.rect.right = WINDOW_WIDTH
+
+        # Handle jumping (UP arrow, W key, or SPACE)
+        if (keys_pressed[pygame.K_UP] or keys_pressed[pygame.K_w] or
+            keys_pressed[pygame.K_SPACE]) and self.is_grounded:
+            self.velocity_y = JUMP_VELOCITY
+            self.is_grounded = False
+
+        # Variable jump height: cut jump short if button released early
+        # Only reduce velocity if moving upward and above cutoff threshold
+        if (not keys_pressed[pygame.K_UP] and not keys_pressed[pygame.K_w] and
+            not keys_pressed[pygame.K_SPACE]):
+            if self.velocity_y < JUMP_CUTOFF_VELOCITY:
+                self.velocity_y = JUMP_CUTOFF_VELOCITY
+
+        # Apply gravity physics
+        self.velocity_y += GRAVITY  # Increase downward velocity
+
+        # Cap at terminal velocity
+        if self.velocity_y > TERMINAL_VELOCITY:
+            self.velocity_y = TERMINAL_VELOCITY
+
+        # Update vertical position
+        self.rect.y += self.velocity_y
+
+        # Simple ground collision (bottom of screen for now, until platforms exist)
+        # Ground level at y=500 (allowing for player height of 60 pixels)
+        ground_level = 500
+        if self.rect.bottom >= ground_level:
+            self.rect.bottom = ground_level
+            self.velocity_y = 0
+            self.is_grounded = True
 
 
 def main():
@@ -97,8 +138,11 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-        # Update all sprites
-        all_sprites.update()
+        # Get currently pressed keys for continuous input
+        keys = pygame.key.get_pressed()
+
+        # Update player with current key states
+        player.update(keys)
 
         # Fill screen with black background
         screen.fill(BLACK)

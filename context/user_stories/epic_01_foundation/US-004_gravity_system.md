@@ -5,11 +5,11 @@
 **So that** the game feels realistic
 
 ## Acceptance Criteria
-- [ ] Player falls downward when in air
-- [ ] Gravity acceleration is 0.8 pixels/frame²
-- [ ] Terminal velocity caps at 20 pixels/frame downward
-- [ ] Gravity applies continuously during gameplay
-- [ ] Player falls smoothly without jittering
+- [x] Player falls downward when in air
+- [x] Gravity acceleration is 0.8 pixels/frame²
+- [x] Terminal velocity caps at 20 pixels/frame downward
+- [x] Gravity applies continuously during gameplay
+- [x] Player falls smoothly without jittering
 
 ## Technical Notes
 - Implement velocity_y variable
