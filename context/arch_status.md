@@ -3,8 +3,8 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 7 / 72
-**Current Phase:** Epic 1 - Foundation
+**Completed User Stories:** 8 / 72
+**Current Phase:** Epic 1 - Foundation (Complete)
 
 ---
 
@@ -79,14 +79,33 @@
   - Precise collision with no gaps or overlapping
   - Ground state correctly tracked for jumping
 
+- **US-008: Project Structure Setup** ✓
+  - Proper modular code organization implemented
+  - `src/` directory contains all game modules
+  - `src/entities/` directory for game entity classes
+  - `config.py` contains all game constants (window, colors, physics)
+  - `main.py` serves as clean entry point with imports
+  - Each class in its own file (player.py, platform.py)
+  - `__init__.py` files in src/ and src/entities/ for proper package structure
+  - Consistent naming conventions (snake_case for modules, PascalCase for classes)
+  - Clean separation of concerns: configuration, entities, and game loop
+  - Uses absolute imports from config and src.entities
+
 ---
 
 ## File Structure
 
 ```
 sancho_bros/
-├── main.py                          # Main game entry point with pygame window and game loop
+├── main.py                          # Main game entry point - imports and runs game
+├── config.py                        # All game constants and configuration
 ├── CLAUDE.md                        # Project documentation for Claude Code
+├── src/                            # Source code package
+│   ├── __init__.py                 # Package initialization
+│   └── entities/                   # Game entity classes
+│       ├── __init__.py             # Entities package exports
+│       ├── player.py               # Player sprite class
+│       └── platform.py             # Platform sprite class
 └── context/                         # Project context and documentation
     ├── task_execution.md           # Task execution workflow
     ├── arch_status.md              # This file - architecture status tracking
@@ -100,31 +119,34 @@ sancho_bros/
 
 ## Files Created/Modified
 
-### main.py
-- **Purpose:** Main game entry point
+### config.py
+- **Purpose:** Central configuration file for all game constants
 - **Key Components:**
-  - `WINDOW_WIDTH`, `WINDOW_HEIGHT`: Window dimensions (800x600)
-  - `FPS`: Frame rate constant (60)
-  - `PLAYER_SPEED`: Movement speed constant (5 pixels/frame)
-  - `GRAVITY`: Gravity acceleration constant (0.8 pixels/frame²)
-  - `TERMINAL_VELOCITY`: Maximum fall speed constant (20 pixels/frame)
-  - `JUMP_VELOCITY`: Initial jump velocity constant (-15 pixels/frame)
-  - `JUMP_CUTOFF_VELOCITY`: Variable jump cutoff constant (-3 pixels/frame)
-  - `BLACK`, `YELLOW`, `GREEN`: Color constants
-  - `Player`: Sprite class for the player character
-  - `Platform`: Sprite class for platforms
+  - **Window Settings:** `WINDOW_WIDTH` (800), `WINDOW_HEIGHT` (600), `FPS` (60), `WINDOW_TITLE`
+  - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color)
+  - **Player Physics Constants:** `PLAYER_SPEED` (5), `GRAVITY` (0.8), `TERMINAL_VELOCITY` (20), `JUMP_VELOCITY` (-15), `JUMP_CUTOFF_VELOCITY` (-3)
+- **Design:** Single source of truth for all configuration values, imported by other modules
+
+### main.py
+- **Purpose:** Main game entry point - bootstraps and runs the game
+- **Key Components:**
+  - Imports from `config` and `src.entities`
   - `main()`: Main game function containing initialization and game loop
 - **Key Features:**
   - Pygame initialization
   - Display surface creation
   - FPS control with pygame.time.Clock()
   - Event handling (QUIT and ESC key)
-  - Player sprite creation and rendering
-  - Sprite group management (all_sprites)
+  - Player and platform creation
+  - Sprite group management (all_sprites, platforms)
   - Key state polling via pygame.key.get_pressed()
-  - Player updates with key states passed to update()
-  - Screen rendering with sprite drawing
+  - Game loop with update and render
   - Clean shutdown with pygame.quit()
+
+### src/entities/player.py
+- **Purpose:** Player character entity
+- **Key Components:**
+  - `Player`: Sprite class for the player character (Sancho)
 - **Player Class:**
   - Extends pygame.sprite.Sprite
   - Properties: width (40), height (60), image, rect, velocity_y, is_grounded
@@ -148,6 +170,11 @@ sancho_bros/
       - Checks vertical collision with all platforms
       - Landing on top: aligns player bottom with platform top, stops velocity, sets grounded
       - Hitting from below: aligns player top with platform bottom, stops upward velocity
+
+### src/entities/platform.py
+- **Purpose:** Platform entity for ground and floating platforms
+- **Key Components:**
+  - `Platform`: Sprite class for platforms
 - **Platform Class:**
   - Extends pygame.sprite.Sprite
   - Constructor takes x, y, width, height parameters
@@ -155,6 +182,13 @@ sancho_bros/
   - Positioned using x, y coordinates (top-left corner)
   - Static - no update method needed as platforms don't move
   - Used to create ground and floating platforms throughout the level
+
+### src/__init__.py & src/entities/__init__.py
+- **Purpose:** Package initialization files
+- **Features:**
+  - Marks directories as Python packages
+  - `src/entities/__init__.py` exports Player and Platform for easy importing
+  - Enables clean imports: `from src.entities import Player, Platform`
 
 ---
 
@@ -167,12 +201,15 @@ sancho_bros/
 - **Target FPS:** 60 (smooth gameplay)
 
 ### Code Organization
-- Single main.py file for now (will be modularized as project grows)
-- Constants defined at module level
-- Player class defined before main() function
-- Main game logic in main() function
-- Clean separation of initialization, game loop, and shutdown
-- Sprite groups used for organized rendering
+- **Modular structure** with proper package hierarchy (US-008)
+- `config.py` - single source of truth for all configuration constants
+- `src/entities/` - dedicated package for game entity classes
+- Each class in its own file for maintainability
+- Main game logic in main.py imports from modules
+- Clean separation of concerns: config, entities, game loop
+- `__init__.py` files enable clean package imports
+- Consistent naming conventions: snake_case for modules, PascalCase for classes
+- Absolute imports used throughout for clarity
 
 ### Sprite System
 - Using pygame.sprite.Sprite as base class for game objects
@@ -190,19 +227,21 @@ sancho_bros/
 
 ## Next Steps
 
-**Next User Story:** US-008 - Project Structure Setup
-- Organize code into proper modules and directories
-- Separate concerns: entities, game logic, constants, utilities
-- Create organized file structure for scalability
+**Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
 
-**Dependencies:** US-001 through US-007 are complete
+**Next Epic:** Epic 2 - Enemies and Combat
+**Next User Story:** US-009 - Enemy Creation (Polocho)
+- Create Polocho enemy sprites with basic properties
+- Path: `context/user_stories/epic_02_enemies_combat/US-009_enemy_creation.md`
+
+**Dependencies:** Epic 1 (Foundation) is complete
 
 ---
 
 ## Notes
 
-- Project is in initial foundation phase
-- US-001 through US-007 completed successfully
+- **Epic 1 (Foundation) completed successfully** - all 8 user stories done!
+- Project now has proper modular structure (US-008)
 - Player can move left and right with keyboard controls
 - Gravity system implemented - player falls naturally
 - Jumping mechanics fully functional with variable jump height
@@ -215,5 +254,10 @@ sancho_bros/
   - Cannot pass through platforms from any direction
   - Precise AABB collision with separate axis checking
   - Ground state properly tracked for jumping mechanics
-- Ready to refactor code into proper project structure (US-008)
+- **Code is well-organized:**
+  - Modular structure with src/ package
+  - Configuration separated into config.py
+  - Each entity in its own file
+  - Clean imports and package structure
+- Ready to begin Epic 2 (Enemies and Combat)
 - Pygame must be installed: `pip install pygame`

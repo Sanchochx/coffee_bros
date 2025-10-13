@@ -4,7 +4,9 @@
       "Bash(python:*)",
       "Bash(python3:*)",
       "Bash(where python py python3)",
-      "Bash(py main.py)"
+      "Bash(py main.py)",
+      "Bash(py:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

@@ -5,12 +5,12 @@
 **So that** the codebase is maintainable
 
 ## Acceptance Criteria
-- [ ] `src/` directory contains all game modules
-- [ ] `config.py` contains all game constants
-- [ ] `main.py` serves as entry point
-- [ ] Each class is in its own file
-- [ ] `__init__.py` files exist in appropriate directories
-- [ ] Code follows consistent naming conventions
+- [x] `src/` directory contains all game modules
+- [x] `config.py` contains all game constants
+- [x] `main.py` serves as entry point
+- [x] Each class is in its own file
+- [x] `__init__.py` files exist in appropriate directories
+- [x] Code follows consistent naming conventions
 
 ## Technical Notes
 - Follow project structure from implementation plan
