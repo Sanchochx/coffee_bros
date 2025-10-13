@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 0
+- **Completed:** 1
 - **In Progress:** 0
-- **Remaining:** 72
-- **Progress:** 0%
+- **Remaining:** 71
+- **Progress:** 1.4%
 
 ---
 
@@ -25,7 +25,7 @@
 ### Epic 1: Foundation (8 stories)
 **Priority:** MUST HAVE - Critical for basic gameplay
 
-- [ ] **US-001** - Basic Game Window Setup
+- [x] **US-001** - Basic Game Window Setup
   - *Set up pygame window, main loop, and FPS control*
   - Path: `context/user_stories/epic_01_foundation/US-001_basic_game_window_setup.md`
   - [Details](context/user_stories/epic_01_foundation/US-001_basic_game_window_setup.md)

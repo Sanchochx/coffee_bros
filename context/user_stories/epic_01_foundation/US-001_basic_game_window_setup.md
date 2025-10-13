@@ -5,12 +5,12 @@
 **So that** I have a foundation to build the game upon
 
 ## Acceptance Criteria
-- [ ] Pygame is installed and imported successfully
-- [ ] Game window opens at 800x600 resolution
-- [ ] Window title displays "Sancho Bros"
-- [ ] Game loop runs at consistent 60 FPS
-- [ ] Window can be closed using the X button or ESC key
-- [ ] Black background is displayed initially
+- [x] Pygame is installed and imported successfully
+- [x] Game window opens at 800x600 resolution
+- [x] Window title displays "Sancho Bros"
+- [x] Game loop runs at consistent 60 FPS
+- [x] Window can be closed using the X button or ESC key
+- [x] Black background is displayed initially
 
 ## Technical Notes
 - Use `pygame.init()` and `pygame.display.set_mode()`
