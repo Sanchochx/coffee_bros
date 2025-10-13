@@ -5,7 +5,7 @@ A 2D platformer game inspired by Super Mario Bros with Colombian cultural themes
 
 import pygame
 import sys
-from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK
+from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE
 from src.entities import Player, Platform, Polocho
 
 
@@ -20,6 +20,10 @@ def main():
 
     # Create clock for FPS control
     clock = pygame.time.Clock()
+
+    # Initialize game state
+    score = 0
+    font = pygame.font.Font(None, 36)  # Default font, size 36
 
     # Create player at initial spawn position
     player = Player(100, 400)
@@ -88,11 +92,27 @@ def main():
         for enemy in enemies:
             enemy.update(platforms)
 
+        # Check for player stomping enemies
+        for enemy in enemies:
+            if player.rect.colliderect(enemy.rect):
+                # Check if player is falling and hitting enemy from above
+                if player.velocity_y > 0 and player.rect.bottom < enemy.rect.centery:
+                    # Player stomped the enemy!
+                    if not enemy.is_squashed:  # Only count score once per enemy
+                        enemy.squash()  # Mark as squashed (will disappear after animation)
+                        player.velocity_y = -8  # Small upward bounce after stomp
+                        score += STOMP_SCORE  # Increase score
+                        # TODO (US-042): Play stomp sound effect (audio system in Epic 7)
+
         # Fill screen with black background
         screen.fill(BLACK)
 
         # Draw all sprites
         all_sprites.draw(screen)
+
+        # Draw score (simple text display for now, will be improved in Epic 5)
+        score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White text
+        screen.blit(score_text, (10, 10))  # Top-left corner
 
         # Update display
         pygame.display.flip()

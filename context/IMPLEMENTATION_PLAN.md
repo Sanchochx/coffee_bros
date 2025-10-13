@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 10
+- **Completed:** 11
 - **In Progress:** 0
-- **Remaining:** 62
-- **Progress:** 13.9%
+- **Remaining:** 61
+- **Progress:** 15.3%
 
 ---
 
@@ -80,7 +80,7 @@
   - Path: `context/user_stories/epic_02_enemies_combat/US-010_enemy_patrol_movement.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-010_enemy_patrol_movement.md)
 
-- [ ] **US-011** - Enemy Stomp Mechanic
+- [x] **US-011** - Enemy Stomp Mechanic
   - *Allow player to defeat enemies by jumping on them*
   - Path: `context/user_stories/epic_02_enemies_combat/US-011_enemy_stomp_mechanic.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-011_enemy_stomp_mechanic.md)
@@ -477,6 +477,6 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 2 - Enemies and Combat
-**Current Story:** US-011 - Enemy Stomp Mechanic
-**Last Completed Story:** US-010 - Enemy Patrol Movement
+**Current Story:** US-012 - Enemy Collision Damage
+**Last Completed Story:** US-011 - Enemy Stomp Mechanic
 **Last Completed Epic:** Epic 1 - Foundation (100% complete)

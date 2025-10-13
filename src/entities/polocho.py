@@ -38,6 +38,23 @@ class Polocho(pygame.sprite.Sprite):
         self.direction = 1  # 1 for right, -1 for left
         self.speed = ENEMY_SPEED
 
+        # Squashed state for stomp mechanic
+        self.is_squashed = False
+        self.squash_timer = 0  # Frames remaining in squashed state
+
+    def squash(self):
+        """Mark enemy as squashed and start squash timer."""
+        if not self.is_squashed:
+            self.is_squashed = True
+            self.squash_timer = 15  # Show squashed state for 15 frames (~0.25 seconds)
+            # Change appearance to show squashed state (flattened)
+            self.image = pygame.Surface((self.width, self.height // 3))  # Flatten to 1/3 height
+            self.image.fill(RED)
+            old_bottom = self.rect.bottom
+            self.rect = self.image.get_rect()
+            self.rect.bottom = old_bottom  # Keep bottom position same
+            self.rect.centerx = self.rect.centerx  # Keep horizontal center
+
     def update(self, platforms):
         """
         Update enemy physics, patrol movement, and collision.
@@ -45,6 +62,13 @@ class Polocho(pygame.sprite.Sprite):
         Args:
             platforms: Sprite group containing platform objects
         """
+        # If squashed, count down timer and kill when done
+        if self.is_squashed:
+            self.squash_timer -= 1
+            if self.squash_timer <= 0:
+                self.kill()  # Remove from all sprite groups
+            return  # Don't process any other movement when squashed
+
         # Horizontal patrol movement
         self.rect.x += self.speed * self.direction
 

@@ -24,3 +24,6 @@ JUMP_CUTOFF_VELOCITY = -3  # velocity threshold for variable jump height
 
 # Enemy constants
 ENEMY_SPEED = 2  # pixels per frame - patrol speed for enemies
+
+# Score constants
+STOMP_SCORE = 100  # Points awarded for stomping an enemy

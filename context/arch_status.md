@@ -3,7 +3,7 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 10 / 72
+**Completed User Stories:** 11 / 72
 **Current Phase:** Epic 2 - Enemies and Combat (In Progress)
 
 ---
@@ -11,6 +11,21 @@
 ## Implemented Features
 
 ### Epic 2: Enemies and Combat
+- **US-011: Enemy Stomp Mechanic** ✓
+  - Collision detection for player jumping on enemies from above
+  - Player must be falling (velocity_y > 0) to stomp
+  - Check if player's bottom hits enemy's top half (below enemy's centery)
+  - Enemy enters "squashed" state before disappearing
+  - Squashed state displays flattened appearance (1/3 original height)
+  - Squashed animation lasts 15 frames (~0.25 seconds at 60 FPS)
+  - Enemy removed from game after squash animation completes
+  - Player bounces upward after stomping (velocity_y = -8)
+  - Score tracking system implemented
+  - Score increases by 100 points (STOMP_SCORE) per enemy defeated
+  - Score displayed in top-left corner as white text
+  - Placeholder added for stomp sound effect (audio in Epic 7)
+  - Enemy cannot damage player during stomp (prevents double collision)
+
 - **US-010: Enemy Patrol Movement** ✓
   - Automatic left/right patrol movement at 2 pixels/frame
   - Configurable patrol boundaries (patrol_start and patrol_end)
@@ -153,6 +168,7 @@ sancho_bros/
   - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color), `RED` (Polocho enemy color)
   - **Player Physics Constants:** `PLAYER_SPEED` (5), `GRAVITY` (0.8), `TERMINAL_VELOCITY` (20), `JUMP_VELOCITY` (-15), `JUMP_CUTOFF_VELOCITY` (-3)
   - **Enemy Constants:** `ENEMY_SPEED` (2) - patrol movement speed for enemies
+  - **Score Constants:** `STOMP_SCORE` (100) - points awarded for stomping an enemy
 - **Design:** Single source of truth for all configuration values, imported by other modules
 
 ### main.py
@@ -169,6 +185,18 @@ sancho_bros/
   - Enemy creation (three Polocho enemies at different positions)
   - Sprite group management (all_sprites, platforms, enemies)
   - Key state polling via pygame.key.get_pressed()
+  - **Score tracking system (US-011):**
+    - Score variable initialized to 0
+    - Font initialized for rendering score text
+    - Score displayed at top-left corner in white text
+  - **Enemy stomp collision detection (US-011):**
+    - Checks collision between player and enemies
+    - Validates player is falling (velocity_y > 0)
+    - Validates player hits enemy from above (player.rect.bottom < enemy.rect.centery)
+    - Calls enemy.squash() to trigger squash animation
+    - Applies upward bounce to player (velocity_y = -8)
+    - Increases score by STOMP_SCORE
+    - Prevents double-counting with is_squashed check
   - Game loop with update and render for player and enemies
   - Clean shutdown with pygame.quit()
 
@@ -218,12 +246,24 @@ sancho_bros/
   - `Polocho`: Sprite class for enemy characters
 - **Polocho Class:**
   - Extends pygame.sprite.Sprite
-  - Properties: width (40), height (40), image, rect, velocity_y, is_grounded, patrol_start, patrol_end, direction, speed
+  - Properties: width (40), height (40), image, rect, velocity_y, is_grounded, patrol_start, patrol_end, direction, speed, is_squashed, squash_timer
   - Constructor takes x, y position parameters and optional patrol_distance (default 150)
   - Red colored rectangle (#DC143C) using RED constant
   - Patrol boundaries calculated as x ± patrol_distance
   - Direction: 1 for right, -1 for left
+  - **Squashed state properties (US-011):**
+    - is_squashed: Boolean flag indicating if enemy has been stomped
+    - squash_timer: Frame counter for squashed animation duration
+  - **squash() method (US-011):** Marks enemy as squashed and starts animation
+    - Sets is_squashed flag to True
+    - Sets squash_timer to 15 frames (~0.25 seconds)
+    - Changes appearance to flattened rectangle (1/3 original height)
+    - Maintains bottom position and horizontal center
   - **update(platforms) method:** Handles enemy patrol movement, physics, and collision
+    - **Squash animation handling (US-011):**
+      - If squashed, decrements squash_timer each frame
+      - Calls self.kill() when timer reaches 0 (removes from sprite groups)
+      - Returns early to prevent movement when squashed
     - **Horizontal patrol movement:**
       - Moves automatically at ENEMY_SPEED * direction pixels/frame
       - Reverses direction when reaching patrol_start or patrol_end boundaries
@@ -286,21 +326,21 @@ sancho_bros/
 ## Next Steps
 
 **Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
-**Epic 2 In Progress!** US-009 (Enemy Creation) and US-010 (Enemy Patrol Movement) complete.
+**Epic 2 In Progress!** US-009, US-010, and US-011 complete!
 
 **Current Epic:** Epic 2 - Enemies and Combat
-**Next User Story:** US-011 - Enemy Stomp Mechanic
-- Implement player ability to defeat enemies by jumping on them
-- Path: `context/user_stories/epic_02_enemies_combat/US-011_enemy_stomp_mechanic.md`
+**Next User Story:** US-012 - Enemy Collision Damage
+- Implement damage when player touches enemy sides
+- Path: `context/user_stories/epic_02_enemies_combat/US-012_enemy_collision_damage.md`
 
-**Dependencies:** US-009 (Enemy Creation) and US-010 (Enemy Patrol Movement) are complete
+**Dependencies:** US-009 (Enemy Creation), US-010 (Enemy Patrol Movement), and US-011 (Enemy Stomp Mechanic) are complete
 
 ---
 
 ## Notes
 
 - **Epic 1 (Foundation) completed successfully** - all 8 user stories done!
-- **Epic 2 (Enemies and Combat) in progress** - US-009 and US-010 complete!
+- **Epic 2 (Enemies and Combat) in progress** - US-009, US-010, and US-011 complete!
 - Project now has proper modular structure (US-008)
 - Player can move left and right with keyboard controls
 - Gravity system implemented - player falls naturally
@@ -309,7 +349,7 @@ sancho_bros/
 - Movement is smooth and responsive with proper boundary checking
 - Platform system created with ground and floating platforms
 - Platforms are visually distinct with green color
-- **Enemy system implemented (US-009, US-010):**
+- **Enemy system implemented (US-009, US-010, US-011):**
   - Polocho enemy class created
   - Enemies are 40x40 pixel red rectangles (distinct from 40x60 yellow player)
   - Three enemies spawn at different positions
@@ -321,6 +361,13 @@ sancho_bros/
     - Smart edge detection prevents falling off platforms
     - Wall collision detection causes direction reversal
     - Consistent movement speed throughout patrol
+  - **Stomp mechanic fully functional (US-011):**
+    - Player can defeat enemies by jumping on them from above
+    - Enemies display squashed state for 15 frames before disappearing
+    - Player bounces upward after successful stomp
+    - Score tracking system displays current score
+    - 100 points awarded per enemy defeated
+    - Placeholder added for stomp sound effect (audio in Epic 7)
 - **Platform collision detection is fully functional:**
   - Player lands on and walks along platforms
   - Enemies also respond to platform collisions
@@ -332,5 +379,5 @@ sancho_bros/
   - Configuration separated into config.py
   - Each entity in its own file
   - Clean imports and package structure
-- Ready to continue Epic 2 with US-011 (Enemy Stomp Mechanic)
+- Ready to continue Epic 2 with US-012 (Enemy Collision Damage)
 - Pygame must be installed: `pip install pygame`
