@@ -5,11 +5,11 @@
 **So that** I have surfaces to walk and jump on
 
 ## Acceptance Criteria
-- [ ] Ground platform exists at bottom of screen
-- [ ] Multiple floating platforms can be placed
-- [ ] Platforms have defined position and size
-- [ ] Platforms are visually distinct from background
-- [ ] Platforms remain static (don't move)
+- [x] Ground platform exists at bottom of screen
+- [x] Multiple floating platforms can be placed
+- [x] Platforms have defined position and size
+- [x] Platforms are visually distinct from background
+- [x] Platforms remain static (don't move)
 
 ## Technical Notes
 - Create Platform class

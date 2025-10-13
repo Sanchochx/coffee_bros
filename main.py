@@ -15,6 +15,7 @@ WINDOW_TITLE = "Sancho Bros"
 # Color constants
 BLACK = (0, 0, 0)
 YELLOW = (255, 209, 0)  # Colombian yellow for Sancho
+GREEN = (34, 139, 34)  # Forest green for platforms
 
 # Player constants
 PLAYER_SPEED = 5  # pixels per frame
@@ -110,6 +111,31 @@ class Player(pygame.sprite.Sprite):
             self.is_grounded = True
 
 
+class Platform(pygame.sprite.Sprite):
+    """Platform class for ground and floating platforms"""
+
+    def __init__(self, x, y, width, height):
+        """
+        Initialize a platform
+
+        Args:
+            x (int): Platform x position (left edge)
+            y (int): Platform y position (top edge)
+            width (int): Platform width in pixels
+            height (int): Platform height in pixels
+        """
+        super().__init__()
+
+        # Create platform surface
+        self.image = pygame.Surface((width, height))
+        self.image.fill(GREEN)
+
+        # Get rect for positioning
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
 def main():
     """Main game function"""
     # Initialize pygame
@@ -126,6 +152,31 @@ def main():
     player = Player(100, 400)
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player)
+
+    # Create platforms
+    platforms = pygame.sprite.Group()
+
+    # Ground platform (full width at bottom of screen)
+    ground = Platform(0, 550, WINDOW_WIDTH, 50)
+    platforms.add(ground)
+    all_sprites.add(ground)
+
+    # Floating platforms at various positions
+    platform1 = Platform(200, 450, 150, 20)
+    platforms.add(platform1)
+    all_sprites.add(platform1)
+
+    platform2 = Platform(400, 350, 120, 20)
+    platforms.add(platform2)
+    all_sprites.add(platform2)
+
+    platform3 = Platform(550, 250, 180, 20)
+    platforms.add(platform3)
+    all_sprites.add(platform3)
+
+    platform4 = Platform(100, 200, 100, 20)
+    platforms.add(platform4)
+    all_sprites.add(platform4)
 
     # Game loop
     running = True
