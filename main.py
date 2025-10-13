@@ -57,14 +57,16 @@ class Player(pygame.sprite.Sprite):
         # Ground state tracking
         self.is_grounded = False  # True when player is standing on ground/platform
 
-    def update(self, keys_pressed):
+    def update(self, keys_pressed, platforms):
         """
-        Update player state based on keyboard input and gravity
-        Handles horizontal movement, gravity physics, jumping, and screen boundaries
+        Update player state based on keyboard input, gravity, and collision
+        Handles horizontal movement, gravity physics, jumping, platform collision, and screen boundaries
 
         Args:
             keys_pressed (tuple): Result from pygame.key.get_pressed()
+            platforms (pygame.sprite.Group): Group of platform sprites for collision detection
         """
+        # Handle horizontal movement
         # Handle left movement (LEFT arrow or A key)
         if keys_pressed[pygame.K_LEFT] or keys_pressed[pygame.K_a]:
             self.rect.x -= PLAYER_SPEED
@@ -78,6 +80,16 @@ class Player(pygame.sprite.Sprite):
             self.rect.left = 0
         if self.rect.right > WINDOW_WIDTH:
             self.rect.right = WINDOW_WIDTH
+
+        # Check for horizontal collision with platforms (side collision)
+        for platform in platforms:
+            if self.rect.colliderect(platform.rect):
+                # Moving right - hit left side of platform
+                if self.rect.right > platform.rect.left and self.rect.centerx < platform.rect.centerx:
+                    self.rect.right = platform.rect.left
+                # Moving left - hit right side of platform
+                elif self.rect.left < platform.rect.right and self.rect.centerx > platform.rect.centerx:
+                    self.rect.left = platform.rect.right
 
         # Handle jumping (UP arrow, W key, or SPACE)
         if (keys_pressed[pygame.K_UP] or keys_pressed[pygame.K_w] or
@@ -102,13 +114,21 @@ class Player(pygame.sprite.Sprite):
         # Update vertical position
         self.rect.y += self.velocity_y
 
-        # Simple ground collision (bottom of screen for now, until platforms exist)
-        # Ground level at y=500 (allowing for player height of 60 pixels)
-        ground_level = 500
-        if self.rect.bottom >= ground_level:
-            self.rect.bottom = ground_level
-            self.velocity_y = 0
-            self.is_grounded = True
+        # Assume player is not grounded initially (will be set to True if standing on platform)
+        self.is_grounded = False
+
+        # Check for vertical collision with platforms
+        for platform in platforms:
+            if self.rect.colliderect(platform.rect):
+                # Falling down - landing on top of platform
+                if self.velocity_y > 0:
+                    self.rect.bottom = platform.rect.top
+                    self.velocity_y = 0
+                    self.is_grounded = True
+                # Moving upward - hitting platform from below
+                elif self.velocity_y < 0:
+                    self.rect.top = platform.rect.bottom
+                    self.velocity_y = 0
 
 
 class Platform(pygame.sprite.Sprite):
@@ -192,8 +212,8 @@ def main():
         # Get currently pressed keys for continuous input
         keys = pygame.key.get_pressed()
 
-        # Update player with current key states
-        player.update(keys)
+        # Update player with current key states and platform collision
+        player.update(keys, platforms)
 
         # Fill screen with black background
         screen.fill(BLACK)
