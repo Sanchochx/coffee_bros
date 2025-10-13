@@ -3,7 +3,7 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 2 / 72
+**Completed User Stories:** 3 / 72
 **Current Phase:** Epic 1 - Foundation
 
 ---
@@ -24,6 +24,14 @@
   - Initial spawn position at (x=100, y=400)
   - Sprite rendering using pygame sprite groups
   - Colombian yellow color (#FFD100) for visibility
+
+- **US-003: Basic Player Movement** ✓
+  - Horizontal movement controls (LEFT/A and RIGHT/D keys)
+  - Movement speed of 5 pixels per frame
+  - Continuous input handling using pygame.key.get_pressed()
+  - Screen boundary collision detection (prevents off-screen movement)
+  - Instant direction changes with no momentum
+  - Smooth and responsive movement at 60 FPS
 
 ---
 
@@ -51,6 +59,7 @@ sancho_bros/
 - **Key Components:**
   - `WINDOW_WIDTH`, `WINDOW_HEIGHT`: Window dimensions (800x600)
   - `FPS`: Frame rate constant (60)
+  - `PLAYER_SPEED`: Movement speed constant (5 pixels/frame)
   - `BLACK`, `YELLOW`: Color constants
   - `Player`: Sprite class for the player character
   - `main()`: Main game function containing initialization and game loop
@@ -61,6 +70,7 @@ sancho_bros/
   - Event handling (QUIT and ESC key)
   - Player sprite creation and rendering
   - Sprite group management (all_sprites)
+  - Sprite updates via all_sprites.update()
   - Screen rendering with sprite drawing
   - Clean shutdown with pygame.quit()
 - **Player Class:**
@@ -68,6 +78,10 @@ sancho_bros/
   - Properties: width (40), height (60), image, rect
   - Positioned using x, y coordinates
   - Yellow colored rectangle placeholder
+  - **update() method:** Handles keyboard input and movement
+    - Detects LEFT/A and RIGHT/D key presses
+    - Updates horizontal position based on PLAYER_SPEED
+    - Clamps position to screen boundaries
 
 ---
 
@@ -96,19 +110,20 @@ sancho_bros/
 
 ## Next Steps
 
-**Next User Story:** US-003 - Basic Player Movement
-- Implement left/right movement controls
-- Add keyboard input detection
-- Update player position based on input
+**Next User Story:** US-004 - Gravity System
+- Add gravity physics to player
+- Implement vertical velocity and acceleration
+- Make player fall when not on solid ground
 
-**Dependencies:** US-001 and US-002 are complete
+**Dependencies:** US-001, US-002, and US-003 are complete
 
 ---
 
 ## Notes
 
 - Project is in initial foundation phase
-- US-001 and US-002 completed successfully
-- Player sprite now visible on screen at starting position
-- Ready to implement player movement mechanics
+- US-001, US-002, and US-003 completed successfully
+- Player can now move left and right with keyboard controls
+- Movement is smooth and responsive with proper boundary checking
+- Ready to implement gravity system for vertical movement
 - Pygame must be installed: `pip install pygame`

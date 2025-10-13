@@ -16,6 +16,9 @@ WINDOW_TITLE = "Sancho Bros"
 BLACK = (0, 0, 0)
 YELLOW = (255, 209, 0)  # Colombian yellow for Sancho
 
+# Player constants
+PLAYER_SPEED = 5  # pixels per frame
+
 
 class Player(pygame.sprite.Sprite):
     """Player character class for Sancho"""
@@ -42,6 +45,28 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+    def update(self):
+        """
+        Update player state based on keyboard input
+        Handles horizontal movement and screen boundaries
+        """
+        # Get currently pressed keys
+        keys = pygame.key.get_pressed()
+
+        # Handle left movement (LEFT arrow or A key)
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            self.rect.x -= PLAYER_SPEED
+
+        # Handle right movement (RIGHT arrow or D key)
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            self.rect.x += PLAYER_SPEED
+
+        # Keep player within screen boundaries
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > WINDOW_WIDTH:
+            self.rect.right = WINDOW_WIDTH
 
 
 def main():
@@ -71,6 +96,9 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+
+        # Update all sprites
+        all_sprites.update()
 
         # Fill screen with black background
         screen.fill(BLACK)
