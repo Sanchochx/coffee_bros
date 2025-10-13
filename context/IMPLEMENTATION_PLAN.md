@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 11
+- **Completed:** 12
 - **In Progress:** 0
-- **Remaining:** 61
-- **Progress:** 15.3%
+- **Remaining:** 60
+- **Progress:** 16.7%
 
 ---
 
@@ -85,7 +85,7 @@
   - Path: `context/user_stories/epic_02_enemies_combat/US-011_enemy_stomp_mechanic.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-011_enemy_stomp_mechanic.md)
 
-- [ ] **US-012** - Enemy Collision Damage
+- [x] **US-012** - Enemy Collision Damage
   - *Implement damage when player touches enemy sides*
   - Path: `context/user_stories/epic_02_enemies_combat/US-012_enemy_collision_damage.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-012_enemy_collision_damage.md)
@@ -477,6 +477,6 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 2 - Enemies and Combat
-**Current Story:** US-012 - Enemy Collision Damage
-**Last Completed Story:** US-011 - Enemy Stomp Mechanic
+**Current Story:** US-013 - Lives System
+**Last Completed Story:** US-012 - Enemy Collision Damage
 **Last Completed Epic:** Epic 1 - Foundation (100% complete)

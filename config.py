@@ -21,6 +21,11 @@ GRAVITY = 0.8  # pixels per frame² - acceleration due to gravity
 TERMINAL_VELOCITY = 20  # pixels per frame - maximum fall speed
 JUMP_VELOCITY = -15  # pixels per frame - initial upward velocity when jumping
 JUMP_CUTOFF_VELOCITY = -3  # velocity threshold for variable jump height
+PLAYER_STARTING_LIVES = 3  # number of lives player starts with
+INVULNERABILITY_DURATION = 60  # frames (1 second at 60 FPS)
+BLINK_INTERVAL = 5  # frames between blinks during invulnerability
+KNOCKBACK_DISTANCE = 30  # pixels player is pushed when hit
+KNOCKBACK_BOUNCE = -5  # upward velocity when hit
 
 # Enemy constants
 ENEMY_SPEED = 2  # pixels per frame - patrol speed for enemies

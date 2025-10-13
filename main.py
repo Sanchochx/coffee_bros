@@ -92,10 +92,10 @@ def main():
         for enemy in enemies:
             enemy.update(platforms)
 
-        # Check for player stomping enemies
+        # Check for player-enemy collisions
         for enemy in enemies:
-            if player.rect.colliderect(enemy.rect):
-                # Check if player is falling and hitting enemy from above
+            if player.rect.colliderect(enemy.rect) and not enemy.is_squashed:
+                # Check if player is falling and hitting enemy from above (stomp)
                 if player.velocity_y > 0 and player.rect.bottom < enemy.rect.centery:
                     # Player stomped the enemy!
                     if not enemy.is_squashed:  # Only count score once per enemy
@@ -103,6 +103,16 @@ def main():
                         player.velocity_y = -8  # Small upward bounce after stomp
                         score += STOMP_SCORE  # Increase score
                         # TODO (US-042): Play stomp sound effect (audio system in Epic 7)
+                else:
+                    # Side or bottom collision - player takes damage
+                    # Determine knockback direction based on relative positions
+                    if player.rect.centerx < enemy.rect.centerx:
+                        knockback_direction = -1  # Push player left
+                    else:
+                        knockback_direction = 1  # Push player right
+
+                    player.take_damage(knockback_direction)
+                    # TODO (US-045): Play damage sound effect (audio system in Epic 7)
 
         # Fill screen with black background
         screen.fill(BLACK)
@@ -110,9 +120,12 @@ def main():
         # Draw all sprites
         all_sprites.draw(screen)
 
-        # Draw score (simple text display for now, will be improved in Epic 5)
+        # Draw HUD (simple text display for now, will be improved in Epic 5)
         score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White text
         screen.blit(score_text, (10, 10))  # Top-left corner
+
+        lives_text = font.render(f"Lives: {player.lives}", True, (255, 255, 255))  # White text
+        screen.blit(lives_text, (10, 50))  # Below score
 
         # Update display
         pygame.display.flip()

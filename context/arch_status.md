@@ -3,7 +3,7 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 11 / 72
+**Completed User Stories:** 12 / 72
 **Current Phase:** Epic 2 - Enemies and Combat (In Progress)
 
 ---
@@ -11,6 +11,20 @@
 ## Implemented Features
 
 ### Epic 2: Enemies and Combat
+- **US-012: Enemy Collision Damage** ✓
+  - Side collision with enemy damages player
+  - Bottom collision (hitting enemy from below) damages player
+  - Player loses one life when damaged
+  - 1-second invulnerability period (60 frames) after taking damage
+  - Visual blinking effect during invulnerability (toggles every 5 frames)
+  - Invulnerability prevents further damage during its duration
+  - Knockback effect pushes player 30 pixels away from enemy
+  - Small upward bounce on hit (velocity_y = -5)
+  - Knockback direction determined by player's position relative to enemy
+  - Lives displayed on HUD below score
+  - Placeholder added for damage sound effect (audio in Epic 7)
+  - Proper distinction between stomp (from above) and damage collisions
+
 - **US-011: Enemy Stomp Mechanic** ✓
   - Collision detection for player jumping on enemies from above
   - Player must be falling (velocity_y > 0) to stomp
@@ -167,6 +181,7 @@ sancho_bros/
   - **Window Settings:** `WINDOW_WIDTH` (800), `WINDOW_HEIGHT` (600), `FPS` (60), `WINDOW_TITLE`
   - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color), `RED` (Polocho enemy color)
   - **Player Physics Constants:** `PLAYER_SPEED` (5), `GRAVITY` (0.8), `TERMINAL_VELOCITY` (20), `JUMP_VELOCITY` (-15), `JUMP_CUTOFF_VELOCITY` (-3)
+  - **Player Combat Constants (US-012):** `PLAYER_STARTING_LIVES` (3), `INVULNERABILITY_DURATION` (60 frames), `BLINK_INTERVAL` (5 frames), `KNOCKBACK_DISTANCE` (30 pixels), `KNOCKBACK_BOUNCE` (-5)
   - **Enemy Constants:** `ENEMY_SPEED` (2) - patrol movement speed for enemies
   - **Score Constants:** `STOMP_SCORE` (100) - points awarded for stomping an enemy
 - **Design:** Single source of truth for all configuration values, imported by other modules
@@ -189,14 +204,23 @@ sancho_bros/
     - Score variable initialized to 0
     - Font initialized for rendering score text
     - Score displayed at top-left corner in white text
-  - **Enemy stomp collision detection (US-011):**
-    - Checks collision between player and enemies
-    - Validates player is falling (velocity_y > 0)
-    - Validates player hits enemy from above (player.rect.bottom < enemy.rect.centery)
-    - Calls enemy.squash() to trigger squash animation
-    - Applies upward bounce to player (velocity_y = -8)
-    - Increases score by STOMP_SCORE
-    - Prevents double-counting with is_squashed check
+  - **Enemy collision detection (US-011, US-012):**
+    - Checks collision between player and enemies (skips squashed enemies)
+    - **Stomp detection (US-011):**
+      - Validates player is falling (velocity_y > 0)
+      - Validates player hits enemy from above (player.rect.bottom < enemy.rect.centery)
+      - Calls enemy.squash() to trigger squash animation
+      - Applies upward bounce to player (velocity_y = -8)
+      - Increases score by STOMP_SCORE
+      - Prevents double-counting with is_squashed check
+    - **Damage detection (US-012):**
+      - Side or bottom collisions trigger player damage
+      - Determines knockback direction based on relative positions
+      - Calls player.take_damage(knockback_direction)
+      - Placeholder for damage sound effect
+  - **HUD rendering:**
+    - Score displayed at top-left (10, 10)
+    - Lives displayed below score (10, 50)
   - Game loop with update and render for player and enemies
   - Clean shutdown with pygame.quit()
 
@@ -206,10 +230,17 @@ sancho_bros/
   - `Player`: Sprite class for the player character (Sancho)
 - **Player Class:**
   - Extends pygame.sprite.Sprite
-  - Properties: width (40), height (60), image, rect, velocity_y, is_grounded
+  - Properties: width (40), height (60), image, rect, velocity_y, is_grounded, lives, is_invulnerable, invulnerability_timer, blink_timer, visible, original_image
   - Positioned using x, y coordinates
   - Yellow colored rectangle placeholder
-  - **update(keys_pressed, platforms) method:** Handles keyboard input, movement, gravity, jumping, and platform collision
+  - **take_damage(knockback_direction) method (US-012):** Handles player taking damage
+    - Returns early if already invulnerable (prevents multiple hits)
+    - Decrements lives by 1
+    - Activates invulnerability for INVULNERABILITY_DURATION frames (60 frames = 1 second)
+    - Applies knockback: pushes player KNOCKBACK_DISTANCE pixels away from enemy
+    - Applies upward bounce with KNOCKBACK_BOUNCE velocity
+    - Placeholder for damage sound effect
+  - **update(keys_pressed, platforms) method:** Handles keyboard input, movement, gravity, jumping, platform collision, and invulnerability
     - **Horizontal movement and collision:**
       - Detects LEFT/A and RIGHT/D key presses for horizontal movement
       - Updates horizontal position based on PLAYER_SPEED
@@ -227,6 +258,12 @@ sancho_bros/
       - Checks vertical collision with all platforms
       - Landing on top: aligns player bottom with platform top, stops velocity, sets grounded
       - Hitting from below: aligns player top with platform bottom, stops upward velocity
+    - **Invulnerability timer and blinking (US-012):**
+      - Decrements invulnerability_timer each frame when invulnerable
+      - Toggles visibility every BLINK_INTERVAL frames (5 frames)
+      - When visible: displays normal sprite
+      - When invisible: displays semi-transparent sprite (alpha 100)
+      - Ends invulnerability and restores full visibility when timer expires
 
 ### src/entities/platform.py
 - **Purpose:** Platform entity for ground and floating platforms
@@ -326,21 +363,21 @@ sancho_bros/
 ## Next Steps
 
 **Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
-**Epic 2 In Progress!** US-009, US-010, and US-011 complete!
+**Epic 2 In Progress!** US-009, US-010, US-011, and US-012 complete!
 
 **Current Epic:** Epic 2 - Enemies and Combat
-**Next User Story:** US-012 - Enemy Collision Damage
-- Implement damage when player touches enemy sides
-- Path: `context/user_stories/epic_02_enemies_combat/US-012_enemy_collision_damage.md`
+**Next User Story:** US-013 - Lives System
+- Add player lives/health system
+- Path: `context/user_stories/epic_02_enemies_combat/US-013_lives_system.md`
 
-**Dependencies:** US-009 (Enemy Creation), US-010 (Enemy Patrol Movement), and US-011 (Enemy Stomp Mechanic) are complete
+**Dependencies:** US-012 (Enemy Collision Damage) is complete and already tracks lives
 
 ---
 
 ## Notes
 
 - **Epic 1 (Foundation) completed successfully** - all 8 user stories done!
-- **Epic 2 (Enemies and Combat) in progress** - US-009, US-010, and US-011 complete!
+- **Epic 2 (Enemies and Combat) in progress** - US-009, US-010, US-011, and US-012 complete!
 - Project now has proper modular structure (US-008)
 - Player can move left and right with keyboard controls
 - Gravity system implemented - player falls naturally
@@ -368,6 +405,14 @@ sancho_bros/
     - Score tracking system displays current score
     - 100 points awarded per enemy defeated
     - Placeholder added for stomp sound effect (audio in Epic 7)
+  - **Damage system fully functional (US-012):**
+    - Side and bottom collisions with enemies damage the player
+    - Player loses one life per hit
+    - 1-second invulnerability period after taking damage
+    - Visual blinking effect during invulnerability
+    - Knockback pushes player away from enemy
+    - Lives displayed on HUD
+    - Placeholder added for damage sound effect (audio in Epic 7)
 - **Platform collision detection is fully functional:**
   - Player lands on and walks along platforms
   - Enemies also respond to platform collisions
@@ -379,5 +424,5 @@ sancho_bros/
   - Configuration separated into config.py
   - Each entity in its own file
   - Clean imports and package structure
-- Ready to continue Epic 2 with US-012 (Enemy Collision Damage)
+- Ready to continue Epic 2 with US-013 (Lives System)
 - Pygame must be installed: `pip install pygame`

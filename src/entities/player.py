@@ -6,7 +6,9 @@ Contains the Player sprite class and related functionality.
 import pygame
 from config import (
     YELLOW, PLAYER_SPEED, GRAVITY, TERMINAL_VELOCITY,
-    JUMP_VELOCITY, JUMP_CUTOFF_VELOCITY, WINDOW_WIDTH
+    JUMP_VELOCITY, JUMP_CUTOFF_VELOCITY, WINDOW_WIDTH,
+    PLAYER_STARTING_LIVES, INVULNERABILITY_DURATION, BLINK_INTERVAL,
+    KNOCKBACK_DISTANCE, KNOCKBACK_BOUNCE
 )
 
 
@@ -41,6 +43,41 @@ class Player(pygame.sprite.Sprite):
 
         # Ground state tracking
         self.is_grounded = False  # True when player is standing on ground/platform
+
+        # Damage and invulnerability system
+        self.lives = PLAYER_STARTING_LIVES  # Starting lives (US-013 will use this)
+        self.is_invulnerable = False  # True when player is invulnerable after taking damage
+        self.invulnerability_timer = 0  # Frames remaining of invulnerability
+        self.blink_timer = 0  # Timer for blinking effect during invulnerability
+        self.visible = True  # Used for blinking effect
+
+        # Store original image for blinking effect
+        self.original_image = self.image.copy()
+
+    def take_damage(self, knockback_direction=0):
+        """
+        Handle player taking damage from an enemy
+
+        Args:
+            knockback_direction (int): Direction of knockback (-1 for left, 1 for right, 0 for none)
+        """
+        if self.is_invulnerable:
+            return  # Already invulnerable, no damage
+
+        # Lose one life
+        self.lives -= 1
+
+        # Activate invulnerability (1 second = 60 frames at 60 FPS)
+        self.is_invulnerable = True
+        self.invulnerability_timer = INVULNERABILITY_DURATION
+
+        # Apply knockback
+        if knockback_direction != 0:
+            self.rect.x += knockback_direction * KNOCKBACK_DISTANCE  # Push player away
+            self.velocity_y = KNOCKBACK_BOUNCE  # Small upward bounce
+
+        # Placeholder for damage sound effect (will be implemented in Epic 7)
+        # TODO: Play damage sound effect
 
     def update(self, keys_pressed, platforms):
         """
@@ -114,3 +151,28 @@ class Player(pygame.sprite.Sprite):
                 elif self.velocity_y < 0:
                     self.rect.top = platform.rect.bottom
                     self.velocity_y = 0
+
+        # Handle invulnerability timer and blinking
+        if self.is_invulnerable:
+            self.invulnerability_timer -= 1
+
+            # Blink effect: toggle visibility every BLINK_INTERVAL frames
+            self.blink_timer += 1
+            if self.blink_timer >= BLINK_INTERVAL:
+                self.visible = not self.visible
+                self.blink_timer = 0
+
+                # Update sprite visibility
+                if self.visible:
+                    self.image = self.original_image.copy()
+                else:
+                    # Create transparent image for "invisible" blink
+                    self.image = pygame.Surface((self.width, self.height))
+                    self.image.set_alpha(100)  # Semi-transparent
+                    self.image.fill(YELLOW)
+
+            # End invulnerability when timer expires
+            if self.invulnerability_timer <= 0:
+                self.is_invulnerable = False
+                self.visible = True
+                self.image = self.original_image.copy()
