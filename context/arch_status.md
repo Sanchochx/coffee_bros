@@ -3,7 +3,7 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 1 / 72
+**Completed User Stories:** 2 / 72
 **Current Phase:** Epic 1 - Foundation
 
 ---
@@ -17,6 +17,13 @@
   - 60 FPS game loop with Clock control
   - Event handling for window close (X button and ESC key)
   - Black background rendering
+
+- **US-002: Player Character Creation** ✓
+  - Player class extending pygame.sprite.Sprite
+  - 40x60 pixel yellow rectangle sprite (placeholder)
+  - Initial spawn position at (x=100, y=400)
+  - Sprite rendering using pygame sprite groups
+  - Colombian yellow color (#FFD100) for visibility
 
 ---
 
@@ -44,15 +51,23 @@ sancho_bros/
 - **Key Components:**
   - `WINDOW_WIDTH`, `WINDOW_HEIGHT`: Window dimensions (800x600)
   - `FPS`: Frame rate constant (60)
-  - `BLACK`: Color constant for background
+  - `BLACK`, `YELLOW`: Color constants
+  - `Player`: Sprite class for the player character
   - `main()`: Main game function containing initialization and game loop
 - **Key Features:**
   - Pygame initialization
   - Display surface creation
   - FPS control with pygame.time.Clock()
   - Event handling (QUIT and ESC key)
-  - Screen filling with black background
+  - Player sprite creation and rendering
+  - Sprite group management (all_sprites)
+  - Screen rendering with sprite drawing
   - Clean shutdown with pygame.quit()
+- **Player Class:**
+  - Extends pygame.sprite.Sprite
+  - Properties: width (40), height (60), image, rect
+  - Positioned using x, y coordinates
+  - Yellow colored rectangle placeholder
 
 ---
 
@@ -67,25 +82,33 @@ sancho_bros/
 ### Code Organization
 - Single main.py file for now (will be modularized as project grows)
 - Constants defined at module level
+- Player class defined before main() function
 - Main game logic in main() function
 - Clean separation of initialization, game loop, and shutdown
+- Sprite groups used for organized rendering
+
+### Sprite System
+- Using pygame.sprite.Sprite as base class for game objects
+- Sprite groups (pygame.sprite.Group) for batch rendering
+- Player sprite uses Surface and Rect for positioning and rendering
 
 ---
 
 ## Next Steps
 
-**Next User Story:** US-002 - Player Character Creation
-- Create player sprite class
-- Add basic sprite properties (position, size, color)
-- Render player on screen
+**Next User Story:** US-003 - Basic Player Movement
+- Implement left/right movement controls
+- Add keyboard input detection
+- Update player position based on input
 
-**Dependencies:** None (US-001 is complete)
+**Dependencies:** US-001 and US-002 are complete
 
 ---
 
 ## Notes
 
 - Project is in initial foundation phase
-- All acceptance criteria for US-001 completed successfully
-- Ready to begin player character implementation
+- US-001 and US-002 completed successfully
+- Player sprite now visible on screen at starting position
+- Ready to implement player movement mechanics
 - Pygame must be installed: `pip install pygame`

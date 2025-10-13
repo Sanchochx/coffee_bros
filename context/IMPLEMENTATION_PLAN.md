@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 1
+- **Completed:** 2
 - **In Progress:** 0
-- **Remaining:** 71
-- **Progress:** 1.4%
+- **Remaining:** 70
+- **Progress:** 2.8%
 
 ---
 
@@ -30,7 +30,7 @@
   - Path: `context/user_stories/epic_01_foundation/US-001_basic_game_window_setup.md`
   - [Details](context/user_stories/epic_01_foundation/US-001_basic_game_window_setup.md)
 
-- [ ] **US-002** - Player Character Creation
+- [x] **US-002** - Player Character Creation
   - *Create player sprite with basic properties*
   - Path: `context/user_stories/epic_01_foundation/US-002_player_character_creation.md`
   - [Details](context/user_stories/epic_01_foundation/US-002_player_character_creation.md)
