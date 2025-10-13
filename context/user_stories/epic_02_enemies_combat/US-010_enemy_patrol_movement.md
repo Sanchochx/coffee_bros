@@ -5,12 +5,12 @@
 **So that** they present a moving challenge
 
 ## Acceptance Criteria
-- [ ] Enemies walk left and right automatically
-- [ ] Each enemy has defined patrol boundaries
-- [ ] Enemy turns around when reaching patrol boundary
-- [ ] Enemy movement speed is consistent
-- [ ] Enemies stay on platforms (don't walk off edges)
-- [ ] Enemy can turn around when hitting walls
+- [x] Enemies walk left and right automatically
+- [x] Each enemy has defined patrol boundaries
+- [x] Enemy turns around when reaching patrol boundary
+- [x] Enemy movement speed is consistent
+- [x] Enemies stay on platforms (don't walk off edges)
+- [x] Enemy can turn around when hitting walls
 
 ## Technical Notes
 - Store `patrol_start` and `patrol_end` for each enemy

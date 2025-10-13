@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 8
+- **Completed:** 10
 - **In Progress:** 0
-- **Remaining:** 64
-- **Progress:** 11.1%
+- **Remaining:** 62
+- **Progress:** 13.9%
 
 ---
 
@@ -70,12 +70,12 @@
 ### Epic 2: Enemies and Combat (7 stories)
 **Priority:** MUST HAVE - Critical for basic gameplay
 
-- [ ] **US-009** - Enemy Creation (Polocho)
+- [x] **US-009** - Enemy Creation (Polocho)
   - *Create Polocho enemy sprites with basic properties*
   - Path: `context/user_stories/epic_02_enemies_combat/US-009_enemy_creation.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-009_enemy_creation.md)
 
-- [ ] **US-010** - Enemy Patrol Movement
+- [x] **US-010** - Enemy Patrol Movement
   - *Implement enemy movement patterns*
   - Path: `context/user_stories/epic_02_enemies_combat/US-010_enemy_patrol_movement.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-010_enemy_patrol_movement.md)
@@ -477,5 +477,6 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 2 - Enemies and Combat
-**Current Story:** US-009 - Enemy Creation (Polocho)
+**Current Story:** US-011 - Enemy Stomp Mechanic
+**Last Completed Story:** US-010 - Enemy Patrol Movement
 **Last Completed Epic:** Epic 1 - Foundation (100% complete)

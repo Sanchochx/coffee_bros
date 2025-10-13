@@ -3,12 +3,36 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 8 / 72
-**Current Phase:** Epic 1 - Foundation (Complete)
+**Completed User Stories:** 10 / 72
+**Current Phase:** Epic 2 - Enemies and Combat (In Progress)
 
 ---
 
 ## Implemented Features
+
+### Epic 2: Enemies and Combat
+- **US-010: Enemy Patrol Movement** ✓
+  - Automatic left/right patrol movement at 2 pixels/frame
+  - Configurable patrol boundaries (patrol_start and patrol_end)
+  - Default patrol distance of 150 pixels (75 each direction from spawn)
+  - Direction reversal when reaching patrol boundaries
+  - Edge detection prevents enemies from walking off platforms
+  - Look-ahead system checks for ground 5 pixels ahead
+  - Wall collision detection with automatic direction reversal
+  - Side collision handling for horizontal platform walls
+  - Consistent movement speed using ENEMY_SPEED constant
+  - Enemies patrol continuously within their boundaries
+
+- **US-009: Enemy Creation (Polocho)** ✓
+  - Polocho class extending pygame.sprite.Sprite
+  - 40x40 pixel red rectangle sprites for enemies
+  - Enemies spawn at defined positions in the level
+  - Three enemy instances created at different locations
+  - Enemies affected by gravity (same physics as player)
+  - Terminal velocity cap prevents unrealistic falling
+  - Platform collision detection for enemies
+  - Enemies stored in dedicated sprite group
+  - RED color constant (#DC143C) for enemy visibility
 
 ### Epic 1: Foundation
 - **US-001: Basic Game Window Setup** ✓
@@ -105,14 +129,17 @@ sancho_bros/
 │   └── entities/                   # Game entity classes
 │       ├── __init__.py             # Entities package exports
 │       ├── player.py               # Player sprite class
-│       └── platform.py             # Platform sprite class
+│       ├── platform.py             # Platform sprite class
+│       └── polocho.py              # Polocho enemy sprite class
 └── context/                         # Project context and documentation
     ├── task_execution.md           # Task execution workflow
     ├── arch_status.md              # This file - architecture status tracking
     ├── IMPLEMENTATION_PLAN.md      # Complete implementation plan with all user stories
     └── user_stories/               # Detailed user story files
-        └── epic_01_foundation/
-            └── US-001_basic_game_window_setup.md
+        ├── epic_01_foundation/
+        │   └── US-001_basic_game_window_setup.md
+        └── epic_02_enemies_combat/
+            └── US-009_enemy_creation.md
 ```
 
 ---
@@ -123,14 +150,15 @@ sancho_bros/
 - **Purpose:** Central configuration file for all game constants
 - **Key Components:**
   - **Window Settings:** `WINDOW_WIDTH` (800), `WINDOW_HEIGHT` (600), `FPS` (60), `WINDOW_TITLE`
-  - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color)
+  - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color), `RED` (Polocho enemy color)
   - **Player Physics Constants:** `PLAYER_SPEED` (5), `GRAVITY` (0.8), `TERMINAL_VELOCITY` (20), `JUMP_VELOCITY` (-15), `JUMP_CUTOFF_VELOCITY` (-3)
+  - **Enemy Constants:** `ENEMY_SPEED` (2) - patrol movement speed for enemies
 - **Design:** Single source of truth for all configuration values, imported by other modules
 
 ### main.py
 - **Purpose:** Main game entry point - bootstraps and runs the game
 - **Key Components:**
-  - Imports from `config` and `src.entities`
+  - Imports from `config` and `src.entities` (Player, Platform, Polocho)
   - `main()`: Main game function containing initialization and game loop
 - **Key Features:**
   - Pygame initialization
@@ -138,9 +166,10 @@ sancho_bros/
   - FPS control with pygame.time.Clock()
   - Event handling (QUIT and ESC key)
   - Player and platform creation
-  - Sprite group management (all_sprites, platforms)
+  - Enemy creation (three Polocho enemies at different positions)
+  - Sprite group management (all_sprites, platforms, enemies)
   - Key state polling via pygame.key.get_pressed()
-  - Game loop with update and render
+  - Game loop with update and render for player and enemies
   - Clean shutdown with pygame.quit()
 
 ### src/entities/player.py
@@ -183,12 +212,41 @@ sancho_bros/
   - Static - no update method needed as platforms don't move
   - Used to create ground and floating platforms throughout the level
 
+### src/entities/polocho.py
+- **Purpose:** Polocho enemy entity
+- **Key Components:**
+  - `Polocho`: Sprite class for enemy characters
+- **Polocho Class:**
+  - Extends pygame.sprite.Sprite
+  - Properties: width (40), height (40), image, rect, velocity_y, is_grounded, patrol_start, patrol_end, direction, speed
+  - Constructor takes x, y position parameters and optional patrol_distance (default 150)
+  - Red colored rectangle (#DC143C) using RED constant
+  - Patrol boundaries calculated as x ± patrol_distance
+  - Direction: 1 for right, -1 for left
+  - **update(platforms) method:** Handles enemy patrol movement, physics, and collision
+    - **Horizontal patrol movement:**
+      - Moves automatically at ENEMY_SPEED * direction pixels/frame
+      - Reverses direction when reaching patrol_start or patrol_end boundaries
+      - Edge detection: checks 5 pixels ahead for platform underneath
+      - Turns around if no ground detected ahead (prevents falling off platforms)
+      - Wall collision: detects side collisions with platforms and reverses direction
+    - **Gravity and vertical movement:**
+      - Applies GRAVITY acceleration to velocity_y each frame
+      - Caps velocity_y at TERMINAL_VELOCITY to prevent unrealistic falling
+      - Updates vertical position based on velocity_y
+    - **Platform collision (vertical):**
+      - Checks vertical collision with all platforms
+      - Landing on top: aligns enemy bottom with platform top, stops velocity, sets grounded
+      - Hitting from below: aligns enemy top with platform bottom, stops upward velocity
+  - Enemies patrol continuously within their defined boundaries
+  - Smart edge and wall detection prevents enemies from falling or getting stuck
+
 ### src/__init__.py & src/entities/__init__.py
 - **Purpose:** Package initialization files
 - **Features:**
   - Marks directories as Python packages
-  - `src/entities/__init__.py` exports Player and Platform for easy importing
-  - Enables clean imports: `from src.entities import Player, Platform`
+  - `src/entities/__init__.py` exports Player, Platform, and Polocho for easy importing
+  - Enables clean imports: `from src.entities import Player, Platform, Polocho`
 
 ---
 
@@ -228,19 +286,21 @@ sancho_bros/
 ## Next Steps
 
 **Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
+**Epic 2 In Progress!** US-009 (Enemy Creation) and US-010 (Enemy Patrol Movement) complete.
 
-**Next Epic:** Epic 2 - Enemies and Combat
-**Next User Story:** US-009 - Enemy Creation (Polocho)
-- Create Polocho enemy sprites with basic properties
-- Path: `context/user_stories/epic_02_enemies_combat/US-009_enemy_creation.md`
+**Current Epic:** Epic 2 - Enemies and Combat
+**Next User Story:** US-011 - Enemy Stomp Mechanic
+- Implement player ability to defeat enemies by jumping on them
+- Path: `context/user_stories/epic_02_enemies_combat/US-011_enemy_stomp_mechanic.md`
 
-**Dependencies:** Epic 1 (Foundation) is complete
+**Dependencies:** US-009 (Enemy Creation) and US-010 (Enemy Patrol Movement) are complete
 
 ---
 
 ## Notes
 
 - **Epic 1 (Foundation) completed successfully** - all 8 user stories done!
+- **Epic 2 (Enemies and Combat) in progress** - US-009 and US-010 complete!
 - Project now has proper modular structure (US-008)
 - Player can move left and right with keyboard controls
 - Gravity system implemented - player falls naturally
@@ -249,8 +309,21 @@ sancho_bros/
 - Movement is smooth and responsive with proper boundary checking
 - Platform system created with ground and floating platforms
 - Platforms are visually distinct with green color
+- **Enemy system implemented (US-009, US-010):**
+  - Polocho enemy class created
+  - Enemies are 40x40 pixel red rectangles (distinct from 40x60 yellow player)
+  - Three enemies spawn at different positions
+  - Enemies affected by gravity and respond to platform collisions
+  - Enemies stored in dedicated sprite group
+  - **Patrol movement fully functional (US-010):**
+    - Enemies walk back and forth automatically at 2 pixels/frame
+    - Configurable patrol boundaries with default 150 pixel range
+    - Smart edge detection prevents falling off platforms
+    - Wall collision detection causes direction reversal
+    - Consistent movement speed throughout patrol
 - **Platform collision detection is fully functional:**
   - Player lands on and walks along platforms
+  - Enemies also respond to platform collisions
   - Cannot pass through platforms from any direction
   - Precise AABB collision with separate axis checking
   - Ground state properly tracked for jumping mechanics
@@ -259,5 +332,5 @@ sancho_bros/
   - Configuration separated into config.py
   - Each entity in its own file
   - Clean imports and package structure
-- Ready to begin Epic 2 (Enemies and Combat)
+- Ready to continue Epic 2 with US-011 (Enemy Stomp Mechanic)
 - Pygame must be installed: `pip install pygame`

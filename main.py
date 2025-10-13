@@ -6,7 +6,7 @@ A 2D platformer game inspired by Super Mario Bros with Colombian cultural themes
 import pygame
 import sys
 from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK
-from src.entities import Player, Platform
+from src.entities import Player, Platform, Polocho
 
 
 def main():
@@ -51,6 +51,22 @@ def main():
     platforms.add(platform4)
     all_sprites.add(platform4)
 
+    # Create enemies
+    enemies = pygame.sprite.Group()
+
+    # Spawn multiple Polocho enemies at different positions
+    enemy1 = Polocho(300, 400)
+    enemies.add(enemy1)
+    all_sprites.add(enemy1)
+
+    enemy2 = Polocho(500, 300)
+    enemies.add(enemy2)
+    all_sprites.add(enemy2)
+
+    enemy3 = Polocho(650, 200)
+    enemies.add(enemy3)
+    all_sprites.add(enemy3)
+
     # Game loop
     running = True
     while running:
@@ -67,6 +83,10 @@ def main():
 
         # Update player with current key states and platform collision
         player.update(keys, platforms)
+
+        # Update all enemies with platform collision
+        for enemy in enemies:
+            enemy.update(platforms)
 
         # Fill screen with black background
         screen.fill(BLACK)
