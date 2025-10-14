@@ -6,7 +6,7 @@ A 2D platformer game inspired by Super Mario Bros with Colombian cultural themes
 import pygame
 import sys
 from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES
-from src.entities import Player, Platform, Polocho
+from src.entities import Player, Platform, Polocho, GoldenArepa
 
 
 def setup_level():
@@ -14,12 +14,13 @@ def setup_level():
     Set up level entities and return them
 
     Returns:
-        tuple: (player, all_sprites, platforms, enemies, initial_enemy_positions)
+        tuple: (player, all_sprites, platforms, enemies, powerups, initial_enemy_positions)
     """
     # Create sprite groups
     all_sprites = pygame.sprite.Group()
     platforms = pygame.sprite.Group()
     enemies = pygame.sprite.Group()
+    powerups = pygame.sprite.Group()
 
     # Create player at initial spawn position
     player = Player(100, 400)
@@ -61,7 +62,21 @@ def setup_level():
         enemies.add(enemy)
         all_sprites.add(enemy)
 
-    return player, all_sprites, platforms, enemies, initial_enemy_positions
+    # Create Golden Arepa power-ups at various positions
+    # Multiple power-ups can exist in a level (AC-5)
+    arepa1 = GoldenArepa(250, 400)  # Near first platform
+    powerups.add(arepa1)
+    all_sprites.add(arepa1)
+
+    arepa2 = GoldenArepa(460, 300)  # On second platform area
+    powerups.add(arepa2)
+    all_sprites.add(arepa2)
+
+    arepa3 = GoldenArepa(640, 200)  # On third platform area
+    powerups.add(arepa3)
+    all_sprites.add(arepa3)
+
+    return player, all_sprites, platforms, enemies, powerups, initial_enemy_positions
 
 
 def main():
@@ -85,7 +100,7 @@ def main():
     death_timer = 0
 
     # Set up level
-    player, all_sprites, platforms, enemies, initial_enemy_positions = setup_level()
+    player, all_sprites, platforms, enemies, powerups, initial_enemy_positions = setup_level()
 
     # Game loop
     running = True
@@ -109,7 +124,7 @@ def main():
             # Check if it's time to respawn
             if death_timer >= DEATH_DELAY:
                 # Respawn: reset level
-                player, all_sprites, platforms, enemies, initial_enemy_positions = setup_level()
+                player, all_sprites, platforms, enemies, powerups, initial_enemy_positions = setup_level()
                 score = 0  # Reset score on respawn
                 is_dead = False
                 death_timer = 0
@@ -123,6 +138,10 @@ def main():
             # Update all enemies with platform collision
             for enemy in enemies:
                 enemy.update(platforms)
+
+            # Update all power-ups (for floating animation)
+            for powerup in powerups:
+                powerup.update()
 
             # Check for player-enemy collisions
             for enemy in enemies:

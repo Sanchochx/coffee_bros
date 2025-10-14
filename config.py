@@ -14,6 +14,7 @@ BLACK = (0, 0, 0)
 YELLOW = (255, 209, 0)  # Colombian yellow for Sancho
 GREEN = (34, 139, 34)  # Forest green for platforms
 RED = (220, 20, 60)  # Crimson red for Polocho enemies
+GOLD = (255, 215, 0)  # Gold color for Golden Arepa power-up
 
 # Player constants
 PLAYER_SPEED = 5  # pixels per frame
@@ -35,3 +36,7 @@ STOMP_SCORE = 100  # Points awarded for stomping an enemy
 
 # Death and respawn constants
 DEATH_DELAY = 120  # frames (2 seconds at 60 FPS) - delay before respawn after death
+
+# Power-up constants
+POWERUP_FLOAT_AMPLITUDE = 10  # pixels - how much the power-up floats up and down
+POWERUP_FLOAT_SPEED = 0.1  # speed of floating animation

@@ -2,13 +2,28 @@
 
 ## Current Project State
 
-**Last Updated:** 2025-10-13
-**Completed User Stories:** 15 / 72
-**Current Phase:** Epic 2 - Enemies and Combat (Complete)
+**Last Updated:** 2025-10-14
+**Completed User Stories:** 16 / 72
+**Current Phase:** Epic 3 - Power-ups and Special Abilities (In Progress)
 
 ---
 
 ## Implemented Features
+
+### Epic 3: Power-ups and Special Abilities
+- **US-016: Golden Arepa Spawning** ✓
+  - GoldenArepa class created extending pygame.sprite.Sprite
+  - 30x30 pixel golden square sprites (GOLD color #FFD700)
+  - Three Golden Arepas spawn at different positions in the level
+  - Floating animation using sine wave motion (math.sin)
+  - Float amplitude of 10 pixels up and down from base position
+  - Float speed controlled by POWERUP_FLOAT_SPEED constant (0.1)
+  - Smooth continuous floating animation via float_timer increment
+  - Power-ups stored in dedicated powerups sprite group
+  - Multiple power-ups can exist simultaneously in a level
+  - Power-ups rendered with all sprites via all_sprites group
+  - Distinct golden appearance makes them easily identifiable
+  - 30x30 size makes them more noticeable than player (40x60) or enemies (40x40)
 
 ### Epic 2: Enemies and Combat
 - **US-015: Pit/Fall Zones** ✓
@@ -198,7 +213,8 @@ sancho_bros/
 │       ├── __init__.py             # Entities package exports
 │       ├── player.py               # Player sprite class
 │       ├── platform.py             # Platform sprite class
-│       └── polocho.py              # Polocho enemy sprite class
+│       ├── polocho.py              # Polocho enemy sprite class
+│       └── golden_arepa.py         # Golden Arepa power-up sprite class
 └── context/                         # Project context and documentation
     ├── task_execution.md           # Task execution workflow
     ├── arch_status.md              # This file - architecture status tracking
@@ -206,8 +222,10 @@ sancho_bros/
     └── user_stories/               # Detailed user story files
         ├── epic_01_foundation/
         │   └── US-001_basic_game_window_setup.md
-        └── epic_02_enemies_combat/
-            └── US-009_enemy_creation.md
+        ├── epic_02_enemies_combat/
+        │   └── US-009_enemy_creation.md
+        └── epic_03_powerups/
+            └── US-016_golden_arepa_spawning.md
 ```
 
 ---
@@ -218,24 +236,26 @@ sancho_bros/
 - **Purpose:** Central configuration file for all game constants
 - **Key Components:**
   - **Window Settings:** `WINDOW_WIDTH` (800), `WINDOW_HEIGHT` (600), `FPS` (60), `WINDOW_TITLE`
-  - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color), `RED` (Polocho enemy color)
+  - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color), `RED` (Polocho enemy color), `GOLD` (Golden Arepa power-up color #FFD700)
   - **Player Physics Constants:** `PLAYER_SPEED` (5), `GRAVITY` (0.8), `TERMINAL_VELOCITY` (20), `JUMP_VELOCITY` (-15), `JUMP_CUTOFF_VELOCITY` (-3)
   - **Player Combat Constants (US-012):** `PLAYER_STARTING_LIVES` (3), `INVULNERABILITY_DURATION` (60 frames), `BLINK_INTERVAL` (5 frames), `KNOCKBACK_DISTANCE` (30 pixels), `KNOCKBACK_BOUNCE` (-5)
   - **Enemy Constants:** `ENEMY_SPEED` (2) - patrol movement speed for enemies
   - **Score Constants:** `STOMP_SCORE` (100) - points awarded for stomping an enemy
   - **Death and Respawn Constants (US-014):** `DEATH_DELAY` (120 frames / 2 seconds) - delay before respawn after death
+  - **Power-up Constants (US-016):** `POWERUP_FLOAT_AMPLITUDE` (10 pixels), `POWERUP_FLOAT_SPEED` (0.1) - floating animation parameters
 - **Design:** Single source of truth for all configuration values, imported by other modules
 
 ### main.py
 - **Purpose:** Main game entry point - bootstraps and runs the game
 - **Key Components:**
-  - Imports from `config` and `src.entities` (Player, Platform, Polocho)
-  - `setup_level()`: Function that creates and returns all level entities (US-014)
+  - Imports from `config` and `src.entities` (Player, Platform, Polocho, GoldenArepa)
+  - `setup_level()`: Function that creates and returns all level entities (US-014, US-016)
     - Creates player at spawn position (100, 400)
     - Creates all platforms (ground and floating platforms)
     - Stores initial enemy spawn positions in a list
     - Creates enemies at spawn positions
-    - Returns: (player, all_sprites, platforms, enemies, initial_enemy_positions)
+    - Creates three Golden Arepa power-ups at various positions (US-016)
+    - Returns: (player, all_sprites, platforms, enemies, powerups, initial_enemy_positions)
   - `main()`: Main game function containing initialization and game loop
 - **Key Features:**
   - Pygame initialization
@@ -382,12 +402,35 @@ sancho_bros/
   - Enemies patrol continuously within their defined boundaries
   - Smart edge and wall detection prevents enemies from falling or getting stuck
 
+### src/entities/golden_arepa.py
+- **Purpose:** Golden Arepa power-up entity
+- **Key Components:**
+  - `GoldenArepa`: Sprite class for collectible power-up items
+- **GoldenArepa Class:**
+  - Extends pygame.sprite.Sprite
+  - Properties: width (30), height (30), image, rect, base_y, float_timer
+  - Constructor takes x, y position parameters for center and base position
+  - Golden colored square using GOLD constant (#FFD700)
+  - Positioned using x, y coordinates (centered on x, y is base of float range)
+  - **Floating animation:**
+    - Uses sine wave (math.sin) for smooth up/down motion
+    - float_timer increments by POWERUP_FLOAT_SPEED each frame
+    - Float offset calculated as sin(float_timer) * POWERUP_FLOAT_AMPLITUDE
+    - Results in smooth 10-pixel vertical oscillation around base_y position
+    - Creates eye-catching "floating" effect typical of collectible items
+  - **update() method:** Updates floating animation position
+    - Increments float_timer for sine wave progression
+    - Calculates new vertical position based on sine wave
+    - Updates rect.centery to animate the power-up
+  - No physics or collision logic - purely visual entity (collision in US-017)
+  - 30x30 size makes it distinct and noticeable in the game world
+
 ### src/__init__.py & src/entities/__init__.py
 - **Purpose:** Package initialization files
 - **Features:**
   - Marks directories as Python packages
-  - `src/entities/__init__.py` exports Player, Platform, and Polocho for easy importing
-  - Enables clean imports: `from src.entities import Player, Platform, Polocho`
+  - `src/entities/__init__.py` exports Player, Platform, Polocho, and GoldenArepa for easy importing
+  - Enables clean imports: `from src.entities import Player, Platform, Polocho, GoldenArepa`
 
 ---
 
@@ -429,12 +472,15 @@ sancho_bros/
 **Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 
-**Current Epic:** Epic 3 - Power-ups and Special Abilities
-**Next User Story:** US-016 - Golden Arepa Spawning
-- Create power-up items in the game world
-- Path: `context/user_stories/epic_03_powerups/US-016_golden_arepa_spawning.md`
+**Current Epic:** Epic 3 - Power-ups and Special Abilities (In Progress)
+**Next User Story:** US-017 - Powerup Collection
+- Implement collision detection for power-ups
+- Path: `context/user_stories/epic_03_powerups/US-017_powerup_collection.md`
 
-**Dependencies:** Epic 2 is complete
+**Completed in Epic 3:**
+- US-016 - Golden Arepa Spawning ✓
+
+**Dependencies:** US-016 is complete
 
 ---
 
@@ -512,6 +558,13 @@ sancho_bros/
   - Configuration separated into config.py
   - Each entity in its own file
   - Clean imports and package structure
-- **Epic 2 Complete!** Ready to continue with Epic 3 (Power-ups and Special Abilities)
-- Next: US-016 (Golden Arepa Spawning)
+- **Epic 2 Complete!** All 7 stories completed successfully!
+- **Epic 3 In Progress:** Golden Arepa power-ups now spawn in the level
+  - **Golden Arepa spawning fully functional (US-016):**
+    - Three golden arepas float at different positions
+    - 30x30 golden square sprites with distinct appearance
+    - Smooth sine wave floating animation
+    - Multiple power-ups can exist simultaneously
+    - Ready for collection system (US-017)
+- Next: US-017 (Powerup Collection)
 - Pygame must be installed: `pip install pygame`

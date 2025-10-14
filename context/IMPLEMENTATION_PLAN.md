@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 15
+- **Completed:** 16
 - **In Progress:** 0
-- **Remaining:** 57
-- **Progress:** 20.8%
+- **Remaining:** 56
+- **Progress:** 22.2%
 
 ---
 
@@ -110,7 +110,7 @@
 ### Epic 3: Power-ups and Special Abilities (5 stories)
 **Priority:** MUST HAVE - Critical for basic gameplay
 
-- [ ] **US-016** - Golden Arepa Spawning
+- [x] **US-016** - Golden Arepa Spawning
   - *Create power-up items in the game world*
   - Path: `context/user_stories/epic_03_powerups/US-016_golden_arepa_spawning.md`
   - [Details](context/user_stories/epic_03_powerups/US-016_golden_arepa_spawning.md)
@@ -476,7 +476,7 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 2 - Enemies and Combat (100% complete)
-**Current Story:** US-016 - Golden Arepa Spawning
-**Last Completed Story:** US-015 - Pit/Fall Zones
-**Last Completed Epic:** Epic 1 - Foundation (100% complete)
+**Current Epic:** Epic 3 - Power-ups and Special Abilities (20% complete)
+**Current Story:** US-017 - Powerup Collection
+**Last Completed Story:** US-016 - Golden Arepa Spawning
+**Last Completed Epic:** Epic 2 - Enemies and Combat (100% complete)
