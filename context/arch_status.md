@@ -3,14 +3,72 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 21 / 72
-**Current Phase:** Epic 4 - Level System and Progression (In Progress - 10%)
+**Completed User Stories:** 22 / 72
+**Current Phase:** Epic 4 - Level System and Progression (In Progress - 20%)
 
 ---
 
 ## Implemented Features
 
 ### Epic 4: Level System and Progression
+- **US-022: Level Loading System** ✓
+  - Level class created in `src/level.py` for loading and managing levels
+  - `Level.load_from_file(level_number)` class method loads levels from JSON
+  - Level loading system features:
+    - Constructs file path from level number (e.g., 1 → `assets/levels/level_1.json`)
+    - Loads and parses JSON using Python's json module
+    - Comprehensive validation of level data structure
+    - Error handling for missing files and malformed JSON
+  - Level validation checks:
+    - Verifies required fields: metadata, player, platforms
+    - Validates metadata contains name and level_number
+    - Validates player spawn has spawn_x and spawn_y
+    - Ensures at least one platform exists
+    - Raises FileNotFoundError or ValueError with descriptive messages
+  - Entity creation from JSON:
+    - **Platforms:** Creates Platform instances from platforms array (x, y, width, height)
+    - **Enemies:** Creates Polocho instances from enemies array (type, spawn_x, spawn_y, patrol_distance)
+    - **Powerups:** Creates GoldenArepa instances from powerups array (type, x, y)
+    - **Player:** Creates Player at spawn position from player object
+  - Sprite group management:
+    - Level class manages all sprite groups (all_sprites, platforms, enemies, powerups)
+    - Entities automatically added to appropriate groups during loading
+    - Easy access to all game entities through level object
+  - Level properties stored:
+    - metadata: Level information (name, dimensions, background, music)
+    - player_spawn: Spawn position with spawn_x and spawn_y
+    - goal: Level completion trigger data
+    - level_data: Complete JSON data stored for level resets
+    - initial_enemy_positions: Enemy spawn data stored for respawning
+  - Helper methods:
+    - `respawn_player()`: Respawns player at original spawn position, resets velocity
+    - `respawn_all_enemies()`: Clears and recreates all enemies at initial positions
+    - `reset_level()`: Completely resets level to initial state (for death/respawn)
+  - Level reset functionality:
+    - Clears all sprite groups completely
+    - Recreates all entities from stored level_data
+    - Maintains original spawn positions and configurations
+    - Used when player dies to provide fresh start
+  - main.py integration:
+    - Replaced hardcoded setup_level() function with Level.load_from_file(1)
+    - Error handling wraps level loading with try-except
+    - Clean error messages displayed if level fails to load
+    - Game exits gracefully if level cannot be loaded
+    - References to level entities extracted for compatibility (player, all_sprites, etc.)
+    - Death/respawn system updated to use level.reset_level()
+    - Pit respawn updated to use level.respawn_player()
+  - Future-proof design:
+    - Supports any level number (1, 2, 3, etc.)
+    - Can easily add new entity types by extending loading logic
+    - JSON format defined in US-021 fully supported
+    - Ready for level progression system (US-023)
+  - Benefits:
+    - Levels are data-driven (no code changes needed for new levels)
+    - Easy to create and modify levels using JSON
+    - Centralized level management reduces code duplication
+    - Clean separation between level data and game logic
+    - Proper error handling prevents crashes from bad data
+
 - **US-021: Level Data Format** ✓
   - Level data stored in JSON format in `assets/levels/` directory
   - Comprehensive JSON structure includes all game entities:
@@ -315,6 +373,7 @@ sancho_bros/
 ├── CLAUDE.md                        # Project documentation for Claude Code
 ├── src/                            # Source code package
 │   ├── __init__.py                 # Package initialization
+│   ├── level.py                    # Level loading and management system (US-022)
 │   └── entities/                   # Game entity classes
 │       ├── __init__.py             # Entities package exports
 │       ├── player.py               # Player sprite class
@@ -359,17 +418,66 @@ sancho_bros/
   - **Laser Constants (US-019):** `LASER_SPEED` (10 pixels/frame) - horizontal laser travel speed, `LASER_COOLDOWN` (30 frames / 0.5 seconds) - time between shots, `MAX_LASERS` (5) - maximum active lasers, `LASER_WIDTH` (20), `LASER_HEIGHT` (6)
 - **Design:** Single source of truth for all configuration values, imported by other modules
 
+### src/level.py
+- **Purpose:** Level loading and management system
+- **Key Components:**
+  - `Level`: Class that loads and manages level data from JSON files
+- **Level Class:**
+  - Properties: metadata, player_spawn, goal, platforms, enemies, powerups, all_sprites, player, initial_enemy_positions, level_data
+  - **__init__()**: Initializes empty level with default spawn position and empty sprite groups
+  - **load_from_file(level_number)**: Class method that loads level from JSON file
+    - Takes level number as parameter (e.g., 1 for level_1.json)
+    - Constructs file path to assets/levels/level_{number}.json
+    - Opens and parses JSON file using json.load()
+    - Calls _validate_level_data() to ensure data integrity
+    - Creates all game entities from JSON data:
+      - Player at spawn_x, spawn_y position
+      - Platforms from platforms array
+      - Enemies (Polocho) from enemies array with patrol_distance
+      - Powerups (GoldenArepa) from powerups array
+    - Stores initial_enemy_positions for respawning
+    - Adds all entities to appropriate sprite groups
+    - Returns fully initialized Level instance
+    - Raises FileNotFoundError if level file doesn't exist
+    - Raises ValueError if JSON is malformed or missing required fields
+  - **_validate_level_data()**: Validates level data structure
+    - Checks for required top-level fields: metadata, player, platforms
+    - Validates metadata has name and level_number
+    - Validates player has spawn_x and spawn_y
+    - Validates platforms is an array with at least one platform
+    - Raises ValueError with descriptive message for any validation failure
+  - **respawn_player()**: Respawns player at original spawn position
+    - Sets player rect position to player_spawn coordinates
+    - Resets velocity_y to 0
+    - Resets is_grounded to False
+  - **respawn_all_enemies()**: Respawns all enemies at original positions
+    - Clears enemies sprite group
+    - Recreates enemies from initial_enemy_positions list
+    - Supports different enemy types (currently only Polocho)
+  - **reset_level()**: Completely resets level to initial state
+    - Clears all sprite groups (all_sprites, platforms, enemies, powerups)
+    - Recreates player from player_spawn data
+    - Recreates all platforms from level_data
+    - Recreates all enemies from initial_enemy_positions
+    - Recreates all powerups from level_data
+    - Used when player dies and needs fresh level state
+- **Design Features:**
+  - Data-driven level design (levels defined in JSON, not code)
+  - Comprehensive error handling prevents crashes
+  - Extensible for new entity types
+  - Stores complete level data for resets
+  - Manages all sprite groups internally
+  - Easy integration with main game loop
+
 ### main.py
 - **Purpose:** Main game entry point - bootstraps and runs the game
 - **Key Components:**
-  - Imports from `config` and `src.entities` (Player, Platform, Polocho, GoldenArepa, Laser)
-  - `setup_level()`: Function that creates and returns all level entities (US-014, US-016)
-    - Creates player at spawn position (100, 400)
-    - Creates all platforms (ground and floating platforms)
-    - Stores initial enemy spawn positions in a list
-    - Creates enemies at spawn positions
-    - Creates three Golden Arepa power-ups at various positions (US-016)
-    - Returns: (player, all_sprites, platforms, enemies, powerups, initial_enemy_positions)
+  - Imports from `config`, `src.entities` (Player, Platform, Polocho, GoldenArepa, Laser), and `src.level` (Level)
+  - **Level loading (US-022):**
+    - Uses `Level.load_from_file(1)` to load level 1 from JSON
+    - Error handling with try-except catches FileNotFoundError and ValueError
+    - Displays error message and exits gracefully if level fails to load
+    - Extracts references to level entities for compatibility (player, all_sprites, platforms, enemies, powerups)
   - `main()`: Main game function containing initialization and game loop
 - **Key Features:**
   - Pygame initialization
@@ -406,20 +514,21 @@ sancho_bros/
       - Removes power-up from sprite groups via kill() (disappears)
       - Placeholder for collection sound effect
       - Placeholder for collection particle effect
-  - **Pit/fall zone detection (US-015):**
+  - **Pit/fall zone detection (US-015, updated in US-022):**
     - Checks if player.rect.top > WINDOW_HEIGHT (fell below screen)
     - Player loses one life immediately when falling into pit
-    - If lives remain: player respawns at spawn position (100, 400)
+    - If lives remain: calls level.respawn_player() to respawn at spawn position (US-022)
     - Velocity and grounded state reset on pit respawn
     - If no lives remain: triggers death state (handled by US-014)
     - Placeholder for fall death sound effect
-  - **Death and respawn system (US-014):**
+  - **Death and respawn system (US-014, updated in US-022):**
     - is_dead boolean flag tracks death state
     - death_timer counts frames during death delay
     - When is_dead is True, gameplay updates are paused
     - death_timer increments each frame when dead
     - After DEATH_DELAY frames (120 / 2 seconds), respawn occurs:
-      - Calls setup_level() to recreate all entities
+      - Calls level.reset_level() to recreate all entities (US-022)
+      - Refreshes references to level entities (player, all_sprites, platforms, enemies, powerups)
       - Clears all active lasers with lasers.empty()
       - Resets score to 0
       - Resets is_dead to False and death_timer to 0
@@ -725,18 +834,19 @@ sancho_bros/
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 **Epic 3 Complete!** All 5 stories (US-016 through US-020) have been completed!
 
-**Epic 4 In Progress!** (1/10 stories completed - 10%)
+**Epic 4 In Progress!** (2/10 stories completed - 20%)
 
 **Completed in Epic 4:**
 - US-021 - Level Data Format ✓
+- US-022 - Level Loading System ✓
 
-**Next User Story:** US-022 - Level Loading System
-- Implement system to load levels from JSON data files
-- Create level loader module with validation
-- Path: `context/user_stories/epic_04_level_system/US-022_level_loading_system.md`
+**Next User Story:** US-023 - Level Goal/Completion
+- Create end goal and level completion detection
+- Path: `context/user_stories/epic_04_level_system/US-023_level_goal_completion.md`
 
 **Dependencies:**
 - US-021 complete (level data format defined) ✓
+- US-022 complete (level loading system) ✓
 - All foundation systems complete (US-001 through US-008) ✓
 
 ---

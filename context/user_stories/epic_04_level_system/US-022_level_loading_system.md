@@ -5,12 +5,12 @@
 **So that** the game can create levels dynamically
 
 ## Acceptance Criteria
-- [ ] Level class can load JSON file by level number
-- [ ] All platforms are created from JSON data
-- [ ] All enemies are spawned from JSON data
-- [ ] All powerups are placed from JSON data
-- [ ] Player spawns at correct position
-- [ ] Loading errors are caught and reported
+- [x] Level class can load JSON file by level number
+- [x] All platforms are created from JSON data
+- [x] All enemies are spawned from JSON data
+- [x] All powerups are placed from JSON data
+- [x] Player spawns at correct position
+- [x] Loading errors are caught and reported
 
 ## Technical Notes
 - Create Level class with `load_from_file()` method

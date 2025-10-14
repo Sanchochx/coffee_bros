@@ -7,76 +7,7 @@ import pygame
 import sys
 from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS
 from src.entities import Player, Platform, Polocho, GoldenArepa, Laser
-
-
-def setup_level():
-    """
-    Set up level entities and return them
-
-    Returns:
-        tuple: (player, all_sprites, platforms, enemies, powerups, initial_enemy_positions)
-    """
-    # Create sprite groups
-    all_sprites = pygame.sprite.Group()
-    platforms = pygame.sprite.Group()
-    enemies = pygame.sprite.Group()
-    powerups = pygame.sprite.Group()
-
-    # Create player at initial spawn position
-    player = Player(100, 400)
-    all_sprites.add(player)
-
-    # Create platforms
-    # Ground platform (full width at bottom of screen)
-    ground = Platform(0, 550, WINDOW_WIDTH, 50)
-    platforms.add(ground)
-    all_sprites.add(ground)
-
-    # Floating platforms at various positions
-    platform1 = Platform(200, 450, 150, 20)
-    platforms.add(platform1)
-    all_sprites.add(platform1)
-
-    platform2 = Platform(400, 350, 120, 20)
-    platforms.add(platform2)
-    all_sprites.add(platform2)
-
-    platform3 = Platform(550, 250, 180, 20)
-    platforms.add(platform3)
-    all_sprites.add(platform3)
-
-    platform4 = Platform(100, 200, 100, 20)
-    platforms.add(platform4)
-    all_sprites.add(platform4)
-
-    # Store initial enemy spawn positions
-    initial_enemy_positions = [
-        (300, 400),
-        (500, 300),
-        (650, 200)
-    ]
-
-    # Create enemies at spawn positions
-    for x, y in initial_enemy_positions:
-        enemy = Polocho(x, y)
-        enemies.add(enemy)
-        all_sprites.add(enemy)
-
-    # Create Golden Arepa power-ups at various positions
-    # Multiple power-ups can exist in a level (AC-5)
-    arepa1 = GoldenArepa(250, 400)  # Near first platform
-    powerups.add(arepa1)
-    all_sprites.add(arepa1)
-
-    arepa2 = GoldenArepa(460, 300)  # On second platform area
-    powerups.add(arepa2)
-    all_sprites.add(arepa2)
-
-    arepa3 = GoldenArepa(640, 200)  # On third platform area
-    powerups.add(arepa3)
-    all_sprites.add(arepa3)
-
-    return player, all_sprites, platforms, enemies, powerups, initial_enemy_positions
+from src.level import Level
 
 
 def main():
@@ -99,8 +30,20 @@ def main():
     is_dead = False
     death_timer = 0
 
-    # Set up level
-    player, all_sprites, platforms, enemies, powerups, initial_enemy_positions = setup_level()
+    # Load level from JSON file (US-022)
+    try:
+        level = Level.load_from_file(1)  # Load level 1
+    except (FileNotFoundError, ValueError) as e:
+        print(f"Error loading level: {e}")
+        pygame.quit()
+        sys.exit()
+
+    # Get references to level entities for easy access
+    player = level.player
+    all_sprites = level.all_sprites
+    platforms = level.platforms
+    enemies = level.enemies
+    powerups = level.powerups
 
     # Create laser sprite group (US-019)
     lasers = pygame.sprite.Group()
@@ -137,8 +80,14 @@ def main():
 
             # Check if it's time to respawn
             if death_timer >= DEATH_DELAY:
-                # Respawn: reset level
-                player, all_sprites, platforms, enemies, powerups, initial_enemy_positions = setup_level()
+                # Respawn: reset level using Level.reset_level()
+                level.reset_level()
+                # Get fresh references to level entities
+                player = level.player
+                all_sprites = level.all_sprites
+                platforms = level.platforms
+                enemies = level.enemies
+                powerups = level.powerups
                 lasers.empty()  # Clear all lasers on respawn
                 score = 0  # Reset score on respawn
                 is_dead = False
@@ -216,10 +165,7 @@ def main():
 
                 # If still have lives left, respawn at spawn position
                 if player.lives > 0:
-                    player.rect.x = 100
-                    player.rect.y = 400
-                    player.velocity_y = 0
-                    player.is_grounded = False
+                    level.respawn_player()  # Use Level's respawn method
                 # If no lives left, trigger death state
 
             # Check for death condition (US-014)
