@@ -42,3 +42,11 @@ DEATH_DELAY = 120  # frames (2 seconds at 60 FPS) - delay before respawn after d
 POWERUP_FLOAT_AMPLITUDE = 10  # pixels - how much the power-up floats up and down
 POWERUP_FLOAT_SPEED = 0.1  # speed of floating animation
 POWERUP_DURATION = 600  # frames (10 seconds at 60 FPS) - how long the powered-up state lasts
+
+# Laser constants
+LASER_SPEED = 10  # pixels per frame - horizontal laser travel speed
+LASER_COOLDOWN = 30  # frames (0.5 seconds at 60 FPS) - time between shots
+MAX_LASERS = 5  # maximum number of active lasers at once
+LASER_WIDTH = 20  # pixels - laser projectile width
+LASER_HEIGHT = 6  # pixels - laser projectile height
+CYAN = (0, 255, 255)  # Cyan color for laser projectiles

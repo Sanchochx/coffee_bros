@@ -5,13 +5,13 @@
 **So that** I can defeat enemies from a distance
 
 ## Acceptance Criteria
-- [ ] Pressing X or J fires laser in facing direction
-- [ ] Laser only fires when powered up
-- [ ] Laser travels horizontally across screen
-- [ ] Laser has visible projectile sprite/effect
-- [ ] Shooting sound effect plays
-- [ ] Can shoot multiple lasers rapidly (cooldown: 0.5 seconds)
-- [ ] Lasers disappear when leaving screen
+- [x] Pressing X or J fires laser in facing direction
+- [x] Laser only fires when powered up
+- [x] Laser travels horizontally across screen
+- [x] Laser has visible projectile sprite/effect
+- [x] Shooting sound effect plays (placeholder added - audio in Epic 7)
+- [x] Can shoot multiple lasers rapidly (cooldown: 0.5 seconds)
+- [x] Lasers disappear when leaving screen
 
 ## Technical Notes
 - Create Projectile class

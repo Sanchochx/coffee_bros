@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 18
+- **Completed:** 19
 - **In Progress:** 0
-- **Remaining:** 54
-- **Progress:** 25.0%
+- **Remaining:** 53
+- **Progress:** 26.4%
 
 ---
 
@@ -125,7 +125,7 @@
   - Path: `context/user_stories/epic_03_powerups/US-018_powered_up_state.md`
   - [Details](context/user_stories/epic_03_powerups/US-018_powered_up_state.md)
 
-- [ ] **US-019** - Laser Shooting Mechanic
+- [x] **US-019** - Laser Shooting Mechanic
   - *Allow player to shoot lasers when powered up*
   - Path: `context/user_stories/epic_03_powerups/US-019_laser_shooting_mechanic.md`
   - [Details](context/user_stories/epic_03_powerups/US-019_laser_shooting_mechanic.md)
@@ -476,7 +476,7 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 3 - Power-ups and Special Abilities (60% complete)
-**Current Story:** US-019 - Laser Shooting Mechanic
-**Last Completed Story:** US-018 - Powered-Up State
+**Current Epic:** Epic 3 - Power-ups and Special Abilities (80% complete)
+**Current Story:** US-020 - Laser-Enemy Collision
+**Last Completed Story:** US-019 - Laser Shooting Mechanic
 **Last Completed Epic:** Epic 2 - Enemies and Combat (100% complete)

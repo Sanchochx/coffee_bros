@@ -3,14 +3,35 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 18 / 72
-**Current Phase:** Epic 3 - Power-ups and Special Abilities (In Progress)
+**Completed User Stories:** 19 / 72
+**Current Phase:** Epic 3 - Power-ups and Special Abilities (In Progress - 80% complete)
 
 ---
 
 ## Implemented Features
 
 ### Epic 3: Power-ups and Special Abilities
+- **US-019: Laser Shooting Mechanic** ✓
+  - Laser class created extending pygame.sprite.Sprite
+  - 20x6 pixel cyan rectangle projectiles (CYAN color #00FFFF)
+  - Shooting triggered by pressing X or J key
+  - Player can only shoot when powered up (is_powered_up flag check)
+  - Player tracks facing direction (1 = right, -1 = left)
+  - Facing direction updated automatically during movement
+  - Lasers travel horizontally at 10 pixels/frame (LASER_SPEED)
+  - Lasers spawn from player's center position (rect.centerx, rect.centery)
+  - Shooting cooldown system: 0.5 seconds (30 frames at 60 FPS)
+  - Player.shoot_cooldown tracks frames until can shoot again
+  - Player.can_shoot() method checks if shooting is allowed
+  - Player.shoot() method handles laser firing logic
+  - Maximum 5 active lasers at once (MAX_LASERS constant)
+  - Lasers stored in dedicated sprite group
+  - Lasers automatically removed when leaving screen (x < 0 or x > WINDOW_WIDTH)
+  - Laser.update() handles movement and off-screen cleanup via kill()
+  - Lasers cleared on player death/respawn
+  - Placeholder for laser shoot sound effect (audio in Epic 7)
+  - KEYDOWN event handling for shooting (not continuous input)
+
 - **US-018: Powered-Up State** ✓
   - Player appearance changes when powered up (golden 3-pixel border)
   - Powerup timer displayed on HUD showing remaining time in seconds
@@ -247,7 +268,8 @@ sancho_bros/
 │       ├── player.py               # Player sprite class
 │       ├── platform.py             # Platform sprite class
 │       ├── polocho.py              # Polocho enemy sprite class
-│       └── golden_arepa.py         # Golden Arepa power-up sprite class
+│       ├── golden_arepa.py         # Golden Arepa power-up sprite class
+│       └── laser.py                # Laser projectile sprite class
 └── context/                         # Project context and documentation
     ├── task_execution.md           # Task execution workflow
     ├── arch_status.md              # This file - architecture status tracking
@@ -269,19 +291,20 @@ sancho_bros/
 - **Purpose:** Central configuration file for all game constants
 - **Key Components:**
   - **Window Settings:** `WINDOW_WIDTH` (800), `WINDOW_HEIGHT` (600), `FPS` (60), `WINDOW_TITLE`
-  - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color), `RED` (Polocho enemy color), `GOLD` (Golden Arepa power-up color #FFD700)
+  - **Color Constants:** `BLACK`, `YELLOW` (Colombian yellow), `GREEN` (platform color), `RED` (Polocho enemy color), `GOLD` (Golden Arepa power-up color #FFD700), `CYAN` (Laser projectile color #00FFFF)
   - **Player Physics Constants:** `PLAYER_SPEED` (5), `GRAVITY` (0.8), `TERMINAL_VELOCITY` (20), `JUMP_VELOCITY` (-15), `JUMP_CUTOFF_VELOCITY` (-3)
   - **Player Combat Constants (US-012):** `PLAYER_STARTING_LIVES` (3), `INVULNERABILITY_DURATION` (60 frames), `BLINK_INTERVAL` (5 frames), `KNOCKBACK_DISTANCE` (30 pixels), `KNOCKBACK_BOUNCE` (-5)
   - **Enemy Constants:** `ENEMY_SPEED` (2) - patrol movement speed for enemies
   - **Score Constants:** `STOMP_SCORE` (100) - points awarded for stomping an enemy, `POWERUP_SCORE` (200) - points awarded for collecting a power-up
   - **Death and Respawn Constants (US-014):** `DEATH_DELAY` (120 frames / 2 seconds) - delay before respawn after death
   - **Power-up Constants (US-016, US-017):** `POWERUP_FLOAT_AMPLITUDE` (10 pixels), `POWERUP_FLOAT_SPEED` (0.1) - floating animation parameters, `POWERUP_DURATION` (600 frames / 10 seconds) - how long powered-up state lasts
+  - **Laser Constants (US-019):** `LASER_SPEED` (10 pixels/frame) - horizontal laser travel speed, `LASER_COOLDOWN` (30 frames / 0.5 seconds) - time between shots, `MAX_LASERS` (5) - maximum active lasers, `LASER_WIDTH` (20), `LASER_HEIGHT` (6)
 - **Design:** Single source of truth for all configuration values, imported by other modules
 
 ### main.py
 - **Purpose:** Main game entry point - bootstraps and runs the game
 - **Key Components:**
-  - Imports from `config` and `src.entities` (Player, Platform, Polocho, GoldenArepa)
+  - Imports from `config` and `src.entities` (Player, Platform, Polocho, GoldenArepa, Laser)
   - `setup_level()`: Function that creates and returns all level entities (US-014, US-016)
     - Creates player at spawn position (100, 400)
     - Creates all platforms (ground and floating platforms)
@@ -297,7 +320,7 @@ sancho_bros/
   - Event handling (QUIT and ESC key)
   - Player and platform creation
   - Enemy creation (three Polocho enemies at different positions)
-  - Sprite group management (all_sprites, platforms, enemies)
+  - Sprite group management (all_sprites, platforms, enemies, powerups, lasers)
   - Key state polling via pygame.key.get_pressed()
   - **Score tracking system (US-011):**
     - Score variable initialized to 0
@@ -339,10 +362,21 @@ sancho_bros/
     - death_timer increments each frame when dead
     - After DEATH_DELAY frames (120 / 2 seconds), respawn occurs:
       - Calls setup_level() to recreate all entities
+      - Clears all active lasers with lasers.empty()
       - Resets score to 0
       - Resets is_dead to False and death_timer to 0
     - Death detection: when player.lives <= 0, set is_dead = True
     - Placeholder for death and respawn sound effects
+  - **Laser shooting system (US-019):**
+    - lasers sprite group stores all active laser projectiles
+    - KEYDOWN event handling for X or J key press
+    - Checks if MAX_LASERS (5) limit reached before spawning
+    - Calls player.shoot() which returns (x, y, direction) if successful
+    - Creates Laser instance at returned position
+    - Adds laser to both lasers and all_sprites groups
+    - laser.update() called each frame to handle movement
+    - Lasers automatically removed when leaving screen
+    - Placeholder for laser shoot sound effect
   - **HUD rendering:**
     - Score displayed at top-left (10, 10)
     - Lives displayed below score (10, 50)
@@ -361,12 +395,15 @@ sancho_bros/
   - `Player`: Sprite class for the player character (Sancho)
 - **Player Class:**
   - Extends pygame.sprite.Sprite
-  - Properties: width (40), height (60), image, rect, velocity_y, is_grounded, lives, is_invulnerable, invulnerability_timer, blink_timer, visible, original_image, is_powered_up, powerup_timer
+  - Properties: width (40), height (60), image, rect, velocity_y, is_grounded, lives, is_invulnerable, invulnerability_timer, blink_timer, visible, original_image, is_powered_up, powerup_timer, facing_direction, shoot_cooldown
   - Positioned using x, y coordinates
   - Yellow colored rectangle placeholder
   - **Powered-up state properties (US-017):**
     - is_powered_up: Boolean flag indicating if player has collected a power-up
     - powerup_timer: Frames remaining of powered-up state
+  - **Shooting system properties (US-019):**
+    - facing_direction: Current facing direction (1 = right, -1 = left)
+    - shoot_cooldown: Frames until can shoot again
   - **collect_powerup() method (US-017):** Handles power-up collection
     - Sets is_powered_up flag to True
     - Sets powerup_timer to POWERUP_DURATION (600 frames / 10 seconds)
@@ -376,6 +413,14 @@ sancho_bros/
     - Creates base yellow player sprite
     - Adds 3-pixel golden border when powered up
     - Updates original_image for blinking effect compatibility
+  - **can_shoot() method (US-019):** Checks if player can shoot
+    - Returns True if powered up AND cooldown is 0
+    - Returns False otherwise
+  - **shoot() method (US-019):** Attempts to fire a laser
+    - Returns None if can't shoot (not powered up or on cooldown)
+    - Starts LASER_COOLDOWN (30 frames) on successful shot
+    - Returns tuple (x, y, direction) with laser spawn info
+    - Placeholder for laser shoot sound effect
   - **take_damage(knockback_direction) method (US-012):** Handles player taking damage
     - Returns early if already invulnerable (prevents multiple hits)
     - Decrements lives by 1
@@ -387,6 +432,7 @@ sancho_bros/
     - **Horizontal movement and collision:**
       - Detects LEFT/A and RIGHT/D key presses for horizontal movement
       - Updates horizontal position based on PLAYER_SPEED
+      - Updates facing_direction (-1 for left, 1 for right) during movement
       - Clamps horizontal position to screen boundaries
       - Checks horizontal collision with platforms and resolves side collisions
     - **Jumping:**
@@ -416,6 +462,9 @@ sancho_bros/
       - When timer reaches 0: sets is_powered_up to False
       - Calls _update_appearance() to remove golden border visual
       - Powered-up state persists for full duration regardless of damage
+    - **Shooting cooldown (US-019):**
+      - Decrements shoot_cooldown by 1 each frame when > 0
+      - Prevents rapid shooting by requiring cooldown to reach 0
 
 ### src/entities/platform.py
 - **Purpose:** Platform entity for ground and floating platforms
@@ -470,6 +519,26 @@ sancho_bros/
   - Enemies patrol continuously within their defined boundaries
   - Smart edge and wall detection prevents enemies from falling or getting stuck
 
+### src/entities/laser.py
+- **Purpose:** Laser projectile entity
+- **Key Components:**
+  - `Laser`: Sprite class for laser projectiles
+- **Laser Class:**
+  - Extends pygame.sprite.Sprite
+  - Properties: width (20), height (6), image, rect, direction, speed
+  - Constructor takes x, y, direction parameters
+  - Cyan colored rectangle using CYAN constant (#00FFFF)
+  - Positioned using x, y coordinates (center of laser)
+  - direction: 1 for right, -1 for left
+  - speed: LASER_SPEED (10 pixels/frame)
+  - **update() method:** Handles laser movement and cleanup
+    - Moves horizontally: rect.x += speed * direction
+    - Checks if laser left screen (rect.right < 0 or rect.left > WINDOW_WIDTH)
+    - Calls self.kill() to remove from sprite groups when off-screen
+    - Automatic cleanup prevents memory leaks from projectiles
+  - No physics or collision logic (collision in US-020)
+  - 20x6 size makes it visible but not overwhelming
+
 ### src/entities/golden_arepa.py
 - **Purpose:** Golden Arepa power-up entity
 - **Key Components:**
@@ -497,8 +566,8 @@ sancho_bros/
 - **Purpose:** Package initialization files
 - **Features:**
   - Marks directories as Python packages
-  - `src/entities/__init__.py` exports Player, Platform, Polocho, and GoldenArepa for easy importing
-  - Enables clean imports: `from src.entities import Player, Platform, Polocho, GoldenArepa`
+  - `src/entities/__init__.py` exports Player, Platform, Polocho, GoldenArepa, and Laser for easy importing
+  - Enables clean imports: `from src.entities import Player, Platform, Polocho, GoldenArepa, Laser`
 
 ---
 
@@ -540,17 +609,18 @@ sancho_bros/
 **Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 
-**Current Epic:** Epic 3 - Power-ups and Special Abilities (In Progress)
-**Next User Story:** US-019 - Laser Shooting Mechanic
-- Allow player to shoot lasers when powered up
-- Path: `context/user_stories/epic_03_powerups/US-019_laser_shooting_mechanic.md`
+**Current Epic:** Epic 3 - Power-ups and Special Abilities (In Progress - 80% complete)
+**Next User Story:** US-020 - Laser-Enemy Collision
+- Implement laser projectile collision with enemies
+- Path: `context/user_stories/epic_03_powerups/US-020_laser_enemy_collision.md`
 
 **Completed in Epic 3:**
 - US-016 - Golden Arepa Spawning ✓
 - US-017 - Powerup Collection ✓
 - US-018 - Powered-Up State ✓
+- US-019 - Laser Shooting Mechanic ✓
 
-**Dependencies:** US-016, US-017, and US-018 are complete
+**Dependencies:** US-019 (Laser Shooting) is complete
 
 ---
 
@@ -629,7 +699,16 @@ sancho_bros/
   - Each entity in its own file
   - Clean imports and package structure
 - **Epic 2 Complete!** All 7 stories completed successfully!
-- **Epic 3 In Progress:** Power-up system fully functional with visual feedback
+- **Epic 3 In Progress (80% complete):** Power-up and laser shooting systems fully functional
+  - **Laser shooting fully functional (US-019):**
+    - Player can shoot lasers when powered up by pressing X or J
+    - Player tracks facing direction automatically during movement
+    - Lasers are 20x6 cyan rectangles that travel horizontally
+    - Shooting cooldown prevents spam (0.5 seconds between shots)
+    - Maximum 5 active lasers at once
+    - Lasers automatically removed when leaving screen
+    - Placeholder for laser shoot sound effect (audio in Epic 7)
+    - Next: US-020 will implement laser-enemy collision
   - **Golden Arepa spawning fully functional (US-016):**
     - Three golden arepas float at different positions
     - 30x30 golden square sprites with distinct appearance
@@ -653,5 +732,5 @@ sancho_bros/
     - State automatically expires after 10 seconds
     - Player returns to normal appearance after expiry
     - Timer display disappears when powerup expires
-- Next: US-019 (Laser Shooting Mechanic)
+- Next: US-020 (Laser-Enemy Collision)
 - Pygame must be installed: `pip install pygame`

@@ -8,7 +8,8 @@ from config import (
     YELLOW, PLAYER_SPEED, GRAVITY, TERMINAL_VELOCITY,
     JUMP_VELOCITY, JUMP_CUTOFF_VELOCITY, WINDOW_WIDTH,
     PLAYER_STARTING_LIVES, INVULNERABILITY_DURATION, BLINK_INTERVAL,
-    KNOCKBACK_DISTANCE, KNOCKBACK_BOUNCE, POWERUP_DURATION, GOLD
+    KNOCKBACK_DISTANCE, KNOCKBACK_BOUNCE, POWERUP_DURATION, GOLD,
+    LASER_COOLDOWN
 )
 
 
@@ -58,6 +59,10 @@ class Player(pygame.sprite.Sprite):
         self.is_powered_up = False  # True when player has collected a power-up
         self.powerup_timer = 0  # Frames remaining of powered-up state
 
+        # Shooting system (US-019)
+        self.facing_direction = 1  # 1 = right, -1 = left
+        self.shoot_cooldown = 0  # Frames until can shoot again
+
     def take_damage(self, knockback_direction=0):
         """
         Handle player taking damage from an enemy
@@ -98,6 +103,39 @@ class Player(pygame.sprite.Sprite):
         # Placeholder for powerup collection sound effect (will be implemented in Epic 7)
         # TODO (US-044): Play powerup collection sound effect
 
+    def can_shoot(self):
+        """
+        Check if player can shoot a laser
+        Must be powered up and cooldown must be 0
+
+        Returns:
+            bool: True if player can shoot, False otherwise
+        """
+        return self.is_powered_up and self.shoot_cooldown == 0
+
+    def shoot(self):
+        """
+        Attempt to shoot a laser
+        Returns laser spawn position and direction if successful
+
+        Returns:
+            tuple or None: (x, y, direction) if shot successful, None otherwise
+        """
+        if not self.can_shoot():
+            return None
+
+        # Start cooldown
+        self.shoot_cooldown = LASER_COOLDOWN
+
+        # Calculate laser spawn position (from center of player)
+        laser_x = self.rect.centerx
+        laser_y = self.rect.centery
+
+        # Placeholder for shooting sound effect (will be implemented in Epic 7)
+        # TODO (US-043): Play laser shoot sound effect
+
+        return (laser_x, laser_y, self.facing_direction)
+
     def _update_appearance(self):
         """Update player visual appearance based on current state"""
         # Create base image
@@ -125,10 +163,12 @@ class Player(pygame.sprite.Sprite):
         # Handle left movement (LEFT arrow or A key)
         if keys_pressed[pygame.K_LEFT] or keys_pressed[pygame.K_a]:
             self.rect.x -= PLAYER_SPEED
+            self.facing_direction = -1  # Facing left
 
         # Handle right movement (RIGHT arrow or D key)
         if keys_pressed[pygame.K_RIGHT] or keys_pressed[pygame.K_d]:
             self.rect.x += PLAYER_SPEED
+            self.facing_direction = 1  # Facing right
 
         # Keep player within screen boundaries (horizontal)
         if self.rect.left < 0:
@@ -230,3 +270,7 @@ class Player(pygame.sprite.Sprite):
             if self.powerup_timer <= 0:
                 self.is_powered_up = False
                 self._update_appearance()  # Remove golden border visual
+
+        # Handle shooting cooldown (US-019)
+        if self.shoot_cooldown > 0:
+            self.shoot_cooldown -= 1

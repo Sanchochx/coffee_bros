@@ -5,8 +5,8 @@ A 2D platformer game inspired by Super Mario Bros with Colombian cultural themes
 
 import pygame
 import sys
-from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE
-from src.entities import Player, Platform, Polocho, GoldenArepa
+from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS
+from src.entities import Player, Platform, Polocho, GoldenArepa, Laser
 
 
 def setup_level():
@@ -102,6 +102,9 @@ def main():
     # Set up level
     player, all_sprites, platforms, enemies, powerups, initial_enemy_positions = setup_level()
 
+    # Create laser sprite group (US-019)
+    lasers = pygame.sprite.Group()
+
     # Game loop
     running = True
     while running:
@@ -112,6 +115,17 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                # Handle shooting (US-019) - X or J key
+                elif event.key == pygame.K_x or event.key == pygame.K_j:
+                    # Only shoot if powered up and not at max lasers
+                    if len(lasers) < MAX_LASERS:
+                        laser_info = player.shoot()
+                        if laser_info is not None:
+                            x, y, direction = laser_info
+                            laser = Laser(x, y, direction)
+                            lasers.add(laser)
+                            all_sprites.add(laser)
+                            # TODO (US-043): Play laser shoot sound effect (audio system in Epic 7)
 
         # Get currently pressed keys for continuous input
         keys = pygame.key.get_pressed()
@@ -125,6 +139,7 @@ def main():
             if death_timer >= DEATH_DELAY:
                 # Respawn: reset level
                 player, all_sprites, platforms, enemies, powerups, initial_enemy_positions = setup_level()
+                lasers.empty()  # Clear all lasers on respawn
                 score = 0  # Reset score on respawn
                 is_dead = False
                 death_timer = 0
@@ -142,6 +157,10 @@ def main():
             # Update all power-ups (for floating animation)
             for powerup in powerups:
                 powerup.update()
+
+            # Update all lasers (US-019) - handles movement and off-screen removal
+            for laser in lasers:
+                laser.update()
 
             # Check for player-enemy collisions
             for enemy in enemies:
