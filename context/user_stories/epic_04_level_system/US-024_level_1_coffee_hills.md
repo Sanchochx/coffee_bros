@@ -5,13 +5,13 @@
 **So that** I can learn the game mechanics
 
 ## Acceptance Criteria
-- [ ] Level is 3200 pixels wide
-- [ ] Contains 5 Polochos with easy patrol patterns
-- [ ] Contains 1 Golden Arepa for introduction
-- [ ] Has simple platform layouts for learning jumping
-- [ ] Has at least one small pit to introduce danger
-- [ ] Completable in 1-2 minutes
-- [ ] Background shows Colombian highlands theme
+- [x] Level is 3200 pixels wide
+- [x] Contains 5 Polochos with easy patrol patterns
+- [x] Contains 1 Golden Arepa for introduction
+- [x] Has simple platform layouts for learning jumping
+- [x] Has at least one small pit to introduce danger
+- [x] Completable in 1-2 minutes
+- [x] Background shows Colombian highlands theme
 
 ## Technical Notes
 - Design level to gradually introduce mechanics

@@ -129,15 +129,9 @@
   "enemies": [
     {
       "type": "polocho",
-      "spawn_x": 300,
-      "spawn_y": 400,
-      "patrol_distance": 150
-    },
-    {
-      "type": "polocho",
       "spawn_x": 600,
       "spawn_y": 500,
-      "patrol_distance": 200
+      "patrol_distance": 150
     },
     {
       "type": "polocho",
@@ -149,7 +143,7 @@
       "type": "polocho",
       "spawn_x": 1600,
       "spawn_y": 500,
-      "patrol_distance": 150
+      "patrol_distance": 120
     },
     {
       "type": "polocho",
@@ -161,7 +155,7 @@
       "type": "polocho",
       "spawn_x": 2700,
       "spawn_y": 500,
-      "patrol_distance": 180
+      "patrol_distance": 150
     }
   ],
   "powerups": [
@@ -169,26 +163,6 @@
       "type": "golden_arepa",
       "x": 250,
       "y": 400
-    },
-    {
-      "type": "golden_arepa",
-      "x": 650,
-      "y": 200
-    },
-    {
-      "type": "golden_arepa",
-      "x": 1200,
-      "y": 350
-    },
-    {
-      "type": "golden_arepa",
-      "x": 1800,
-      "y": 300
-    },
-    {
-      "type": "golden_arepa",
-      "x": 2600,
-      "y": 300
     }
   ],
   "pits": [
