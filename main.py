@@ -30,6 +30,7 @@ def main():
 
     # Time tracking (for completion screen)
     level_start_time = pygame.time.get_ticks()  # milliseconds since pygame.init()
+    level_start_score = 0  # Score at level start (for transition screen - US-029)
 
     # Death and respawn state
     is_dead = False
@@ -39,6 +40,10 @@ def main():
     is_level_complete = False
     completion_timer = 0
     completion_time = 0  # Time taken to complete level (in seconds)
+
+    # Level transition state (US-029)
+    is_transition_screen = False
+    score_earned_in_level = 0  # Score earned specifically in completed level
 
     # Load level from JSON file (US-022)
     try:
@@ -69,55 +74,65 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                # Handle shooting (US-019) - X or J key
+                # Handle transition screen continuation (US-029)
+                elif is_transition_screen:
+                    # Any key press continues to next level
+                    # Check if there's a next level available
+                    if current_level_number < max_level_number:
+                        # Load next level
+                        current_level_number += 1
+                        try:
+                            level = Level.load_from_file(current_level_number)
+                            # Get fresh references to level entities
+                            player = level.player
+                            all_sprites = level.all_sprites
+                            platforms = level.platforms
+                            enemies = level.enemies
+                            powerups = level.powerups
+                            goals = level.goals
+                            lasers.empty()  # Clear all lasers from previous level
+                            # Reset completion and transition state
+                            is_level_complete = False
+                            is_transition_screen = False
+                            completion_timer = 0
+                            # Reset time tracking for new level
+                            level_start_time = pygame.time.get_ticks()
+                            level_start_score = score  # Record starting score for next level
+                            # Score carries over between levels
+                        except (FileNotFoundError, ValueError) as e:
+                            print(f"Error loading level {current_level_number}: {e}")
+                            running = False
+                    else:
+                        # No more levels - exit transition screen to show victory screen
+                        is_transition_screen = False
+                        # TODO (US-030): Show victory screen when implemented
+                # Handle shooting (US-019) - X or J key (only during normal gameplay)
                 elif event.key == pygame.K_x or event.key == pygame.K_j:
-                    # Only shoot if powered up and not at max lasers
-                    if len(lasers) < MAX_LASERS:
-                        laser_info = player.shoot()
-                        if laser_info is not None:
-                            x, y, direction = laser_info
-                            laser = Laser(x, y, direction)
-                            lasers.add(laser)
-                            all_sprites.add(laser)
-                            # TODO (US-043): Play laser shoot sound effect (audio system in Epic 7)
+                    if not is_level_complete and not is_dead:
+                        # Only shoot if powered up and not at max lasers
+                        if len(lasers) < MAX_LASERS:
+                            laser_info = player.shoot()
+                            if laser_info is not None:
+                                x, y, direction = laser_info
+                                laser = Laser(x, y, direction)
+                                lasers.add(laser)
+                                all_sprites.add(laser)
+                                # TODO (US-043): Play laser shoot sound effect (audio system in Epic 7)
 
         # Get currently pressed keys for continuous input
         keys = pygame.key.get_pressed()
 
-        # Handle level completion state (US-023, US-025)
+        # Handle level completion state (US-023, US-029)
         if is_level_complete:
             # Increment completion timer
             completion_timer += 1
 
-            # After LEVEL_COMPLETE_DELAY frames (3 seconds), load next level
+            # After LEVEL_COMPLETE_DELAY frames (3 seconds), show transition screen (US-029)
             if completion_timer >= LEVEL_COMPLETE_DELAY:
-                # Check if there's a next level available
-                if current_level_number < max_level_number:
-                    # Load next level
-                    current_level_number += 1
-                    try:
-                        level = Level.load_from_file(current_level_number)
-                        # Get fresh references to level entities
-                        player = level.player
-                        all_sprites = level.all_sprites
-                        platforms = level.platforms
-                        enemies = level.enemies
-                        powerups = level.powerups
-                        goals = level.goals
-                        lasers.empty()  # Clear all lasers from previous level
-                        # Reset completion state
-                        is_level_complete = False
-                        completion_timer = 0
-                        # Reset time tracking for new level
-                        level_start_time = pygame.time.get_ticks()
-                        # Score carries over between levels
-                    except (FileNotFoundError, ValueError) as e:
-                        print(f"Error loading level {current_level_number}: {e}")
-                        running = False
-                else:
-                    # No more levels - show completion screen indefinitely
-                    # TODO (US-030): Show victory screen when implemented
-                    pass
+                # Transition to transition screen
+                is_transition_screen = True
+                is_level_complete = False  # Exit level complete state
+                completion_timer = 0  # Reset timer for future use
 
         # Handle death state
         elif is_dead:
@@ -203,7 +218,7 @@ def main():
                     # TODO (US-044): Play powerup collection sound effect (audio system in Epic 7)
                     # TODO (US-059): Add particle effect for powerup collection (visual polish in Epic 8)
 
-            # Check for level completion (US-023)
+            # Check for level completion (US-023, US-029)
             for goal in goals:
                 if player.rect.colliderect(goal.rect):
                     # Player reached the goal - complete the level!
@@ -212,6 +227,8 @@ def main():
                         completion_timer = 0
                         # Calculate time taken to complete level (in seconds)
                         completion_time = (pygame.time.get_ticks() - level_start_time) / 1000
+                        # Calculate score earned in this level (US-029)
+                        score_earned_in_level = score - level_start_score
                         # TODO (US-046): Play level complete sound/music (audio system in Epic 7)
 
             # Check for pit/fall death (US-015)
@@ -277,6 +294,56 @@ def main():
             time_text = medium_font.render(f"Time: {completion_time:.1f}s", True, (255, 255, 255))  # White
             time_rect = time_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 60))
             screen.blit(time_text, time_rect)
+
+        # Display level transition screen (US-029)
+        if is_transition_screen:
+            # Create semi-transparent overlay
+            overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+            overlay.set_alpha(200)  # Slightly more opaque than completion screen
+            overlay.fill((0, 0, 0))  # Black overlay
+            screen.blit(overlay, (0, 0))
+
+            # Create fonts for transition screen
+            big_font = pygame.font.Font(None, 72)
+            medium_font = pygame.font.Font(None, 48)
+            small_font = pygame.font.Font(None, 36)
+
+            # Get level metadata for display
+            level_name = level.metadata.get("name", f"Level {current_level_number}")
+
+            # Display "Level Complete!" title
+            title_text = big_font.render("Level Complete!", True, (0, 255, 0))  # Bright green
+            title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 6))
+            screen.blit(title_text, title_rect)
+
+            # Display level name and number
+            level_info_text = medium_font.render(f"{level_name} (Level {current_level_number})", True, (255, 255, 255))  # White
+            level_info_rect = level_info_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 6 + 80))
+            screen.blit(level_info_text, level_info_rect)
+
+            # Display score earned in this level
+            score_earned_text = medium_font.render(f"Score Earned: {score_earned_in_level}", True, (255, 215, 0))  # Gold
+            score_earned_rect = score_earned_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 40))
+            screen.blit(score_earned_text, score_earned_rect)
+
+            # Display total score
+            total_score_text = small_font.render(f"Total Score: {score}", True, (255, 255, 255))  # White
+            total_score_rect = total_score_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 20))
+            screen.blit(total_score_text, total_score_rect)
+
+            # Display time taken
+            time_text = medium_font.render(f"Time: {completion_time:.1f}s", True, (255, 255, 255))  # White
+            time_rect = time_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 80))
+            screen.blit(time_text, time_rect)
+
+            # Display "Press any key to continue" prompt
+            # Add blinking effect by alternating visibility every 30 frames
+            if (pygame.time.get_ticks() // 500) % 2 == 0:  # Blink every 0.5 seconds
+                continue_text = small_font.render("Press any key to continue", True, (200, 200, 200))  # Light gray
+                continue_rect = continue_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 100))
+                screen.blit(continue_text, continue_rect)
+
+            # TODO (US-029): Play transition music/fanfare (audio system in Epic 7)
 
         # Update display
         pygame.display.flip()

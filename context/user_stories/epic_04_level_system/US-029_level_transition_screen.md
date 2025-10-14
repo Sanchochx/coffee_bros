@@ -5,13 +5,13 @@
 **So that** I feel a sense of advancement
 
 ## Acceptance Criteria
-- [ ] Screen shows after completing level
-- [ ] Displays level name and number
-- [ ] Shows score earned in level
-- [ ] Shows time taken to complete
-- [ ] Shows "Press any key to continue" prompt
-- [ ] Transitions to next level smoothly
-- [ ] Plays transition music or fanfare
+- [x] Screen shows after completing level
+- [x] Displays level name and number
+- [x] Shows score earned in level
+- [x] Shows time taken to complete
+- [x] Shows "Press any key to continue" prompt
+- [x] Transitions to next level smoothly
+- [x] Plays transition music or fanfare
 
 ## Technical Notes
 - Create UI screen with level stats
