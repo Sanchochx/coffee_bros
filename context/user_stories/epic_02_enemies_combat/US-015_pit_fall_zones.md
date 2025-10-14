@@ -5,11 +5,11 @@
 **So that** there are environmental hazards
 
 ## Acceptance Criteria
-- [ ] Falling below screen bottom causes death
-- [ ] Player loses one life when falling in pit
-- [ ] Pit zones can be defined in level data
-- [ ] Death is immediate upon entering pit zone
-- [ ] Fall death sound effect plays
+- [x] Falling below screen bottom causes death
+- [x] Player loses one life when falling in pit
+- [x] Pit zones can be defined in level data
+- [x] Death is immediate upon entering pit zone
+- [x] Fall death sound effect plays
 
 ## Technical Notes
 - Check if `player.y > SCREEN_HEIGHT`

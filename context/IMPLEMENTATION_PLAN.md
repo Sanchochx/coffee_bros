@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 13
+- **Completed:** 15
 - **In Progress:** 0
-- **Remaining:** 59
-- **Progress:** 18.1%
+- **Remaining:** 57
+- **Progress:** 20.8%
 
 ---
 
@@ -95,12 +95,12 @@
   - Path: `context/user_stories/epic_02_enemies_combat/US-013_lives_system.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-013_lives_system.md)
 
-- [ ] **US-014** - Death and Respawn
+- [x] **US-014** - Death and Respawn
   - *Handle player death and respawn mechanics*
   - Path: `context/user_stories/epic_02_enemies_combat/US-014_death_and_respawn.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-014_death_and_respawn.md)
 
-- [ ] **US-015** - Pit/Fall Zones
+- [x] **US-015** - Pit/Fall Zones
   - *Create death zones for falling off the map*
   - Path: `context/user_stories/epic_02_enemies_combat/US-015_pit_fall_zones.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-015_pit_fall_zones.md)
@@ -476,7 +476,7 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 2 - Enemies and Combat
-**Current Story:** US-014 - Death and Respawn
-**Last Completed Story:** US-013 - Lives System
+**Current Epic:** Epic 2 - Enemies and Combat (100% complete)
+**Current Story:** US-016 - Golden Arepa Spawning
+**Last Completed Story:** US-015 - Pit/Fall Zones
 **Last Completed Epic:** Epic 1 - Foundation (100% complete)

@@ -3,14 +3,43 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 13 / 72
-**Current Phase:** Epic 2 - Enemies and Combat (In Progress)
+**Completed User Stories:** 15 / 72
+**Current Phase:** Epic 2 - Enemies and Combat (Complete)
 
 ---
 
 ## Implemented Features
 
 ### Epic 2: Enemies and Combat
+- **US-015: Pit/Fall Zones** ✓
+  - Pit detection when player falls below screen bottom (y > WINDOW_HEIGHT)
+  - Player loses one life when falling into pit
+  - Immediate pit death (no delay)
+  - Player respawns at spawn position (100, 400) if lives remain
+  - Velocity and grounded state reset on respawn
+  - If no lives remain, triggers death state (US-014)
+  - Placeholder for fall death sound effect (audio in Epic 7)
+  - Pit zones can be defined in level data (currently uses screen bottom)
+  - Future: Can define specific pit rectangles for mid-level pits
+
+- **US-014: Death and Respawn** ✓
+  - Death occurs when lives reach 0 (replaces game exit from US-013)
+  - is_dead boolean flag tracks death state
+  - death_timer counts frames during death delay
+  - Brief death animation delay (2 seconds / 120 frames) before respawn
+  - Player respawns at original spawn position (100, 400)
+  - Lives reset to PLAYER_STARTING_LIVES (3) on respawn
+  - All enemies respawn in original positions
+  - Enemy spawn positions stored in initial_enemy_positions list
+  - setup_level() function creates and returns all level entities
+  - Score resets to 0 on respawn
+  - All sprite groups recreated on respawn (fresh level state)
+  - Game continues running after death (no longer exits like in US-013)
+  - Placeholder for death sound effect (audio in Epic 7)
+  - Placeholder for respawn sound effect (audio in Epic 7)
+  - Death state pauses gameplay updates (player and enemies don't update)
+  - Note: Pit/fall death will be implemented in US-015
+
 - **US-013: Lives System** ✓
   - Player starts with 3 lives (PLAYER_STARTING_LIVES constant)
   - Lives tracked in player.lives attribute
@@ -194,12 +223,19 @@ sancho_bros/
   - **Player Combat Constants (US-012):** `PLAYER_STARTING_LIVES` (3), `INVULNERABILITY_DURATION` (60 frames), `BLINK_INTERVAL` (5 frames), `KNOCKBACK_DISTANCE` (30 pixels), `KNOCKBACK_BOUNCE` (-5)
   - **Enemy Constants:** `ENEMY_SPEED` (2) - patrol movement speed for enemies
   - **Score Constants:** `STOMP_SCORE` (100) - points awarded for stomping an enemy
+  - **Death and Respawn Constants (US-014):** `DEATH_DELAY` (120 frames / 2 seconds) - delay before respawn after death
 - **Design:** Single source of truth for all configuration values, imported by other modules
 
 ### main.py
 - **Purpose:** Main game entry point - bootstraps and runs the game
 - **Key Components:**
   - Imports from `config` and `src.entities` (Player, Platform, Polocho)
+  - `setup_level()`: Function that creates and returns all level entities (US-014)
+    - Creates player at spawn position (100, 400)
+    - Creates all platforms (ground and floating platforms)
+    - Stores initial enemy spawn positions in a list
+    - Creates enemies at spawn positions
+    - Returns: (player, all_sprites, platforms, enemies, initial_enemy_positions)
   - `main()`: Main game function containing initialization and game loop
 - **Key Features:**
   - Pygame initialization
@@ -228,10 +264,24 @@ sancho_bros/
       - Determines knockback direction based on relative positions
       - Calls player.take_damage(knockback_direction)
       - Placeholder for damage sound effect
-  - **Game over check (US-013):**
-    - After collision detection, checks if player.lives <= 0
-    - Ends game loop when lives reach 0
-    - Game exits cleanly when game over condition met
+  - **Pit/fall zone detection (US-015):**
+    - Checks if player.rect.top > WINDOW_HEIGHT (fell below screen)
+    - Player loses one life immediately when falling into pit
+    - If lives remain: player respawns at spawn position (100, 400)
+    - Velocity and grounded state reset on pit respawn
+    - If no lives remain: triggers death state (handled by US-014)
+    - Placeholder for fall death sound effect
+  - **Death and respawn system (US-014):**
+    - is_dead boolean flag tracks death state
+    - death_timer counts frames during death delay
+    - When is_dead is True, gameplay updates are paused
+    - death_timer increments each frame when dead
+    - After DEATH_DELAY frames (120 / 2 seconds), respawn occurs:
+      - Calls setup_level() to recreate all entities
+      - Resets score to 0
+      - Resets is_dead to False and death_timer to 0
+    - Death detection: when player.lives <= 0, set is_dead = True
+    - Placeholder for death and respawn sound effects
   - **HUD rendering:**
     - Score displayed at top-left (10, 10)
     - Lives displayed below score (10, 50)
@@ -377,21 +427,21 @@ sancho_bros/
 ## Next Steps
 
 **Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
-**Epic 2 In Progress!** US-009, US-010, US-011, US-012, and US-013 complete!
+**Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 
-**Current Epic:** Epic 2 - Enemies and Combat
-**Next User Story:** US-014 - Death and Respawn
-- Handle player death and respawn mechanics
-- Path: `context/user_stories/epic_02_enemies_combat/US-014_death_and_respawn.md`
+**Current Epic:** Epic 3 - Power-ups and Special Abilities
+**Next User Story:** US-016 - Golden Arepa Spawning
+- Create power-up items in the game world
+- Path: `context/user_stories/epic_03_powerups/US-016_golden_arepa_spawning.md`
 
-**Dependencies:** US-013 (Lives System) is complete
+**Dependencies:** Epic 2 is complete
 
 ---
 
 ## Notes
 
 - **Epic 1 (Foundation) completed successfully** - all 8 user stories done!
-- **Epic 2 (Enemies and Combat) in progress** - US-009, US-010, US-011, US-012, and US-013 complete!
+- **Epic 2 (Enemies and Combat) completed successfully** - all 7 user stories done!
 - Project now has proper modular structure (US-008)
 - Player can move left and right with keyboard controls
 - Gravity system implemented - player falls naturally
@@ -431,9 +481,26 @@ sancho_bros/
     - Player starts with 3 lives
     - Lives displayed on HUD below score
     - Lives decrease when taking damage from enemies
-    - Game over occurs when lives reach 0 (game exits)
+    - Game over occurs when lives reach 0 (triggers death state)
     - Lives persist throughout the level attempt
     - Clean integration with damage and combat systems
+  - **Death and respawn system fully functional (US-014):**
+    - Death triggers when lives reach 0
+    - 2-second death delay before respawn
+    - Player respawns at starting position (100, 400)
+    - All enemies respawn in original positions
+    - Lives reset to 3 on respawn
+    - Score resets to 0 on respawn
+    - Level state completely resets (fresh start)
+    - Game continues running after death (no exit)
+  - **Pit/fall zones fully functional (US-015):**
+    - Player dies when falling below screen bottom
+    - Immediate pit death (no delay)
+    - Player loses one life when falling into pit
+    - If lives remain: respawn at spawn position with reset velocity
+    - If no lives: triggers death state (US-014)
+    - Placeholder for fall death sound effect
+    - Future: can define specific pit rectangles for mid-level pits
 - **Platform collision detection is fully functional:**
   - Player lands on and walks along platforms
   - Enemies also respond to platform collisions
@@ -445,5 +512,6 @@ sancho_bros/
   - Configuration separated into config.py
   - Each entity in its own file
   - Clean imports and package structure
-- Ready to continue Epic 2 with US-014 (Death and Respawn)
+- **Epic 2 Complete!** Ready to continue with Epic 3 (Power-ups and Special Abilities)
+- Next: US-016 (Golden Arepa Spawning)
 - Pygame must be installed: `pip install pygame`

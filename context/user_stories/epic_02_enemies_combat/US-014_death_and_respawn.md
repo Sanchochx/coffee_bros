@@ -5,12 +5,12 @@
 **So that** I can retry the level
 
 ## Acceptance Criteria
-- [ ] Death occurs when lives reach 0
-- [ ] Player respawns at level start position
-- [ ] Lives reset to starting amount (3)
-- [ ] All enemies respawn in original positions
-- [ ] All collected powerups respawn
-- [ ] Brief death animation plays before respawn
+- [x] Death occurs when lives reach 0
+- [x] Player respawns at level start position
+- [x] Lives reset to starting amount (3)
+- [x] All enemies respawn in original positions
+- [x] All collected powerups respawn
+- [x] Brief death animation plays before respawn
 
 ## Technical Notes
 - Store initial spawn positions for all entities

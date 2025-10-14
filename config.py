@@ -32,3 +32,6 @@ ENEMY_SPEED = 2  # pixels per frame - patrol speed for enemies
 
 # Score constants
 STOMP_SCORE = 100  # Points awarded for stomping an enemy
+
+# Death and respawn constants
+DEATH_DELAY = 120  # frames (2 seconds at 60 FPS) - delay before respawn after death
