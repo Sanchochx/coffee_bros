@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 19
+- **Completed:** 20
 - **In Progress:** 0
-- **Remaining:** 53
-- **Progress:** 26.4%
+- **Remaining:** 52
+- **Progress:** 27.8%
 
 ---
 
@@ -130,7 +130,7 @@
   - Path: `context/user_stories/epic_03_powerups/US-019_laser_shooting_mechanic.md`
   - [Details](context/user_stories/epic_03_powerups/US-019_laser_shooting_mechanic.md)
 
-- [ ] **US-020** - Laser-Enemy Collision
+- [x] **US-020** - Laser-Enemy Collision
   - *Implement laser projectile collision with enemies*
   - Path: `context/user_stories/epic_03_powerups/US-020_laser_enemy_collision.md`
   - [Details](context/user_stories/epic_03_powerups/US-020_laser_enemy_collision.md)
@@ -476,7 +476,7 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 3 - Power-ups and Special Abilities (80% complete)
-**Current Story:** US-020 - Laser-Enemy Collision
-**Last Completed Story:** US-019 - Laser Shooting Mechanic
-**Last Completed Epic:** Epic 2 - Enemies and Combat (100% complete)
+**Current Epic:** Epic 4 - Level System and Progression (0% complete)
+**Current Story:** US-021 - Level Data Format
+**Last Completed Story:** US-020 - Laser-Enemy Collision
+**Last Completed Epic:** Epic 3 - Power-ups and Special Abilities (100% complete)

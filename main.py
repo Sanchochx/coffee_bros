@@ -162,6 +162,20 @@ def main():
             for laser in lasers:
                 laser.update()
 
+            # Check for laser-enemy collisions (US-020)
+            for laser in lasers:
+                # Check collision with all enemies
+                hit_enemies = pygame.sprite.spritecollide(laser, enemies, False)
+                for enemy in hit_enemies:
+                    if not enemy.is_squashed:  # Don't collide with already squashed enemies
+                        # Laser hit an enemy!
+                        laser.kill()  # Remove laser from sprite groups
+                        enemy.squash()  # Mark enemy as squashed (will disappear after animation)
+                        score += STOMP_SCORE  # Award same points as stomp kill
+                        # TODO (US-042): Play enemy defeat sound effect (audio system in Epic 7)
+                        # TODO (US-058): Add explosion particle effect at impact point (visual polish in Epic 8)
+                        break  # One laser can only hit one enemy (exit inner loop)
+
             # Check for player-enemy collisions
             for enemy in enemies:
                 if player.rect.colliderect(enemy.rect) and not enemy.is_squashed:

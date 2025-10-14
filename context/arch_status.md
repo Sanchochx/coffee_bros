@@ -3,14 +3,29 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 19 / 72
-**Current Phase:** Epic 3 - Power-ups and Special Abilities (In Progress - 80% complete)
+**Completed User Stories:** 20 / 72
+**Current Phase:** Epic 3 - Power-ups and Special Abilities (Complete - 100%)
 
 ---
 
 ## Implemented Features
 
 ### Epic 3: Power-ups and Special Abilities
+- **US-020: Laser-Enemy Collision** ✓
+  - Laser-enemy collision detection implemented using pygame.sprite.spritecollide()
+  - Collision checked each frame between all lasers and all enemies
+  - Laser hitting enemy destroys the enemy (enemy.squash() called)
+  - Laser disappears after hitting enemy (laser.kill() removes from sprite groups)
+  - Enemy enters squashed state (same animation as stomp mechanic)
+  - Score increases by STOMP_SCORE (100 points) when enemy defeated by laser
+  - One laser can only hit one enemy (break after first collision)
+  - Squashed enemies are skipped (is_squashed flag check prevents double-collision)
+  - Collision detection happens after laser movement updates
+  - Uses pygame.sprite.spritecollide() for efficient collision detection
+  - Placeholder for enemy defeat sound effect (audio in Epic 7)
+  - Placeholder for explosion particle effect at impact point (visual polish in Epic 8)
+  - Laser defeat awards same points as stomp defeat (consistent scoring)
+
 - **US-019: Laser Shooting Mechanic** ✓
   - Laser class created extending pygame.sprite.Sprite
   - 20x6 pixel cyan rectangle projectiles (CYAN color #00FFFF)
@@ -377,6 +392,17 @@ sancho_bros/
     - laser.update() called each frame to handle movement
     - Lasers automatically removed when leaving screen
     - Placeholder for laser shoot sound effect
+  - **Laser-enemy collision detection (US-020):**
+    - Checks collision between lasers and enemies each frame
+    - Uses pygame.sprite.spritecollide() for collision detection
+    - For each laser, checks against all enemies in the enemies group
+    - On collision with non-squashed enemy:
+      - Calls laser.kill() to remove laser from sprite groups
+      - Calls enemy.squash() to mark enemy for destruction
+      - Increases score by STOMP_SCORE (100 points)
+      - Breaks inner loop (one laser hits one enemy only)
+    - Placeholder for enemy defeat sound effect
+    - Placeholder for explosion particle effect at impact point
   - **HUD rendering:**
     - Score displayed at top-left (10, 10)
     - Lives displayed below score (10, 50)
@@ -608,19 +634,21 @@ sancho_bros/
 
 **Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
-
-**Current Epic:** Epic 3 - Power-ups and Special Abilities (In Progress - 80% complete)
-**Next User Story:** US-020 - Laser-Enemy Collision
-- Implement laser projectile collision with enemies
-- Path: `context/user_stories/epic_03_powerups/US-020_laser_enemy_collision.md`
+**Epic 3 Complete!** All 5 stories (US-016 through US-020) have been completed!
 
 **Completed in Epic 3:**
 - US-016 - Golden Arepa Spawning ✓
 - US-017 - Powerup Collection ✓
 - US-018 - Powered-Up State ✓
 - US-019 - Laser Shooting Mechanic ✓
+- US-020 - Laser-Enemy Collision ✓
 
-**Dependencies:** US-019 (Laser Shooting) is complete
+**Next Epic:** Epic 4 - Level System and Progression (10 stories)
+**Next User Story:** US-021 - Level Data Format
+- Design JSON/data structure for level definitions
+- Path: `context/user_stories/epic_04_level_system/US-021_level_data_format.md`
+
+**Dependencies:** All foundation, combat, and powerup systems are complete
 
 ---
 
@@ -699,7 +727,15 @@ sancho_bros/
   - Each entity in its own file
   - Clean imports and package structure
 - **Epic 2 Complete!** All 7 stories completed successfully!
-- **Epic 3 In Progress (80% complete):** Power-up and laser shooting systems fully functional
+- **Epic 3 Complete!** All 5 stories completed successfully! Power-up and laser shooting systems fully functional
+  - **Laser-enemy collision fully functional (US-020):**
+    - Lasers destroy enemies on contact using pygame.sprite.spritecollide()
+    - Both laser and enemy disappear after collision
+    - Enemy enters squashed state (same animation as stomp)
+    - Score increases by 100 points per laser kill (same as stomp)
+    - One laser can only hit one enemy (consistent behavior)
+    - Placeholder for enemy defeat sound effect (audio in Epic 7)
+    - Placeholder for explosion particle effect (visual polish in Epic 8)
   - **Laser shooting fully functional (US-019):**
     - Player can shoot lasers when powered up by pressing X or J
     - Player tracks facing direction automatically during movement
@@ -708,7 +744,6 @@ sancho_bros/
     - Maximum 5 active lasers at once
     - Lasers automatically removed when leaving screen
     - Placeholder for laser shoot sound effect (audio in Epic 7)
-    - Next: US-020 will implement laser-enemy collision
   - **Golden Arepa spawning fully functional (US-016):**
     - Three golden arepas float at different positions
     - 30x30 golden square sprites with distinct appearance
@@ -732,5 +767,5 @@ sancho_bros/
     - State automatically expires after 10 seconds
     - Player returns to normal appearance after expiry
     - Timer display disappears when powerup expires
-- Next: US-020 (Laser-Enemy Collision)
+- **Epic 3 Complete!** Ready to begin Epic 4 (Level System and Progression)
 - Pygame must be installed: `pip install pygame`
