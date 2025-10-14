@@ -210,9 +210,21 @@ class Player(pygame.sprite.Sprite):
                 self.visible = True
                 self.image = self.original_image.copy()
 
-        # Handle powered-up timer (US-017)
+        # Handle powered-up timer (US-017, US-018)
         if self.is_powered_up:
             self.powerup_timer -= 1
+
+            # Visual warning when powerup about to expire (last 3 seconds = 180 frames)
+            # Flash the golden border on and off every 10 frames when timer < 180
+            if self.powerup_timer < 180 and self.powerup_timer % 20 < 10:
+                # Flash effect: temporarily show normal appearance (no border)
+                temp_powered_up = self.is_powered_up
+                self.is_powered_up = False
+                self._update_appearance()
+                self.is_powered_up = temp_powered_up
+            elif self.powerup_timer < 180:
+                # Show powered-up appearance (with border)
+                self._update_appearance()
 
             # End powered-up state when timer expires
             if self.powerup_timer <= 0:

@@ -3,7 +3,7 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 17 / 72
+**Completed User Stories:** 18 / 72
 **Current Phase:** Epic 3 - Power-ups and Special Abilities (In Progress)
 
 ---
@@ -11,6 +11,20 @@
 ## Implemented Features
 
 ### Epic 3: Power-ups and Special Abilities
+- **US-018: Powered-Up State** ✓
+  - Player appearance changes when powered up (golden 3-pixel border)
+  - Powerup timer displayed on HUD showing remaining time in seconds
+  - Timer appears as "Powerup: X.Xs" in gold text below lives display
+  - Powered-up state lasts exactly 10 seconds (600 frames at 60 FPS)
+  - State automatically expires when timer reaches 0
+  - Visual warning when powerup about to expire (last 3 seconds = 180 frames)
+  - Flash effect: golden border flashes on/off every 10 frames during warning period
+  - Player returns to normal yellow appearance after powerup expires
+  - Timer display disappears when powerup expires
+  - Flash warning helps player anticipate end of powered-up state
+  - Timer displayed in gold color (255, 215, 0) to match powerup theme
+  - Smooth countdown with decimal precision (e.g., "9.5s", "3.2s", "0.1s")
+
 - **US-017: Powerup Collection** ✓
   - Collision detection between player and power-ups implemented
   - Walking into a Golden Arepa collects it automatically
@@ -332,6 +346,12 @@ sancho_bros/
   - **HUD rendering:**
     - Score displayed at top-left (10, 10)
     - Lives displayed below score (10, 50)
+    - **Powerup timer display (US-018):**
+      - Shows remaining powerup time when player is powered up
+      - Displayed as "Powerup: X.Xs" below lives (10, 90)
+      - Gold colored text (255, 215, 0) to match powerup theme
+      - Converts frames to seconds with decimal precision
+      - Automatically disappears when powerup expires
   - Game loop with update and render for player and enemies
   - Clean shutdown with pygame.quit()
 
@@ -387,8 +407,12 @@ sancho_bros/
       - When visible: displays normal sprite
       - When invisible: displays semi-transparent sprite (alpha 100)
       - Ends invulnerability and restores full visibility when timer expires
-    - **Powered-up timer (US-017):**
+    - **Powered-up timer (US-017, US-018):**
       - Decrements powerup_timer each frame when powered up
+      - **Visual warning (US-018):** When timer < 180 frames (last 3 seconds):
+        - Flash effect: border appears/disappears every 10 frames
+        - Alternates between normal and powered-up appearance
+        - Helps player anticipate end of powerup state
       - When timer reaches 0: sets is_powered_up to False
       - Calls _update_appearance() to remove golden border visual
       - Powered-up state persists for full duration regardless of damage
@@ -517,15 +541,16 @@ sancho_bros/
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 
 **Current Epic:** Epic 3 - Power-ups and Special Abilities (In Progress)
-**Next User Story:** US-018 - Powered-Up State
-- Add visual changes when player is powered up
-- Path: `context/user_stories/epic_03_powerups/US-018_powered_up_state.md`
+**Next User Story:** US-019 - Laser Shooting Mechanic
+- Allow player to shoot lasers when powered up
+- Path: `context/user_stories/epic_03_powerups/US-019_laser_shooting_mechanic.md`
 
 **Completed in Epic 3:**
 - US-016 - Golden Arepa Spawning ✓
 - US-017 - Powerup Collection ✓
+- US-018 - Powered-Up State ✓
 
-**Dependencies:** US-016 and US-017 are complete
+**Dependencies:** US-016, US-017, and US-018 are complete
 
 ---
 
@@ -604,7 +629,7 @@ sancho_bros/
   - Each entity in its own file
   - Clean imports and package structure
 - **Epic 2 Complete!** All 7 stories completed successfully!
-- **Epic 3 In Progress:** Golden Arepa power-ups now spawn and can be collected
+- **Epic 3 In Progress:** Power-up system fully functional with visual feedback
   - **Golden Arepa spawning fully functional (US-016):**
     - Three golden arepas float at different positions
     - 30x30 golden square sprites with distinct appearance
@@ -620,5 +645,13 @@ sancho_bros/
     - Multiple power-ups can be collected (timer resets each time)
     - Placeholder for collection sound effect (audio in Epic 7)
     - Placeholder for collection particle effect (visual polish in Epic 8)
-- Next: US-018 (Powered-Up State visual improvements)
+  - **Powered-up state fully functional (US-018):**
+    - Player appearance changes with golden border when powered up
+    - Powerup timer displays on HUD showing remaining time in seconds
+    - Timer appears in gold text below lives display
+    - Visual warning: border flashes during last 3 seconds
+    - State automatically expires after 10 seconds
+    - Player returns to normal appearance after expiry
+    - Timer display disappears when powerup expires
+- Next: US-019 (Laser Shooting Mechanic)
 - Pygame must be installed: `pip install pygame`
