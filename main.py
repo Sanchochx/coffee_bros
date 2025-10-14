@@ -5,8 +5,8 @@ A 2D platformer game inspired by Super Mario Bros with Colombian cultural themes
 
 import pygame
 import sys
-from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS
-from src.entities import Player, Platform, Polocho, GoldenArepa, Laser
+from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS, LEVEL_COMPLETE_DELAY
+from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
 from src.level import Level
 
 
@@ -26,9 +26,17 @@ def main():
     score = 0
     font = pygame.font.Font(None, 36)  # Default font, size 36
 
+    # Time tracking (for completion screen)
+    level_start_time = pygame.time.get_ticks()  # milliseconds since pygame.init()
+
     # Death and respawn state
     is_dead = False
     death_timer = 0
+
+    # Level completion state (US-023)
+    is_level_complete = False
+    completion_timer = 0
+    completion_time = 0  # Time taken to complete level (in seconds)
 
     # Load level from JSON file (US-022)
     try:
@@ -44,6 +52,7 @@ def main():
     platforms = level.platforms
     enemies = level.enemies
     powerups = level.powerups
+    goals = level.goals  # Goal sprite group (US-023)
 
     # Create laser sprite group (US-019)
     lasers = pygame.sprite.Group()
@@ -73,8 +82,19 @@ def main():
         # Get currently pressed keys for continuous input
         keys = pygame.key.get_pressed()
 
+        # Handle level completion state (US-023)
+        if is_level_complete:
+            # Increment completion timer
+            completion_timer += 1
+
+            # After LEVEL_COMPLETE_DELAY frames (3 seconds), load next level
+            if completion_timer >= LEVEL_COMPLETE_DELAY:
+                # TODO (US-024+): Load next level when implemented
+                # For now, just continue showing completion screen
+                pass
+
         # Handle death state
-        if is_dead:
+        elif is_dead:
             # Increment death timer
             death_timer += 1
 
@@ -157,6 +177,17 @@ def main():
                     # TODO (US-044): Play powerup collection sound effect (audio system in Epic 7)
                     # TODO (US-059): Add particle effect for powerup collection (visual polish in Epic 8)
 
+            # Check for level completion (US-023)
+            for goal in goals:
+                if player.rect.colliderect(goal.rect):
+                    # Player reached the goal - complete the level!
+                    if not is_level_complete:  # Only trigger once
+                        is_level_complete = True
+                        completion_timer = 0
+                        # Calculate time taken to complete level (in seconds)
+                        completion_time = (pygame.time.get_ticks() - level_start_time) / 1000
+                        # TODO (US-046): Play level complete sound/music (audio system in Epic 7)
+
             # Check for pit/fall death (US-015)
             if player.rect.top > WINDOW_HEIGHT:
                 # Player fell into a pit - lose one life immediately
@@ -193,6 +224,33 @@ def main():
             powerup_seconds = player.powerup_timer / 60
             powerup_text = font.render(f"Powerup: {powerup_seconds:.1f}s", True, (255, 215, 0))  # Gold text
             screen.blit(powerup_text, (10, 90))  # Below lives
+
+        # Display level completion screen (US-023)
+        if is_level_complete:
+            # Create semi-transparent overlay
+            overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+            overlay.set_alpha(180)  # Semi-transparent (0-255)
+            overlay.fill((0, 0, 0))  # Black overlay
+            screen.blit(overlay, (0, 0))
+
+            # Create larger font for completion screen
+            big_font = pygame.font.Font(None, 72)
+            medium_font = pygame.font.Font(None, 48)
+
+            # Display "LEVEL COMPLETE!" message
+            complete_text = big_font.render("LEVEL COMPLETE!", True, (0, 255, 0))  # Bright green
+            complete_rect = complete_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 3))
+            screen.blit(complete_text, complete_rect)
+
+            # Display final score
+            score_text = medium_font.render(f"Final Score: {score}", True, (255, 255, 255))  # White
+            score_rect = score_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+            screen.blit(score_text, score_rect)
+
+            # Display completion time
+            time_text = medium_font.render(f"Time: {completion_time:.1f}s", True, (255, 255, 255))  # White
+            time_rect = time_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 60))
+            screen.blit(time_text, time_rect)
 
         # Update display
         pygame.display.flip()

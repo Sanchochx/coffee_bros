@@ -5,12 +5,12 @@
 **So that** I can progress to the next level
 
 ## Acceptance Criteria
-- [ ] Goal object/zone exists at end of level
-- [ ] Goal is visually distinct (flag, door, etc.)
-- [ ] Touching goal completes the level
-- [ ] Level completion sound/music plays
-- [ ] Completion screen shows before next level
-- [ ] Score and time are displayed on completion
+- [x] Goal object/zone exists at end of level
+- [x] Goal is visually distinct (flag, door, etc.)
+- [x] Touching goal completes the level
+- [x] Level completion sound/music plays
+- [x] Completion screen shows before next level
+- [x] Score and time are displayed on completion
 
 ## Technical Notes
 - Create goal as rectangle or sprite at level end

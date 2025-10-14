@@ -6,7 +6,7 @@ Loads level data from JSON files and creates game entities.
 import json
 import os
 import pygame
-from src.entities import Player, Platform, Polocho, GoldenArepa
+from src.entities import Player, Platform, Polocho, GoldenArepa, Goal
 
 
 class Level:
@@ -19,12 +19,14 @@ class Level:
         """Initialize empty level."""
         self.metadata = {}
         self.player_spawn = {"spawn_x": 100, "spawn_y": 400}  # Default spawn
-        self.goal = {}
+        self.goal_data = {}
         self.platforms = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.powerups = pygame.sprite.Group()
+        self.goals = pygame.sprite.Group()  # Sprite group for goals
         self.all_sprites = pygame.sprite.Group()
         self.player = None
+        self.goal_sprite = None  # Reference to the goal sprite
         self.initial_enemy_positions = []
         self.level_data = None
 
@@ -77,7 +79,7 @@ class Level:
         level.all_sprites.add(level.player)
 
         # Load goal data
-        level.goal = level.level_data.get("goal", {})
+        level.goal_data = level.level_data.get("goal", {})
 
         # Create platforms from JSON data
         platforms_data = level.level_data.get("platforms", [])
@@ -125,6 +127,17 @@ class Level:
                 powerup = GoldenArepa(x, y)
                 level.powerups.add(powerup)
                 level.all_sprites.add(powerup)
+
+        # Create goal sprite from JSON data
+        if level.goal_data:
+            goal_x = level.goal_data.get("x", 0)
+            goal_y = level.goal_data.get("y", 0)
+            goal_width = level.goal_data.get("width", 40)
+            goal_height = level.goal_data.get("height", 80)
+
+            level.goal_sprite = Goal(goal_x, goal_y, goal_width, goal_height)
+            level.goals.add(level.goal_sprite)
+            level.all_sprites.add(level.goal_sprite)
 
         return level
 
@@ -197,7 +210,7 @@ class Level:
     def reset_level(self):
         """
         Reset the entire level to initial state.
-        Respawns player, enemies, and powerups.
+        Respawns player, enemies, powerups, and goal.
         Used when player dies and respawns.
         """
         # Clear all sprite groups
@@ -205,6 +218,7 @@ class Level:
         self.platforms.empty()
         self.enemies.empty()
         self.powerups.empty()
+        self.goals.empty()
 
         # Reload level from stored data
         if self.level_data:
@@ -247,3 +261,14 @@ class Level:
                     powerup = GoldenArepa(x, y)
                     self.powerups.add(powerup)
                     self.all_sprites.add(powerup)
+
+            # Recreate goal
+            if self.goal_data:
+                goal_x = self.goal_data.get("x", 0)
+                goal_y = self.goal_data.get("y", 0)
+                goal_width = self.goal_data.get("width", 40)
+                goal_height = self.goal_data.get("height", 80)
+
+                self.goal_sprite = Goal(goal_x, goal_y, goal_width, goal_height)
+                self.goals.add(self.goal_sprite)
+                self.all_sprites.add(self.goal_sprite)

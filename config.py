@@ -50,3 +50,7 @@ MAX_LASERS = 5  # maximum number of active lasers at once
 LASER_WIDTH = 20  # pixels - laser projectile width
 LASER_HEIGHT = 6  # pixels - laser projectile height
 CYAN = (0, 255, 255)  # Cyan color for laser projectiles
+
+# Goal constants
+GOAL_COLOR = (0, 200, 0)  # Bright green for level goal/flag
+LEVEL_COMPLETE_DELAY = 180  # frames (3 seconds at 60 FPS) - delay before next level

@@ -8,5 +8,6 @@ from .platform import Platform
 from .polocho import Polocho
 from .golden_arepa import GoldenArepa
 from .laser import Laser
+from .goal import Goal
 
-__all__ = ['Player', 'Platform', 'Polocho', 'GoldenArepa', 'Laser']
+__all__ = ['Player', 'Platform', 'Polocho', 'GoldenArepa', 'Laser', 'Goal']
