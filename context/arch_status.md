@@ -3,14 +3,194 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 25 / 72
-**Current Phase:** Epic 4 - Level System and Progression (In Progress - 50%)
+**Completed User Stories:** 27 / 72
+**Current Phase:** Epic 4 - Level System and Progression (In Progress - 70%)
 
 ---
 
 ## Implemented Features
 
 ### Epic 4: Level System and Progression
+- **US-027: Level 4 - Harvest Heights** ✓
+  - Fourth level designed as challenging combined platforming and combat experience
+  - Level implemented using level_4.json file
+  - **Level specifications:**
+    - Width: 5000 pixels (longest level in the game - extended combined challenges)
+    - Height: 600 pixels (standard viewport height)
+    - Name: "Harvest Heights"
+    - Description: "A challenging combined level requiring mastery of both platforming and combat - multiple paths to victory!"
+    - Background type: harvest_heights with golden-brown background color (180, 140, 80)
+  - **Player spawn:** (100, 450) - left side of level
+  - **Goal location:** (4850, 450) - right side of level, 50x80 pixel flag
+  - **Platform layout (49 platforms):**
+    - Most platforms in any level so far - creates complex navigation options
+    - Mix of ground platforms and floating platforms at varying heights (150-550)
+    - Multiple pathways: safer lower route vs. riskier higher route with better rewards
+    - Platforms positioned to create both vertical and horizontal challenges
+    - Narrow floating platforms (70-90px) require precision landing
+    - Wider ground sections (250-500px) provide rest areas between challenges
+    - Design forces players to choose between safe progression and risk/reward
+  - **Enemy configuration (15 Polochos - most enemies in any level):**
+    - Enemy 1: (250, 500) with 150px patrol - early ground section
+    - Enemy 2: (370, 250) with 60px patrol - high floating platform (tight patrol)
+    - Enemy 3: (700, 500) with 180px patrol - ground section with wide patrol
+    - Enemy 4: (710, 350) with 80px patrol - mid-height platform (close to Enemy 3!)
+    - Enemy 5: (1150, 500) with 120px patrol - ground section
+    - Enemy 6: (1150, 250) with 100px patrol - high floating platform (same x as Enemy 5!)
+    - Enemy 7: (1600, 500) with 200px patrol - long ground patrol (widest in level)
+    - Enemy 8: (1550, 350) with 70px patrol - floating platform (tight space)
+    - Enemy 9: (1780, 150) with 60px patrol - very high platform (guards Golden Arepa)
+    - Enemy 10: (2130, 400) with 50px patrol - narrow platform patrol
+    - Enemy 11: (2100, 250) with 100px patrol - mid-height platform (close to Enemy 10!)
+    - Enemy 12: (2600, 500) with 160px patrol - ground section
+    - Enemy 13: (3080, 400) with 50px patrol - narrow platform (tight patrol)
+    - Enemy 14: (3550, 300) with 70px patrol - floating platform
+    - Enemy 15: (4400, 350) with 80px patrol - final challenge before goal
+    - Complex patrol patterns ranging from 50px (tight) to 200px (wide)
+    - Multiple enemies positioned at different heights with overlapping x-coordinates
+    - Forces strategic decision-making: stomp vs. shoot vs. avoid
+    - Enemies on narrow platforms create high-pressure platforming+combat moments
+  - **Power-up placement (3 Golden Arepas):**
+    - Golden Arepa 1 at (720, 200) - high floating platform, requires vertical platforming
+    - Golden Arepa 2 at (1780, 150) - very high platform guarded by Enemy 9
+    - Golden Arepa 3 at (3650, 150) - late-game reward on high platform
+    - Powerups require skilled platforming to reach (all on high platforms)
+    - Strategic placement: early, mid, and late-game rewards
+    - Encourages risk-taking and exploration of upper routes
+    - Rewards mastery of vertical platforming skills
+  - **Pit/danger zones (10 pits - most hazards in any level):**
+    - Pit 1: x=500, 50px wide - early narrow gap
+    - Pit 2: x=950, 50px wide - between platform sections
+    - Pit 3: x=1350, 50px wide - mid-early hazard
+    - Pit 4: x=1900, 50px wide - mid-level gap
+    - Pit 5: x=2350, 50px wide - center section hazard
+    - Pit 6: x=2850, 50px wide - mid-late gap
+    - Pit 7: x=3250, 50px wide - late-game hazard
+    - Pit 8: x=3800, 50px wide - near-end precision test
+    - Pit 9: x=4250, 50px wide - final approach challenge
+    - Pit 10: x=4700, 50px wide - last obstacle before goal
+    - Narrow pits (50px) require precision during combat and platforming
+    - Evenly distributed throughout level for consistent challenge
+    - More pits than any previous level (10 vs 7 in Level 3)
+    - Environmental hazards complement enemy challenges
+  - **Level design philosophy:**
+    - Combined challenge: requires mastery of BOTH platforming AND combat
+    - Multiple paths/routes: players can choose safer lower route or riskier upper route
+    - Strategic powerup usage: 3 arepas allow for different combat strategies
+    - Complex enemy patterns: varying patrol distances create unpredictable challenges
+    - Enemies on platforms: forces platforming precision during combat
+    - Optional harder paths: upper routes offer skilled players faster completion
+    - Medium-hard difficulty: hardest level so far, tests all skills learned
+    - Longest level (5000 pixels): extended gameplay requiring endurance
+    - 49 platforms create maze-like navigation with multiple valid solutions
+    - 15 enemies ensure constant combat pressure throughout level
+    - 10 pits add environmental danger to every section
+  - **Harvest Heights theme:**
+    - Background type set to "harvest_heights"
+    - Golden-brown background color (RGB: 180, 140, 80) - harvest/wheat theme
+    - Music track: "harvest_heights_theme" (placeholder for Epic 7)
+    - Visual theme represents Colombian harvest season and highlands
+  - **Integration with game systems:**
+    - Loaded via Level.load_from_file(4) after completing Level 3
+    - All entities created from JSON data (US-021, US-022)
+    - Goal triggers level completion (US-023)
+    - Level progression system loads Level 4 after Level 3 completion
+    - Score carries over from previous levels
+    - 3-second delay between levels shows completion screen
+    - main.py updated with max_level_number = 4
+  - **Testing and validation:**
+    - Level JSON validates correctly with all required fields
+    - All 15 enemies spawn and patrol correctly with varied patterns
+    - 3 powerups spawn at challenging high-platform locations
+    - 10 pits function as death zones
+    - Goal triggers level completion
+    - Level is challenging but completable with skillful play
+    - Multiple paths confirmed: upper and lower routes both viable
+    - Complex enemy placement creates engaging combat+platforming scenarios
+
+- **US-026: Level 3 - Bean Valley** ✓
+  - Third level designed with combat focus and medium difficulty
+  - Level implemented using level_3.json file
+  - **Level specifications:**
+    - Width: 4800 pixels (longest level so far - extended combat encounters)
+    - Height: 600 pixels (standard viewport height)
+    - Name: "Bean Valley"
+    - Description: "Combat-focused level with multiple enemies in succession - master fighting!"
+    - Background type: bean_valley with green background color (120, 160, 100)
+  - **Player spawn:** (100, 450) - left side of level
+  - **Goal location:** (4650, 450) - right side of level, 50x80 pixel flag
+  - **Platform layout (27 platforms):**
+    - Mix of ground platforms and floating platforms creating tight combat spaces
+    - Smaller floating platforms (70-120px) force closer enemy encounters
+    - Platforms positioned to create sections with multiple enemies
+    - Strategic platform gaps create natural combat arenas
+    - Ground sections interspersed with floating platform challenges
+    - Design encourages both stomping and shooting approaches
+  - **Enemy configuration (12 Polochos - highest count yet):**
+    - Enemy 1: (300, 500) with 120px patrol - early ground section
+    - Enemy 2: (450, 250) with 100px patrol - high floating platform
+    - Enemy 3: (800, 500) with 150px patrol - first tight section (ground)
+    - Enemy 4: (800, 400) with 60px patrol - first tight section (platform) - close together!
+    - Enemy 5: (1300, 500) with 180px patrol - second tight section (ground)
+    - Enemy 6: (1250, 350) with 80px patrol - second tight section (platform) - close together!
+    - Enemy 7: (1750, 500) with 120px patrol - third tight section (ground)
+    - Enemy 8: (1775, 400) with 60px patrol - third tight section (platform) - very close!
+    - Enemy 9: (2700, 500) with 150px patrol - mid-level challenge
+    - Enemy 10: (3200, 500) with 180px patrol - late-game ground section
+    - Enemy 11: (3700, 500) with 150px patrol - near-end challenge
+    - Enemy 12: (4150, 300) with 100px patrol - final obstacle on floating platform
+    - Multiple enemies placed in close proximity (within 50-100 pixels)
+    - Enemies positioned on both ground and floating platforms at same x-coordinate
+    - Creates challenging sections requiring quick decision-making
+    - Forces player to use both stomp and laser strategies
+  - **Power-up placement (2 Golden Arepas):**
+    - Golden Arepa 1 at (1250, 350) - middle of first major enemy cluster
+    - Golden Arepa 2 at (3200, 350) - before late-game enemy gauntlet
+    - Powerups strategically placed when player needs them most for combat
+    - Positioned right before or during major enemy encounters
+    - Rewards aggressive play and risk-taking
+  - **Pit/danger zones (7 pits):**
+    - Pit 1: x=600, 50px wide - early narrow gap
+    - Pit 2: x=1050, 50px wide - between enemy sections
+    - Pit 3: x=2000, 50px wide - mid-level hazard
+    - Pit 4: x=2500, 50px wide - adds platforming challenge
+    - Pit 5: x=3500, 50px wide - late-game precision test
+    - Pit 6: x=3950, 50px wide - near-end hazard
+    - Pit 7: x=4400, 50px wide - final challenge before goal
+    - Narrow pits (50px) require precision during combat
+    - More pits than previous levels (7 vs 5 in Level 2)
+    - Adds environmental hazards to enemy encounters
+  - **Level design philosophy:**
+    - Combat-focused with emphasis on enemy encounters
+    - Multiple enemies placed close together in "gauntlet" sections
+    - Requires mastery of both stomping and laser shooting
+    - Tight spaces with enemies force strategic thinking
+    - Powerups placed strategically when needed most
+    - Medium difficulty - significantly harder than Level 2
+    - Longest level so far (4800 pixels) for extended gameplay
+    - Tests player's combat skills more than platforming
+    - Narrow pits add environmental danger to combat
+  - **Bean Valley theme:**
+    - Background type set to "bean_valley"
+    - Green background color (RGB: 120, 160, 100)
+    - Music track: "bean_valley_theme" (placeholder for Epic 7)
+    - Visual theme represents Colombian coffee bean valleys
+  - **Integration with game systems:**
+    - Loaded via Level.load_from_file(3) after completing Level 2
+    - All entities created from JSON data (US-021, US-022)
+    - Goal triggers level completion (US-023)
+    - Level progression system loads Level 3 after Level 2 completion
+    - Score carries over from previous levels
+    - 3-second delay between levels shows completion screen
+  - **Testing and validation:**
+    - Level JSON validates correctly with all required fields
+    - All 12 enemies spawn and patrol correctly
+    - 2 powerups spawn at strategic combat locations
+    - Pits function as death zones
+    - Goal triggers level completion
+    - Level is challenging but completable with good combat skills
+    - Close enemy placement creates engaging combat scenarios
+
 - **US-025: Level 2 - Mountain Paths** ✓
   - Second level designed with platforming focus and increased difficulty
   - Level implemented using level_2.json file
@@ -574,6 +754,8 @@ sancho_bros/
 │   └── levels/                     # Level data files (US-021)
 │       ├── level_1.json            # Level 1: Coffee Hills data
 │       ├── level_2.json            # Level 2: Mountain Paths data (US-025)
+│       ├── level_3.json            # Level 3: Bean Valley data (US-026)
+│       ├── level_4.json            # Level 4: Harvest Heights data (US-027)
 │       └── level_format_spec.md    # JSON format specification
 └── context/                         # Project context and documentation
     ├── task_execution.md           # Task execution workflow
@@ -990,6 +1172,27 @@ sancho_bros/
   - `src/entities/__init__.py` exports Player, Platform, Polocho, GoldenArepa, Laser, and Goal for easy importing
   - Enables clean imports: `from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal`
 
+### assets/levels/level_3.json
+- **Purpose:** Level 3 data definition (Bean Valley combat-focused level)
+- **Key Components:**
+  - **Metadata:** Level name "Bean Valley", 4800x600 dimensions, bean_valley background
+  - **Player spawn:** (100, 450) - left side of level
+  - **Goal:** Flag at (4650, 450) - right side of level
+  - **27 platforms:** Mix of ground and floating platforms creating combat arenas
+  - **12 enemies:** Polocho enemies with close placement for combat challenges (60-180px patrols)
+  - **2 power-ups:** Golden Arepas strategically placed during major enemy encounters
+  - **7 pits:** Narrow fall zones (50 pixels wide) adding environmental hazards
+- **Design Philosophy:**
+  - Combat-focused level testing fighting skills
+  - Multiple enemies placed in close proximity (gauntlet sections)
+  - Smaller floating platforms (70-120px) create tight combat spaces
+  - Enemies positioned on both ground and platforms at same x-coordinates
+  - Requires mastery of both stomping and shooting strategies
+  - Powerups placed when player needs them most for combat
+  - Medium difficulty - harder than Level 2
+  - Longest level so far (4800 pixels) for extended combat encounters
+  - 7 narrow pits add precision challenges during combat
+
 ### assets/levels/level_2.json
 - **Purpose:** Level 2 data definition (Mountain Paths platforming level)
 - **Key Components:**
@@ -1096,7 +1299,7 @@ sancho_bros/
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 **Epic 3 Complete!** All 5 stories (US-016 through US-020) have been completed!
 
-**Epic 4 In Progress!** (5/10 stories completed - 50%)
+**Epic 4 In Progress!** (7/10 stories completed - 70%)
 
 **Completed in Epic 4:**
 - US-021 - Level Data Format ✓
@@ -1104,10 +1307,12 @@ sancho_bros/
 - US-023 - Level Goal/Completion ✓
 - US-024 - Level 1: Coffee Hills (Tutorial) ✓
 - US-025 - Level 2: Mountain Paths ✓
+- US-026 - Level 3: Bean Valley ✓
+- US-027 - Level 4: Harvest Heights ✓
 
-**Next User Story:** US-026 - Level 3: Bean Valley
-- Design and implement third level with medium difficulty
-- Path: `context/user_stories/epic_04_level_system/US-026_level_3_bean_valley.md`
+**Next User Story:** US-028 - Level 5: El Pico del Café (Final)
+- Design and implement final boss/challenge level
+- Path: `context/user_stories/epic_04_level_system/US-028_level_5_el_pico_del_cafe.md`
 
 **Dependencies:**
 - US-021 complete (level data format defined) ✓
@@ -1115,6 +1320,8 @@ sancho_bros/
 - US-023 complete (level goal/completion) ✓
 - US-024 complete (Level 1 tutorial) ✓
 - US-025 complete (Level 2 platforming focus) ✓
+- US-026 complete (Level 3 combat focus) ✓
+- US-027 complete (Level 4 combined challenge) ✓
 - Level progression system implemented ✓
 - All foundation systems complete (US-001 through US-008) ✓
 

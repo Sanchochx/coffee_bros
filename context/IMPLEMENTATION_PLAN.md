@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 25
+- **Completed:** 27
 - **In Progress:** 0
-- **Remaining:** 47
-- **Progress:** 34.7%
+- **Remaining:** 45
+- **Progress:** 37.5%
 
 ---
 
@@ -165,12 +165,12 @@
   - Path: `context/user_stories/epic_04_level_system/US-025_level_2_mountain_paths.md`
   - [Details](context/user_stories/epic_04_level_system/US-025_level_2_mountain_paths.md)
 
-- [ ] **US-026** - Level 3: Bean Valley
+- [x] **US-026** - Level 3: Bean Valley
   - *Design and implement third level*
   - Path: `context/user_stories/epic_04_level_system/US-026_level_3_bean_valley.md`
   - [Details](context/user_stories/epic_04_level_system/US-026_level_3_bean_valley.md)
 
-- [ ] **US-027** - Level 4: Harvest Heights
+- [x] **US-027** - Level 4: Harvest Heights
   - *Design and implement fourth level*
   - Path: `context/user_stories/epic_04_level_system/US-027_level_4_harvest_heights.md`
   - [Details](context/user_stories/epic_04_level_system/US-027_level_4_harvest_heights.md)
@@ -476,7 +476,7 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 4 - Level System and Progression (50% complete)
-**Current Story:** US-026 - Level 3: Bean Valley
-**Last Completed Story:** US-025 - Level 2: Mountain Paths
+**Current Epic:** Epic 4 - Level System and Progression (70% complete)
+**Current Story:** US-028 - Level 5: El Pico del Café (Final)
+**Last Completed Story:** US-027 - Level 4: Harvest Heights
 **Last Completed Epic:** Epic 3 - Power-ups and Special Abilities (100% complete)

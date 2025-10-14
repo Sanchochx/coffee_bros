@@ -1,0 +1,378 @@
+{
+  "metadata": {
+    "name": "Bean Valley",
+    "level_number": 3,
+    "description": "Combat-focused level with multiple enemies in succession - master fighting!",
+    "width": 4800,
+    "height": 600,
+    "background_type": "bean_valley",
+    "background_color": [120, 160, 100],
+    "music_track": "bean_valley_theme"
+  },
+  "player": {
+    "spawn_x": 100,
+    "spawn_y": 450
+  },
+  "goal": {
+    "x": 4650,
+    "y": 450,
+    "width": 50,
+    "height": 80,
+    "type": "flag"
+  },
+  "platforms": [
+    {
+      "x": 0,
+      "y": 550,
+      "width": 600,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 200,
+      "y": 400,
+      "width": 120,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 400,
+      "y": 300,
+      "width": 150,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 650,
+      "y": 550,
+      "width": 400,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 750,
+      "y": 450,
+      "width": 80,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 920,
+      "y": 450,
+      "width": 80,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 1100,
+      "y": 550,
+      "width": 500,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 1200,
+      "y": 400,
+      "width": 100,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 1400,
+      "y": 400,
+      "width": 100,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 1650,
+      "y": 550,
+      "width": 350,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 1700,
+      "y": 450,
+      "width": 70,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 1850,
+      "y": 450,
+      "width": 70,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 2050,
+      "y": 550,
+      "width": 450,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 2150,
+      "y": 350,
+      "width": 120,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 2350,
+      "y": 350,
+      "width": 120,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 2550,
+      "y": 550,
+      "width": 400,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 2650,
+      "y": 450,
+      "width": 80,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 2820,
+      "y": 450,
+      "width": 80,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 3000,
+      "y": 550,
+      "width": 500,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 3100,
+      "y": 400,
+      "width": 100,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 3300,
+      "y": 400,
+      "width": 100,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 3550,
+      "y": 550,
+      "width": 400,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 3650,
+      "y": 450,
+      "width": 80,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 3820,
+      "y": 450,
+      "width": 80,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 4000,
+      "y": 550,
+      "width": 400,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    },
+    {
+      "x": 4100,
+      "y": 350,
+      "width": 120,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 4450,
+      "y": 550,
+      "width": 350,
+      "height": 50,
+      "type": "ground",
+      "texture": "stone"
+    }
+  ],
+  "enemies": [
+    {
+      "type": "polocho",
+      "spawn_x": 300,
+      "spawn_y": 500,
+      "patrol_distance": 120
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 450,
+      "spawn_y": 250,
+      "patrol_distance": 100
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 800,
+      "spawn_y": 500,
+      "patrol_distance": 150
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 800,
+      "spawn_y": 400,
+      "patrol_distance": 60
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 1300,
+      "spawn_y": 500,
+      "patrol_distance": 180
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 1250,
+      "spawn_y": 350,
+      "patrol_distance": 80
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 1750,
+      "spawn_y": 500,
+      "patrol_distance": 120
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 1775,
+      "spawn_y": 400,
+      "patrol_distance": 60
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 2700,
+      "spawn_y": 500,
+      "patrol_distance": 150
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 3200,
+      "spawn_y": 500,
+      "patrol_distance": 180
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 3700,
+      "spawn_y": 500,
+      "patrol_distance": 150
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 4150,
+      "spawn_y": 300,
+      "patrol_distance": 100
+    }
+  ],
+  "powerups": [
+    {
+      "type": "golden_arepa",
+      "x": 1250,
+      "y": 350
+    },
+    {
+      "type": "golden_arepa",
+      "x": 3200,
+      "y": 350
+    }
+  ],
+  "pits": [
+    {
+      "x": 600,
+      "y": 0,
+      "width": 50,
+      "height": 600,
+      "type": "fall_zone"
+    },
+    {
+      "x": 1050,
+      "y": 0,
+      "width": 50,
+      "height": 600,
+      "type": "fall_zone"
+    },
+    {
+      "x": 2000,
+      "y": 0,
+      "width": 50,
+      "height": 600,
+      "type": "fall_zone"
+    },
+    {
+      "x": 2500,
+      "y": 0,
+      "width": 50,
+      "height": 600,
+      "type": "fall_zone"
+    },
+    {
+      "x": 3500,
+      "y": 0,
+      "width": 50,
+      "height": 600,
+      "type": "fall_zone"
+    },
+    {
+      "x": 3950,
+      "y": 0,
+      "width": 50,
+      "height": 600,
+      "type": "fall_zone"
+    },
+    {
+      "x": 4400,
+      "y": 0,
+      "width": 50,
+      "height": 600,
+      "type": "fall_zone"
+    }
+  ]
+}

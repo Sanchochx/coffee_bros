@@ -5,13 +5,13 @@
 **So that** I can use all my skills together
 
 ## Acceptance Criteria
-- [ ] Level is 5000 pixels wide
-- [ ] Contains 15 Polochos with complex patterns
-- [ ] Contains 3 Golden Arepas
-- [ ] Combines difficult platforming with dense enemies
-- [ ] Requires strategic powerup usage
-- [ ] Medium-hard difficulty
-- [ ] Has multiple paths/routes to goal
+- [x] Level is 5000 pixels wide
+- [x] Contains 15 Polochos with complex patterns
+- [x] Contains 3 Golden Arepas
+- [x] Combines difficult platforming with dense enemies
+- [x] Requires strategic powerup usage
+- [x] Medium-hard difficulty
+- [x] Has multiple paths/routes to goal
 
 ## Technical Notes
 - Design requires mastery of both platforming and combat

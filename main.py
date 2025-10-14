@@ -26,7 +26,7 @@ def main():
     score = 0
     font = pygame.font.Font(None, 36)  # Default font, size 36
     current_level_number = 1  # Start with level 1 (US-025)
-    max_level_number = 2  # Maximum level implemented (US-025)
+    max_level_number = 4  # Maximum level implemented (US-027)
 
     # Time tracking (for completion screen)
     level_start_time = pygame.time.get_ticks()  # milliseconds since pygame.init()

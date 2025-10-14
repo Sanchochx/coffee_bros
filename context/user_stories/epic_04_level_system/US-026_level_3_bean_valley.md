@@ -5,13 +5,13 @@
 **So that** I can master fighting enemies
 
 ## Acceptance Criteria
-- [ ] Level is 4800 pixels wide
-- [ ] Contains 12 Polochos placed close together
-- [ ] Contains 2 Golden Arepas strategically placed
-- [ ] Features sections with multiple enemies in succession
-- [ ] Requires both stomping and shooting strategies
-- [ ] Medium difficulty
-- [ ] Includes some tight spaces with enemies
+- [x] Level is 4800 pixels wide
+- [x] Contains 12 Polochos placed close together
+- [x] Contains 2 Golden Arepas strategically placed
+- [x] Features sections with multiple enemies in succession
+- [x] Requires both stomping and shooting strategies
+- [x] Medium difficulty
+- [x] Includes some tight spaces with enemies
 
 ## Technical Notes
 - Group enemies to create challenging sections
