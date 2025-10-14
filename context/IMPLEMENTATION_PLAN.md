@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 12
+- **Completed:** 13
 - **In Progress:** 0
-- **Remaining:** 60
-- **Progress:** 16.7%
+- **Remaining:** 59
+- **Progress:** 18.1%
 
 ---
 
@@ -90,7 +90,7 @@
   - Path: `context/user_stories/epic_02_enemies_combat/US-012_enemy_collision_damage.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-012_enemy_collision_damage.md)
 
-- [ ] **US-013** - Lives System
+- [x] **US-013** - Lives System
   - *Add player lives/health system*
   - Path: `context/user_stories/epic_02_enemies_combat/US-013_lives_system.md`
   - [Details](context/user_stories/epic_02_enemies_combat/US-013_lives_system.md)
@@ -477,6 +477,6 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 2 - Enemies and Combat
-**Current Story:** US-013 - Lives System
-**Last Completed Story:** US-012 - Enemy Collision Damage
+**Current Story:** US-014 - Death and Respawn
+**Last Completed Story:** US-013 - Lives System
 **Last Completed Epic:** Epic 1 - Foundation (100% complete)

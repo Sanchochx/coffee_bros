@@ -114,6 +114,10 @@ def main():
                     player.take_damage(knockback_direction)
                     # TODO (US-045): Play damage sound effect (audio system in Epic 7)
 
+        # Check for game over condition (US-013)
+        if player.lives <= 0:
+            running = False  # End game when lives reach 0
+
         # Fill screen with black background
         screen.fill(BLACK)
 

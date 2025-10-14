@@ -3,7 +3,7 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-13
-**Completed User Stories:** 12 / 72
+**Completed User Stories:** 13 / 72
 **Current Phase:** Epic 2 - Enemies and Combat (In Progress)
 
 ---
@@ -11,6 +11,16 @@
 ## Implemented Features
 
 ### Epic 2: Enemies and Combat
+- **US-013: Lives System** ✓
+  - Player starts with 3 lives (PLAYER_STARTING_LIVES constant)
+  - Lives tracked in player.lives attribute
+  - Lives displayed on HUD below score at position (10, 50)
+  - Lives decrease when player takes damage from enemies
+  - Game over logic: game ends when lives reach 0
+  - Lives persist throughout the level attempt
+  - Lives system integrates with damage system (US-012)
+  - Note: Pit/fall death (decreasing lives when falling off map) will be implemented in US-015
+
 - **US-012: Enemy Collision Damage** ✓
   - Side collision with enemy damages player
   - Bottom collision (hitting enemy from below) damages player
@@ -204,7 +214,7 @@ sancho_bros/
     - Score variable initialized to 0
     - Font initialized for rendering score text
     - Score displayed at top-left corner in white text
-  - **Enemy collision detection (US-011, US-012):**
+  - **Enemy collision detection (US-011, US-012, US-013):**
     - Checks collision between player and enemies (skips squashed enemies)
     - **Stomp detection (US-011):**
       - Validates player is falling (velocity_y > 0)
@@ -218,6 +228,10 @@ sancho_bros/
       - Determines knockback direction based on relative positions
       - Calls player.take_damage(knockback_direction)
       - Placeholder for damage sound effect
+  - **Game over check (US-013):**
+    - After collision detection, checks if player.lives <= 0
+    - Ends game loop when lives reach 0
+    - Game exits cleanly when game over condition met
   - **HUD rendering:**
     - Score displayed at top-left (10, 10)
     - Lives displayed below score (10, 50)
@@ -363,21 +377,21 @@ sancho_bros/
 ## Next Steps
 
 **Epic 1 Complete!** All foundation stories (US-001 through US-008) have been completed.
-**Epic 2 In Progress!** US-009, US-010, US-011, and US-012 complete!
+**Epic 2 In Progress!** US-009, US-010, US-011, US-012, and US-013 complete!
 
 **Current Epic:** Epic 2 - Enemies and Combat
-**Next User Story:** US-013 - Lives System
-- Add player lives/health system
-- Path: `context/user_stories/epic_02_enemies_combat/US-013_lives_system.md`
+**Next User Story:** US-014 - Death and Respawn
+- Handle player death and respawn mechanics
+- Path: `context/user_stories/epic_02_enemies_combat/US-014_death_and_respawn.md`
 
-**Dependencies:** US-012 (Enemy Collision Damage) is complete and already tracks lives
+**Dependencies:** US-013 (Lives System) is complete
 
 ---
 
 ## Notes
 
 - **Epic 1 (Foundation) completed successfully** - all 8 user stories done!
-- **Epic 2 (Enemies and Combat) in progress** - US-009, US-010, US-011, and US-012 complete!
+- **Epic 2 (Enemies and Combat) in progress** - US-009, US-010, US-011, US-012, and US-013 complete!
 - Project now has proper modular structure (US-008)
 - Player can move left and right with keyboard controls
 - Gravity system implemented - player falls naturally
@@ -413,6 +427,13 @@ sancho_bros/
     - Knockback pushes player away from enemy
     - Lives displayed on HUD
     - Placeholder added for damage sound effect (audio in Epic 7)
+  - **Lives system fully functional (US-013):**
+    - Player starts with 3 lives
+    - Lives displayed on HUD below score
+    - Lives decrease when taking damage from enemies
+    - Game over occurs when lives reach 0 (game exits)
+    - Lives persist throughout the level attempt
+    - Clean integration with damage and combat systems
 - **Platform collision detection is fully functional:**
   - Player lands on and walks along platforms
   - Enemies also respond to platform collisions
@@ -424,5 +445,5 @@ sancho_bros/
   - Configuration separated into config.py
   - Each entity in its own file
   - Clean imports and package structure
-- Ready to continue Epic 2 with US-013 (Lives System)
+- Ready to continue Epic 2 with US-014 (Death and Respawn)
 - Pygame must be installed: `pip install pygame`
