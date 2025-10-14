@@ -3,12 +3,49 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 20 / 72
-**Current Phase:** Epic 3 - Power-ups and Special Abilities (Complete - 100%)
+**Completed User Stories:** 21 / 72
+**Current Phase:** Epic 4 - Level System and Progression (In Progress - 10%)
 
 ---
 
 ## Implemented Features
+
+### Epic 4: Level System and Progression
+- **US-021: Level Data Format** ✓
+  - Level data stored in JSON format in `assets/levels/` directory
+  - Comprehensive JSON structure includes all game entities:
+    - **metadata**: Level name, number, description, dimensions (width/height), background info, music track
+    - **player**: Spawn position (spawn_x, spawn_y)
+    - **goal**: Level completion area (x, y, width, height, type)
+    - **platforms**: Array of platform objects (x, y, width, height, type, texture)
+    - **enemies**: Array of enemy spawn points (type, spawn_x, spawn_y, patrol_distance)
+    - **powerups**: Array of power-up locations (type, x, y)
+    - **pits**: Array of death zones (x, y, width, height, type)
+  - Example level file created: `level_1.json` (Coffee Hills tutorial level)
+  - Comprehensive format specification documented in `level_format_spec.md`
+  - Specification includes:
+    - Detailed field descriptions with types and requirements
+    - Example JSON snippets for each section
+    - Python code examples for loading and parsing levels
+    - Validation rules for required vs optional fields
+    - Level design guidelines (platform spacing, enemy placement, etc.)
+    - Future enhancement considerations
+  - JSON format supports multiple entity types:
+    - Platform types: ground, floating
+    - Enemy types: polocho (with patrol behavior)
+    - Power-up types: golden_arepa
+    - Pit types: fall_zone, lava, spikes
+  - Format designed for easy level creation and modification
+  - Uses Python's json module for loading (to be implemented in US-022)
+  - Validation system planned for missing/malformed JSON
+  - Level 1 example features:
+    - 3200x600 pixel scrolling level
+    - 13 platforms (ground and floating)
+    - 6 Polocho enemies with varied patrol distances
+    - 5 Golden Arepa power-ups
+    - 2 pit/fall zones
+    - Player spawn at (100, 400)
+    - Goal flag at (3000, 400)
 
 ### Epic 3: Power-ups and Special Abilities
 - **US-020: Laser-Enemy Collision** ✓
@@ -285,6 +322,10 @@ sancho_bros/
 │       ├── polocho.py              # Polocho enemy sprite class
 │       ├── golden_arepa.py         # Golden Arepa power-up sprite class
 │       └── laser.py                # Laser projectile sprite class
+├── assets/                         # Game assets and data
+│   └── levels/                     # Level data files (US-021)
+│       ├── level_1.json            # Level 1: Coffee Hills data
+│       └── level_format_spec.md    # JSON format specification
 └── context/                         # Project context and documentation
     ├── task_execution.md           # Task execution workflow
     ├── arch_status.md              # This file - architecture status tracking
@@ -294,8 +335,10 @@ sancho_bros/
         │   └── US-001_basic_game_window_setup.md
         ├── epic_02_enemies_combat/
         │   └── US-009_enemy_creation.md
-        └── epic_03_powerups/
-            └── US-016_golden_arepa_spawning.md
+        ├── epic_03_powerups/
+        │   └── US-016_golden_arepa_spawning.md
+        └── epic_04_level_system/
+            └── US-021_level_data_format.md
 ```
 
 ---
@@ -595,6 +638,52 @@ sancho_bros/
   - `src/entities/__init__.py` exports Player, Platform, Polocho, GoldenArepa, and Laser for easy importing
   - Enables clean imports: `from src.entities import Player, Platform, Polocho, GoldenArepa, Laser`
 
+### assets/levels/level_1.json
+- **Purpose:** Level 1 data definition (Coffee Hills tutorial level)
+- **Key Components:**
+  - **Metadata:** Level name "Coffee Hills", 3200x600 dimensions, background info
+  - **Player spawn:** (100, 400) - left side of level
+  - **Goal:** Flag at (3000, 400) - right side of level
+  - **13 platforms:** Mix of ground platforms and floating platforms at various heights
+  - **6 enemies:** Polocho enemies with varied patrol distances (100-200 pixels)
+  - **5 power-ups:** Golden Arepas placed at strategic locations throughout level
+  - **2 pits:** Fall zones at x=1200 and x=1900 (100 pixels wide each)
+- **Design Philosophy:**
+  - Tutorial level introducing basic mechanics
+  - Gradually increasing difficulty from left to right
+  - Power-ups reward exploration and platforming skill
+  - Enemies teach combat mechanics without overwhelming player
+  - Wide scrolling level (3200 pixels) for camera system (Epic 6)
+
+### assets/levels/level_format_spec.md
+- **Purpose:** Comprehensive documentation of level JSON format
+- **Key Sections:**
+  1. **Overview:** Introduction to level data format and file naming conventions
+  2. **JSON Structure:** Root-level field specification
+  3. **Field Specifications:** Detailed documentation for each field:
+     - metadata: Level info (name, dimensions, background, music)
+     - player: Spawn position
+     - goal: Level completion trigger
+     - platforms: Platform objects with position, size, type, texture
+     - enemies: Enemy spawns with patrol behavior
+     - powerups: Power-up locations
+     - pits: Death zone definitions
+  4. **Validation Rules:** Required vs optional fields
+  5. **Python Loading Examples:** Code snippets for loading and parsing JSON
+  6. **Entity Creation Examples:** How to instantiate game objects from data
+  7. **Level Design Guidelines:** Best practices for:
+     - Platform spacing (based on player jump capabilities)
+     - Enemy placement and patrol distances
+     - Power-up positioning for rewards
+     - Pit placement for fair challenge
+  8. **Level Dimensions:** Standard sizes and scrolling considerations
+  9. **Future Enhancements:** Planned additions (moving platforms, new enemy types, etc.)
+- **Features:**
+  - Includes Python code examples for loading levels with error handling
+  - Documents all current entity types (polocho, golden_arepa, etc.)
+  - Provides validation examples for required fields
+  - Includes versioning information for format changes
+
 ---
 
 ## Technical Decisions
@@ -636,19 +725,19 @@ sancho_bros/
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 **Epic 3 Complete!** All 5 stories (US-016 through US-020) have been completed!
 
-**Completed in Epic 3:**
-- US-016 - Golden Arepa Spawning ✓
-- US-017 - Powerup Collection ✓
-- US-018 - Powered-Up State ✓
-- US-019 - Laser Shooting Mechanic ✓
-- US-020 - Laser-Enemy Collision ✓
+**Epic 4 In Progress!** (1/10 stories completed - 10%)
 
-**Next Epic:** Epic 4 - Level System and Progression (10 stories)
-**Next User Story:** US-021 - Level Data Format
-- Design JSON/data structure for level definitions
-- Path: `context/user_stories/epic_04_level_system/US-021_level_data_format.md`
+**Completed in Epic 4:**
+- US-021 - Level Data Format ✓
 
-**Dependencies:** All foundation, combat, and powerup systems are complete
+**Next User Story:** US-022 - Level Loading System
+- Implement system to load levels from JSON data files
+- Create level loader module with validation
+- Path: `context/user_stories/epic_04_level_system/US-022_level_loading_system.md`
+
+**Dependencies:**
+- US-021 complete (level data format defined) ✓
+- All foundation systems complete (US-001 through US-008) ✓
 
 ---
 

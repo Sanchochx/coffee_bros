@@ -1,0 +1,210 @@
+{
+  "metadata": {
+    "name": "Coffee Hills",
+    "level_number": 1,
+    "description": "Tutorial level introducing basic mechanics",
+    "width": 3200,
+    "height": 600,
+    "background_type": "coffee_hills",
+    "background_color": [135, 206, 235],
+    "music_track": "coffee_hills_theme"
+  },
+  "player": {
+    "spawn_x": 100,
+    "spawn_y": 400
+  },
+  "goal": {
+    "x": 3000,
+    "y": 400,
+    "width": 50,
+    "height": 80,
+    "type": "flag"
+  },
+  "platforms": [
+    {
+      "x": 0,
+      "y": 550,
+      "width": 800,
+      "height": 50,
+      "type": "ground",
+      "texture": "grass"
+    },
+    {
+      "x": 200,
+      "y": 450,
+      "width": 150,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 400,
+      "y": 350,
+      "width": 120,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 550,
+      "y": 250,
+      "width": 180,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 100,
+      "y": 200,
+      "width": 100,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 800,
+      "y": 550,
+      "width": 400,
+      "height": 50,
+      "type": "ground",
+      "texture": "grass"
+    },
+    {
+      "x": 1300,
+      "y": 550,
+      "width": 600,
+      "height": 50,
+      "type": "ground",
+      "texture": "grass"
+    },
+    {
+      "x": 1000,
+      "y": 400,
+      "width": 150,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 1500,
+      "y": 350,
+      "width": 200,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 2000,
+      "y": 550,
+      "width": 800,
+      "height": 50,
+      "type": "ground",
+      "texture": "grass"
+    },
+    {
+      "x": 2200,
+      "y": 450,
+      "width": 150,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 2500,
+      "y": 350,
+      "width": 200,
+      "height": 20,
+      "type": "floating",
+      "texture": "stone"
+    },
+    {
+      "x": 2900,
+      "y": 500,
+      "width": 300,
+      "height": 50,
+      "type": "ground",
+      "texture": "grass"
+    }
+  ],
+  "enemies": [
+    {
+      "type": "polocho",
+      "spawn_x": 300,
+      "spawn_y": 400,
+      "patrol_distance": 150
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 600,
+      "spawn_y": 500,
+      "patrol_distance": 200
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 1100,
+      "spawn_y": 350,
+      "patrol_distance": 100
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 1600,
+      "spawn_y": 500,
+      "patrol_distance": 150
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 2300,
+      "spawn_y": 400,
+      "patrol_distance": 120
+    },
+    {
+      "type": "polocho",
+      "spawn_x": 2700,
+      "spawn_y": 500,
+      "patrol_distance": 180
+    }
+  ],
+  "powerups": [
+    {
+      "type": "golden_arepa",
+      "x": 250,
+      "y": 400
+    },
+    {
+      "type": "golden_arepa",
+      "x": 650,
+      "y": 200
+    },
+    {
+      "type": "golden_arepa",
+      "x": 1200,
+      "y": 350
+    },
+    {
+      "type": "golden_arepa",
+      "x": 1800,
+      "y": 300
+    },
+    {
+      "type": "golden_arepa",
+      "x": 2600,
+      "y": 300
+    }
+  ],
+  "pits": [
+    {
+      "x": 1200,
+      "y": 0,
+      "width": 100,
+      "height": 600,
+      "type": "fall_zone"
+    },
+    {
+      "x": 1900,
+      "y": 0,
+      "width": 100,
+      "height": 600,
+      "type": "fall_zone"
+    }
+  ]
+}

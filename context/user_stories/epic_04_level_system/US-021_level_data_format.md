@@ -5,12 +5,12 @@
 **So that** levels are easy to create and modify
 
 ## Acceptance Criteria
-- [ ] Level data is stored in JSON format
-- [ ] JSON includes platforms, enemies, powerups, pits
-- [ ] JSON specifies player spawn and goal positions
-- [ ] JSON includes level metadata (name, size, background)
-- [ ] Level files are located in `assets/levels/` directory
-- [ ] JSON structure follows documented format
+- [x] Level data is stored in JSON format
+- [x] JSON includes platforms, enemies, powerups, pits
+- [x] JSON specifies player spawn and goal positions
+- [x] JSON includes level metadata (name, size, background)
+- [x] Level files are located in `assets/levels/` directory
+- [x] JSON structure follows documented format
 
 ## Technical Notes
 - Use Python's `json` module to load data
