@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 27
+- **Completed:** 28
 - **In Progress:** 0
-- **Remaining:** 45
-- **Progress:** 37.5%
+- **Remaining:** 44
+- **Progress:** 38.9%
 
 ---
 
@@ -175,7 +175,7 @@
   - Path: `context/user_stories/epic_04_level_system/US-027_level_4_harvest_heights.md`
   - [Details](context/user_stories/epic_04_level_system/US-027_level_4_harvest_heights.md)
 
-- [ ] **US-028** - Level 5: El Pico del Café (Final)
+- [x] **US-028** - Level 5: El Pico del Café (Final)
   - *Design and implement final boss/challenge level*
   - Path: `context/user_stories/epic_04_level_system/US-028_level_5_el_pico_del_cafe.md`
   - [Details](context/user_stories/epic_04_level_system/US-028_level_5_el_pico_del_cafe.md)
@@ -476,7 +476,7 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 4 - Level System and Progression (70% complete)
-**Current Story:** US-028 - Level 5: El Pico del Café (Final)
-**Last Completed Story:** US-027 - Level 4: Harvest Heights
+**Current Epic:** Epic 4 - Level System and Progression (80% complete)
+**Current Story:** US-029 - Level Transition Screen
+**Last Completed Story:** US-028 - Level 5: El Pico del Café (Final)
 **Last Completed Epic:** Epic 3 - Power-ups and Special Abilities (100% complete)

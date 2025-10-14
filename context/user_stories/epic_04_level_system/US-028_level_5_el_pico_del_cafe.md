@@ -5,14 +5,14 @@
 **So that** I have a satisfying conclusion
 
 ## Acceptance Criteria
-- [ ] Level is 6000 pixels wide (longest level)
-- [ ] Contains 20 Polochos with challenging placement
-- [ ] Contains 3 Golden Arepas
-- [ ] Features most difficult platforming sections
-- [ ] Combines all game mechanics learned
-- [ ] Hard difficulty
-- [ ] Has climactic feel with peak mountain background
-- [ ] Victory screen shows after completion
+- [x] Level is 6000 pixels wide (longest level)
+- [x] Contains 20 Polochos with challenging placement
+- [x] Contains 3 Golden Arepas
+- [x] Features most difficult platforming sections
+- [x] Combines all game mechanics learned
+- [x] Hard difficulty
+- [x] Has climactic feel with peak mountain background
+- [x] Victory screen shows after completion
 
 ## Technical Notes
 - Design as culmination of all previous challenges

@@ -3,14 +3,116 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 27 / 72
-**Current Phase:** Epic 4 - Level System and Progression (In Progress - 70%)
+**Completed User Stories:** 28 / 72
+**Current Phase:** Epic 4 - Level System and Progression (In Progress - 80%)
 
 ---
 
 ## Implemented Features
 
 ### Epic 4: Level System and Progression
+- **US-028: Level 5 - El Pico del Café (Final)** ✓
+  - Final and most challenging level designed as ultimate test of all game mechanics
+  - Level implemented using level_5.json file
+  - **Level specifications:**
+    - Width: 6000 pixels (LONGEST level in the entire game - epic final challenge)
+    - Height: 600 pixels (standard viewport height)
+    - Name: "El Pico del Café"
+    - Description: "The ultimate challenge! Reach the peak of the mountain using all your skills!"
+    - Background type: el_pico_peak with dark blue-gray background color (100, 120, 160)
+  - **Player spawn:** (100, 450) - left side of level
+  - **Goal location:** (5850, 150) - HIGH on the right side (y=150), 50x80 pixel flag at mountain peak
+  - **Platform layout (36 platforms):**
+    - Most complex platform arrangement in any level - creates ultimate platforming challenge
+    - Mix of ground platforms and small floating platforms (70-120px) requiring precision
+    - Extensive use of vertical space - platforms from y=150 to y=550
+    - Narrow floating platforms positioned to create vertical climbing sections
+    - Multiple vertical "towers" requiring precise jump sequences
+    - Long gaps between platforms force careful jump planning
+    - Platform positioning creates both high-risk high-reward paths and safer alternatives
+    - Ground sections spaced far apart (200-250px) as "rest areas" between challenges
+    - Final approach to goal requires climbing to y=150 (highest point in game)
+  - **Enemy configuration (20 Polochos - MOST enemies in any level):**
+    - Enemy 1: (150, 500) with 100px patrol - early ground section
+    - Enemy 2: (380, 400) with 60px patrol - first floating platform (tight space)
+    - Enemy 3: (850, 500) with 150px patrol - second ground section
+    - Enemy 4: (1050, 400) with 50px patrol - narrow platform (very tight!)
+    - Enemy 5: (1320, 200) with 70px patrol - high floating platform
+    - Enemy 6: (1480, 100) with 80px patrol - VERY high platform (guards Golden Arepa)
+    - Enemy 7: (1780, 300) with 60px patrol - mid-height challenge
+    - Enemy 8: (1920, 400) with 70px patrol - narrow platform
+    - Enemy 9: (2200, 500) with 180px patrol - long ground patrol (widest in level)
+    - Enemy 10: (2420, 400) with 50px patrol - very tight platform space
+    - Enemy 11: (2680, 200) with 70px patrol - high floating platform
+    - Enemy 12: (2830, 100) with 60px patrol - VERY high platform (guards Golden Arepa)
+    - Enemy 13: (3100, 300) with 50px patrol - extremely tight space
+    - Enemy 14: (3450, 500) with 150px patrol - ground section
+    - Enemy 15: (3780, 300) with 60px patrol - mid-height challenge
+    - Enemy 16: (4050, 100) with 70px patrol - VERY high platform (guards Golden Arepa)
+    - Enemy 17: (4330, 300) with 60px patrol - mid-height floating platform
+    - Enemy 18: (4750, 500) with 180px patrol - late-game ground patrol (very wide)
+    - Enemy 19: (5070, 300) with 60px patrol - near-end challenge
+    - Enemy 20: (5630, 200) with 70px patrol - FINAL enemy before goal (high platform)
+    - Complex patrol patterns ranging from 50px (extremely tight) to 180px (very wide)
+    - Many enemies positioned on high platforms (y=100-200) guarding powerups
+    - Enemies on narrow platforms create extreme precision challenges
+    - Forces strategic use of all combat mechanics: stomp, shoot, and avoidance
+  - **Power-up placement (3 Golden Arepas):**
+    - Golden Arepa 1 at (1480, 100) - very high platform, guarded by Enemy 6
+    - Golden Arepa 2 at (2830, 100) - very high platform, guarded by Enemy 12
+    - Golden Arepa 3 at (4050, 100) - very high platform, guarded by Enemy 16
+    - ALL powerups at highest vertical level (y=100) - extreme risk/reward
+    - Each powerup guarded by an enemy with tight patrol
+    - Powerups spaced throughout level: early, mid, and late-game
+    - Requires mastery of vertical platforming to reach
+    - Strategic timing needed to collect while avoiding enemy patrols
+  - **Pit/danger zones (35 pits - MOST hazards in any level):**
+    - Pits distributed throughout entire 6000px length
+    - Most pits are 60-70px wide (precision jumps required)
+    - Pit positions: x=300, 430, 590, 720, 980, 1120, 1260, 1410, 1580, 1720, 1860, 2010, 2350, 2490, 2620, 2770, 2910, 3040, 3170, 3310, 3580, 3720, 3860, 3990, 4140, 4270, 4410, 4550, 4870, 5010, 5150, 5280, 5430, 5570, 5720
+    - 35 total pits create constant environmental danger
+    - Narrow pits force precision during both platforming AND combat
+    - More than double the pits from Level 4 (35 vs 10)
+    - Evenly distributed - no safe section without pit hazards
+  - **Level design philosophy:**
+    - Ultimate challenge combining ALL game mechanics from previous levels
+    - Vertical platforming emphasis - uses full screen height from y=150 to y=550
+    - Precision platforming - narrow platforms (70-90px) throughout
+    - Intense combat pressure - 20 enemies ensure constant threat
+    - Strategic powerup usage - 3 arepas at extreme heights require risk-taking
+    - Multiple skill requirements: precision jumping, enemy combat, powerup timing
+    - Enemies on high platforms guard critical powerups
+    - Long level length (6000px) tests endurance and consistency
+    - Hard difficulty - hardest level in the game by design
+    - Goal placed at peak height (y=150) requires final climb to victory
+    - Climactic feel with mountain peak theme and ultimate challenge
+    - 35 pits ensure no moment of safety - constant vigilance required
+    - Combines platforming focus (Level 2), combat focus (Level 3), and combined challenge (Level 4)
+  - **El Pico del Café theme:**
+    - Background type set to "el_pico_peak"
+    - Dark blue-gray background color (RGB: 100, 120, 160) - peak mountain atmosphere
+    - Music track: "el_pico_theme" (placeholder for Epic 7)
+    - Visual theme represents reaching the peak of Colombian coffee mountain
+    - Name "El Pico del Café" translates to "The Coffee Peak"
+  - **Integration with game systems:**
+    - Loaded via Level.load_from_file(5) after completing Level 4
+    - All entities created from JSON data (US-021, US-022)
+    - Goal triggers level completion (US-023)
+    - Level progression system loads Level 5 after Level 4 completion
+    - Score carries over from previous levels
+    - 3-second delay between levels shows completion screen
+    - main.py updated with max_level_number = 5
+    - Victory screen shows after completion (placeholder for US-030)
+  - **Testing and validation:**
+    - Level JSON validates correctly with all required fields
+    - All 20 enemies spawn and patrol correctly with varied patterns
+    - 3 powerups spawn at challenging high-platform locations
+    - 35 pits function as death zones throughout level
+    - Goal triggers level completion at mountain peak
+    - Level is extremely challenging but completable with mastery of all skills
+    - Vertical platforming sections confirmed functional
+    - Complex enemy+platform combinations create engaging final challenge
+
 - **US-027: Level 4 - Harvest Heights** ✓
   - Fourth level designed as challenging combined platforming and combat experience
   - Level implemented using level_4.json file
@@ -756,6 +858,7 @@ sancho_bros/
 │       ├── level_2.json            # Level 2: Mountain Paths data (US-025)
 │       ├── level_3.json            # Level 3: Bean Valley data (US-026)
 │       ├── level_4.json            # Level 4: Harvest Heights data (US-027)
+│       ├── level_5.json            # Level 5: El Pico del Café data (US-028)
 │       └── level_format_spec.md    # JSON format specification
 └── context/                         # Project context and documentation
     ├── task_execution.md           # Task execution workflow
@@ -1172,6 +1275,28 @@ sancho_bros/
   - `src/entities/__init__.py` exports Player, Platform, Polocho, GoldenArepa, Laser, and Goal for easy importing
   - Enables clean imports: `from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal`
 
+### assets/levels/level_5.json
+- **Purpose:** Level 5 data definition (El Pico del Café - final challenge level)
+- **Key Components:**
+  - **Metadata:** Level name "El Pico del Café", 6000x600 dimensions, el_pico_peak background
+  - **Player spawn:** (100, 450) - left side of level
+  - **Goal:** Flag at (5850, 150) - HIGH on right side (mountain peak)
+  - **36 platforms:** Most complex layout creating ultimate platforming challenge
+  - **20 enemies:** Polocho enemies with challenging placement (50-180px patrols)
+  - **3 power-ups:** Golden Arepas all at extreme heights (y=100) - guarded by enemies
+  - **35 pits:** MOST hazards in any level (60-70 pixels wide) - constant danger
+- **Design Philosophy:**
+  - Final and hardest level testing all game mechanics
+  - Vertical platforming emphasis - uses full screen height
+  - Precision platforming - narrow platforms throughout
+  - 20 enemies ensure constant combat pressure
+  - 3 powerups at extreme heights require risk-taking and skill
+  - Goal at peak height (y=150) requires final climb
+  - Longest level (6000 pixels) tests endurance
+  - Hard difficulty - combines all previous challenge types
+  - 35 pits create constant environmental danger
+  - Climactic peak mountain theme
+
 ### assets/levels/level_3.json
 - **Purpose:** Level 3 data definition (Bean Valley combat-focused level)
 - **Key Components:**
@@ -1299,7 +1424,7 @@ sancho_bros/
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 **Epic 3 Complete!** All 5 stories (US-016 through US-020) have been completed!
 
-**Epic 4 In Progress!** (7/10 stories completed - 70%)
+**Epic 4 In Progress!** (8/10 stories completed - 80%)
 
 **Completed in Epic 4:**
 - US-021 - Level Data Format ✓
@@ -1309,19 +1434,17 @@ sancho_bros/
 - US-025 - Level 2: Mountain Paths ✓
 - US-026 - Level 3: Bean Valley ✓
 - US-027 - Level 4: Harvest Heights ✓
+- US-028 - Level 5: El Pico del Café (Final) ✓
 
-**Next User Story:** US-028 - Level 5: El Pico del Café (Final)
-- Design and implement final boss/challenge level
-- Path: `context/user_stories/epic_04_level_system/US-028_level_5_el_pico_del_cafe.md`
+**Next User Story:** US-029 - Level Transition Screen
+- Create screen that displays between levels
+- Path: `context/user_stories/epic_04_level_system/US-029_level_transition_screen.md`
 
 **Dependencies:**
 - US-021 complete (level data format defined) ✓
 - US-022 complete (level loading system) ✓
 - US-023 complete (level goal/completion) ✓
-- US-024 complete (Level 1 tutorial) ✓
-- US-025 complete (Level 2 platforming focus) ✓
-- US-026 complete (Level 3 combat focus) ✓
-- US-027 complete (Level 4 combined challenge) ✓
+- US-024 through US-028 complete (all 5 levels implemented) ✓
 - Level progression system implemented ✓
 - All foundation systems complete (US-001 through US-008) ✓
 
