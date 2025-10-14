@@ -25,6 +25,8 @@ def main():
     # Initialize game state
     score = 0
     font = pygame.font.Font(None, 36)  # Default font, size 36
+    current_level_number = 1  # Start with level 1 (US-025)
+    max_level_number = 2  # Maximum level implemented (US-025)
 
     # Time tracking (for completion screen)
     level_start_time = pygame.time.get_ticks()  # milliseconds since pygame.init()
@@ -40,7 +42,7 @@ def main():
 
     # Load level from JSON file (US-022)
     try:
-        level = Level.load_from_file(1)  # Load level 1
+        level = Level.load_from_file(current_level_number)  # Load current level
     except (FileNotFoundError, ValueError) as e:
         print(f"Error loading level: {e}")
         pygame.quit()
@@ -82,16 +84,40 @@ def main():
         # Get currently pressed keys for continuous input
         keys = pygame.key.get_pressed()
 
-        # Handle level completion state (US-023)
+        # Handle level completion state (US-023, US-025)
         if is_level_complete:
             # Increment completion timer
             completion_timer += 1
 
             # After LEVEL_COMPLETE_DELAY frames (3 seconds), load next level
             if completion_timer >= LEVEL_COMPLETE_DELAY:
-                # TODO (US-024+): Load next level when implemented
-                # For now, just continue showing completion screen
-                pass
+                # Check if there's a next level available
+                if current_level_number < max_level_number:
+                    # Load next level
+                    current_level_number += 1
+                    try:
+                        level = Level.load_from_file(current_level_number)
+                        # Get fresh references to level entities
+                        player = level.player
+                        all_sprites = level.all_sprites
+                        platforms = level.platforms
+                        enemies = level.enemies
+                        powerups = level.powerups
+                        goals = level.goals
+                        lasers.empty()  # Clear all lasers from previous level
+                        # Reset completion state
+                        is_level_complete = False
+                        completion_timer = 0
+                        # Reset time tracking for new level
+                        level_start_time = pygame.time.get_ticks()
+                        # Score carries over between levels
+                    except (FileNotFoundError, ValueError) as e:
+                        print(f"Error loading level {current_level_number}: {e}")
+                        running = False
+                else:
+                    # No more levels - show completion screen indefinitely
+                    # TODO (US-030): Show victory screen when implemented
+                    pass
 
         # Handle death state
         elif is_dead:

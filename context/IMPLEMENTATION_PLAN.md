@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 24
+- **Completed:** 25
 - **In Progress:** 0
-- **Remaining:** 48
-- **Progress:** 33.3%
+- **Remaining:** 47
+- **Progress:** 34.7%
 
 ---
 
@@ -160,7 +160,7 @@
   - Path: `context/user_stories/epic_04_level_system/US-024_level_1_coffee_hills.md`
   - [Details](context/user_stories/epic_04_level_system/US-024_level_1_coffee_hills.md)
 
-- [ ] **US-025** - Level 2: Mountain Paths
+- [x] **US-025** - Level 2: Mountain Paths
   - *Design and implement second level with increased difficulty*
   - Path: `context/user_stories/epic_04_level_system/US-025_level_2_mountain_paths.md`
   - [Details](context/user_stories/epic_04_level_system/US-025_level_2_mountain_paths.md)
@@ -476,7 +476,7 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 4 - Level System and Progression (40% complete)
-**Current Story:** US-025 - Level 2: Mountain Paths
-**Last Completed Story:** US-024 - Level 1: Coffee Hills (Tutorial)
+**Current Epic:** Epic 4 - Level System and Progression (50% complete)
+**Current Story:** US-026 - Level 3: Bean Valley
+**Last Completed Story:** US-025 - Level 2: Mountain Paths
 **Last Completed Epic:** Epic 3 - Power-ups and Special Abilities (100% complete)

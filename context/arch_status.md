@@ -3,14 +3,91 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 24 / 72
-**Current Phase:** Epic 4 - Level System and Progression (In Progress - 40%)
+**Completed User Stories:** 25 / 72
+**Current Phase:** Epic 4 - Level System and Progression (In Progress - 50%)
 
 ---
 
 ## Implemented Features
 
 ### Epic 4: Level System and Progression
+- **US-025: Level 2 - Mountain Paths** ✓
+  - Second level designed with platforming focus and increased difficulty
+  - Level implemented using level_2.json file
+  - **Level specifications:**
+    - Width: 4000 pixels (wider than Level 1 - longer scrolling level)
+    - Height: 600 pixels (standard viewport height)
+    - Name: "Mountain Paths"
+    - Description: "Platforming-focused level with precision jumps and vertical challenges"
+    - Background type: mountain with light blue-gray background color (150, 180, 200)
+  - **Player spawn:** (100, 450) - left side of level, slightly higher than Level 1
+  - **Goal location:** (3850, 400) - right side of level, 50x80 pixel flag
+  - **Platform layout (22 platforms):**
+    - Ground platforms at y=550 with larger gaps between sections
+    - Multiple floating platforms at varied heights (150-450) for precision jumping
+    - Vertical platforming sections requiring careful timing
+    - Wider gaps between platforms compared to Level 1 (150-300 pixels)
+    - Platforms positioned to create challenging but achievable jump sequences
+  - **Enemy configuration (8 Polochos):**
+    - Enemy 1: (200, 500) with 100px patrol - early ground enemy
+    - Enemy 2: (600, 300) with 80px patrol - mid-height floating platform
+    - Enemy 3: (1250, 500) with 150px patrol - ground section
+    - Enemy 4: (1500, 100) with 100px patrol - high vertical section challenge
+    - Enemy 5: (1900, 300) with 120px patrol - floating platform obstacle
+    - Enemy 6: (2500, 500) with 150px patrol - ground section
+    - Enemy 7: (3100, 400) with 100px patrol - late-game challenge
+    - Enemy 8: (3650, 300) with 80px patrol - final obstacle before goal
+    - More enemies than Level 1 (8 vs 5) for increased difficulty
+    - Strategic placement on floating platforms adds platforming + combat challenge
+  - **Power-up placement (2 Golden Arepas):**
+    - Golden Arepa 1 at (1400, 100) - high vertical section (rewards exploration)
+    - Golden Arepa 2 at (3450, 200) - near end of level (difficult to reach)
+    - Fewer powerups than Level 1 (2 vs 1) but placed in challenging locations
+    - Rewards players who master precision platforming
+  - **Pit/danger zones (5 pits):**
+    - Pit 1: x=300, 150px wide - early gap requires precision
+    - Pit 2: x=800, 300px wide - large gap tests jump skills
+    - Pit 3: x=1500, 200px wide - mid-level challenge
+    - Pit 4: x=2000, 300px wide - large gap with floating platforms
+    - Pit 5: x=3150, 250px wide - late-game precision test
+    - More and wider pits than Level 1 for increased difficulty
+  - **Level design philosophy:**
+    - Focus on platforming challenges rather than combat
+    - Wider gaps require precision jumping and planning
+    - Vertical sections test player's climbing skills
+    - Strategic enemy placement adds complexity to platforming
+    - Powerups reward exploration of difficult areas
+    - Easy-medium difficulty - noticeably harder than tutorial but fair
+    - Teaches advanced platforming before introducing more mechanics
+  - **Mountain theme:**
+    - Background type set to "mountain"
+    - Light blue-gray background color (RGB: 150, 180, 200)
+    - Music track: "mountain_theme" (placeholder for Epic 7)
+    - Visual theme represents Colombian mountain landscapes
+  - **Integration with game systems:**
+    - Loaded via Level.load_from_file(2) after completing Level 1
+    - All entities created from JSON data (US-021, US-022)
+    - Goal triggers level completion (US-023)
+    - Level progression system loads Level 2 after Level 1 completion
+    - Score carries over between levels
+    - 3-second delay between levels shows completion screen
+  - **Level progression system (US-025):**
+    - main.py updated with current_level_number and max_level_number tracking
+    - After LEVEL_COMPLETE_DELAY (3 seconds), next level loads automatically
+    - Level 2 loads seamlessly after completing Level 1
+    - All game state properly reset between levels (lasers cleared, time reset)
+    - Score persists across levels for cumulative scoring
+    - Error handling for missing level files
+    - Future-ready for additional levels (US-026, US-027, US-028)
+  - **Testing and validation:**
+    - Level JSON validates correctly with all required fields
+    - All 8 enemies spawn and patrol correctly
+    - 2 powerups spawn at challenging locations
+    - Pits function as death zones with wider gaps
+    - Goal triggers level completion
+    - Level progression from Level 1 to Level 2 works correctly
+    - Level is playable and completable with careful platforming
+
 - **US-024: Level 1 - Coffee Hills (Tutorial)** ✓
   - First playable level designed as tutorial to introduce game mechanics
   - Level implemented using existing level_1.json file (created in US-021)
@@ -496,6 +573,7 @@ sancho_bros/
 ├── assets/                         # Game assets and data
 │   └── levels/                     # Level data files (US-021)
 │       ├── level_1.json            # Level 1: Coffee Hills data
+│       ├── level_2.json            # Level 2: Mountain Paths data (US-025)
 │       └── level_format_spec.md    # JSON format specification
 └── context/                         # Project context and documentation
     ├── task_execution.md           # Task execution workflow
@@ -588,8 +666,13 @@ sancho_bros/
 - **Purpose:** Main game entry point - bootstraps and runs the game
 - **Key Components:**
   - Imports from `config`, `src.entities` (Player, Platform, Polocho, GoldenArepa, Laser, Goal), and `src.level` (Level)
-  - **Level loading (US-022):**
-    - Uses `Level.load_from_file(1)` to load level 1 from JSON
+  - **Level progression system (US-025):**
+    - current_level_number tracks which level is currently loaded
+    - max_level_number defines highest implemented level (2)
+    - Levels load sequentially after completion
+    - Score carries over between levels
+  - **Level loading (US-022, US-025):**
+    - Uses `Level.load_from_file(current_level_number)` to load current level from JSON
     - Error handling with try-except catches FileNotFoundError and ValueError
     - Displays error message and exits gracefully if level fails to load
     - Extracts references to level entities for compatibility (player, all_sprites, platforms, enemies, powerups, goals)
@@ -629,15 +712,19 @@ sancho_bros/
       - Removes power-up from sprite groups via kill() (disappears)
       - Placeholder for collection sound effect
       - Placeholder for collection particle effect
-  - **Level completion detection (US-023):**
+  - **Level completion detection (US-023, US-025):**
     - Checks collision between player and goal using rect.colliderect()
     - On collision with goal:
       - Sets is_level_complete to True (only triggers once)
       - Resets completion_timer to 0
       - Records completion_time from level start (using pygame.time.get_ticks())
       - Placeholder for level complete sound/music (audio in Epic 7)
-    - After completion: waits LEVEL_COMPLETE_DELAY frames before loading next level
-    - Currently displays completion screen indefinitely (level progression in US-024+)
+    - After LEVEL_COMPLETE_DELAY frames (3 seconds):
+      - If current_level_number < max_level_number: loads next level
+      - Level progression: increments current_level_number, loads new level data
+      - Resets game state: clears lasers, resets completion flags, resets time tracking
+      - Score persists across levels for cumulative scoring
+      - If no more levels: shows completion screen indefinitely (victory screen in US-030)
   - **Pit/fall zone detection (US-015, updated in US-022):**
     - Checks if player.rect.top > WINDOW_HEIGHT (fell below screen)
     - Player loses one life immediately when falling into pit
@@ -903,6 +990,25 @@ sancho_bros/
   - `src/entities/__init__.py` exports Player, Platform, Polocho, GoldenArepa, Laser, and Goal for easy importing
   - Enables clean imports: `from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal`
 
+### assets/levels/level_2.json
+- **Purpose:** Level 2 data definition (Mountain Paths platforming level)
+- **Key Components:**
+  - **Metadata:** Level name "Mountain Paths", 4000x600 dimensions, mountain background
+  - **Player spawn:** (100, 450) - left side of level
+  - **Goal:** Flag at (3850, 400) - right side of level
+  - **22 platforms:** Heavy focus on floating platforms with precision jumping
+  - **8 enemies:** Polocho enemies strategically placed on platforms (80-150px patrols)
+  - **2 power-ups:** Golden Arepas in challenging locations requiring skilled platforming
+  - **5 pits:** Larger fall zones (150-300 pixels wide) testing precision
+- **Design Philosophy:**
+  - Platforming-focused level with precision jumping emphasis
+  - Wider gaps between platforms (150-300 pixels vs Level 1's smaller gaps)
+  - Vertical platforming sections requiring climb skills
+  - Strategic enemy placement adds complexity to jumps
+  - Fewer powerups but in more rewarding locations
+  - Easy-medium difficulty - noticeably harder than tutorial
+  - Longer scrolling level (4000 pixels) extends playtime
+
 ### assets/levels/level_1.json
 - **Purpose:** Level 1 data definition (Coffee Hills tutorial level)
 - **Key Components:**
@@ -910,13 +1016,13 @@ sancho_bros/
   - **Player spawn:** (100, 400) - left side of level
   - **Goal:** Flag at (3000, 400) - right side of level
   - **13 platforms:** Mix of ground platforms and floating platforms at various heights
-  - **6 enemies:** Polocho enemies with varied patrol distances (100-200 pixels)
-  - **5 power-ups:** Golden Arepas placed at strategic locations throughout level
+  - **5 enemies:** Polocho enemies with varied patrol distances (100-150 pixels)
+  - **1 power-up:** Golden Arepa placed early in level for tutorial
   - **2 pits:** Fall zones at x=1200 and x=1900 (100 pixels wide each)
 - **Design Philosophy:**
   - Tutorial level introducing basic mechanics
   - Gradually increasing difficulty from left to right
-  - Power-ups reward exploration and platforming skill
+  - Power-up early so player learns shooting mechanic
   - Enemies teach combat mechanics without overwhelming player
   - Wide scrolling level (3200 pixels) for camera system (Epic 6)
 
@@ -990,22 +1096,26 @@ sancho_bros/
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 **Epic 3 Complete!** All 5 stories (US-016 through US-020) have been completed!
 
-**Epic 4 In Progress!** (4/10 stories completed - 40%)
+**Epic 4 In Progress!** (5/10 stories completed - 50%)
 
 **Completed in Epic 4:**
 - US-021 - Level Data Format ✓
 - US-022 - Level Loading System ✓
 - US-023 - Level Goal/Completion ✓
 - US-024 - Level 1: Coffee Hills (Tutorial) ✓
+- US-025 - Level 2: Mountain Paths ✓
 
-**Next User Story:** US-025 - Level 2: Mountain Paths
-- Design and implement first tutorial level
-- Path: `context/user_stories/epic_04_level_system/US-024_level_1_coffee_hills.md`
+**Next User Story:** US-026 - Level 3: Bean Valley
+- Design and implement third level with medium difficulty
+- Path: `context/user_stories/epic_04_level_system/US-026_level_3_bean_valley.md`
 
 **Dependencies:**
 - US-021 complete (level data format defined) ✓
 - US-022 complete (level loading system) ✓
 - US-023 complete (level goal/completion) ✓
+- US-024 complete (Level 1 tutorial) ✓
+- US-025 complete (Level 2 platforming focus) ✓
+- Level progression system implemented ✓
 - All foundation systems complete (US-001 through US-008) ✓
 
 ---
