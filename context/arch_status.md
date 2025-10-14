@@ -3,7 +3,7 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 16 / 72
+**Completed User Stories:** 17 / 72
 **Current Phase:** Epic 3 - Power-ups and Special Abilities (In Progress)
 
 ---
@@ -11,6 +11,25 @@
 ## Implemented Features
 
 ### Epic 3: Power-ups and Special Abilities
+- **US-017: Powerup Collection** ✓
+  - Collision detection between player and power-ups implemented
+  - Walking into a Golden Arepa collects it automatically
+  - Power-up disappears when collected (removed from sprite groups via kill())
+  - Player enters powered-up state immediately upon collection
+  - Player.is_powered_up flag tracks powered-up state
+  - Player.powerup_timer tracks remaining powered-up time
+  - POWERUP_DURATION constant set to 600 frames (10 seconds at 60 FPS)
+  - Visual feedback: golden border (3-pixel width) added to player sprite when powered up
+  - _update_appearance() helper method manages player visual state changes
+  - Golden border automatically removed when powerup timer expires
+  - Score increases by POWERUP_SCORE (200 points) when power-up collected
+  - Player.collect_powerup() method handles power-up collection logic
+  - Placeholder added for collection sound effect (audio in Epic 7)
+  - Placeholder added for collection particle effect (visual polish in Epic 8)
+  - Powerup timer counts down each frame when powered up
+  - Powered-up state persists for full duration regardless of damage
+  - Multiple power-ups can be collected sequentially (timer resets to full duration)
+
 - **US-016: Golden Arepa Spawning** ✓
   - GoldenArepa class created extending pygame.sprite.Sprite
   - 30x30 pixel golden square sprites (GOLD color #FFD700)
@@ -240,9 +259,9 @@ sancho_bros/
   - **Player Physics Constants:** `PLAYER_SPEED` (5), `GRAVITY` (0.8), `TERMINAL_VELOCITY` (20), `JUMP_VELOCITY` (-15), `JUMP_CUTOFF_VELOCITY` (-3)
   - **Player Combat Constants (US-012):** `PLAYER_STARTING_LIVES` (3), `INVULNERABILITY_DURATION` (60 frames), `BLINK_INTERVAL` (5 frames), `KNOCKBACK_DISTANCE` (30 pixels), `KNOCKBACK_BOUNCE` (-5)
   - **Enemy Constants:** `ENEMY_SPEED` (2) - patrol movement speed for enemies
-  - **Score Constants:** `STOMP_SCORE` (100) - points awarded for stomping an enemy
+  - **Score Constants:** `STOMP_SCORE` (100) - points awarded for stomping an enemy, `POWERUP_SCORE` (200) - points awarded for collecting a power-up
   - **Death and Respawn Constants (US-014):** `DEATH_DELAY` (120 frames / 2 seconds) - delay before respawn after death
-  - **Power-up Constants (US-016):** `POWERUP_FLOAT_AMPLITUDE` (10 pixels), `POWERUP_FLOAT_SPEED` (0.1) - floating animation parameters
+  - **Power-up Constants (US-016, US-017):** `POWERUP_FLOAT_AMPLITUDE` (10 pixels), `POWERUP_FLOAT_SPEED` (0.1) - floating animation parameters, `POWERUP_DURATION` (600 frames / 10 seconds) - how long powered-up state lasts
 - **Design:** Single source of truth for all configuration values, imported by other modules
 
 ### main.py
@@ -284,6 +303,14 @@ sancho_bros/
       - Determines knockback direction based on relative positions
       - Calls player.take_damage(knockback_direction)
       - Placeholder for damage sound effect
+  - **Power-up collision detection (US-017):**
+    - Checks collision between player and power-ups
+    - On collision:
+      - Calls player.collect_powerup() to enter powered-up state
+      - Increases score by POWERUP_SCORE (200 points)
+      - Removes power-up from sprite groups via kill() (disappears)
+      - Placeholder for collection sound effect
+      - Placeholder for collection particle effect
   - **Pit/fall zone detection (US-015):**
     - Checks if player.rect.top > WINDOW_HEIGHT (fell below screen)
     - Player loses one life immediately when falling into pit
@@ -314,9 +341,21 @@ sancho_bros/
   - `Player`: Sprite class for the player character (Sancho)
 - **Player Class:**
   - Extends pygame.sprite.Sprite
-  - Properties: width (40), height (60), image, rect, velocity_y, is_grounded, lives, is_invulnerable, invulnerability_timer, blink_timer, visible, original_image
+  - Properties: width (40), height (60), image, rect, velocity_y, is_grounded, lives, is_invulnerable, invulnerability_timer, blink_timer, visible, original_image, is_powered_up, powerup_timer
   - Positioned using x, y coordinates
   - Yellow colored rectangle placeholder
+  - **Powered-up state properties (US-017):**
+    - is_powered_up: Boolean flag indicating if player has collected a power-up
+    - powerup_timer: Frames remaining of powered-up state
+  - **collect_powerup() method (US-017):** Handles power-up collection
+    - Sets is_powered_up flag to True
+    - Sets powerup_timer to POWERUP_DURATION (600 frames / 10 seconds)
+    - Calls _update_appearance() to add golden border visual
+    - Placeholder for collection sound effect
+  - **_update_appearance() method (US-017):** Updates player visual state
+    - Creates base yellow player sprite
+    - Adds 3-pixel golden border when powered up
+    - Updates original_image for blinking effect compatibility
   - **take_damage(knockback_direction) method (US-012):** Handles player taking damage
     - Returns early if already invulnerable (prevents multiple hits)
     - Decrements lives by 1
@@ -348,6 +387,11 @@ sancho_bros/
       - When visible: displays normal sprite
       - When invisible: displays semi-transparent sprite (alpha 100)
       - Ends invulnerability and restores full visibility when timer expires
+    - **Powered-up timer (US-017):**
+      - Decrements powerup_timer each frame when powered up
+      - When timer reaches 0: sets is_powered_up to False
+      - Calls _update_appearance() to remove golden border visual
+      - Powered-up state persists for full duration regardless of damage
 
 ### src/entities/platform.py
 - **Purpose:** Platform entity for ground and floating platforms
@@ -473,14 +517,15 @@ sancho_bros/
 **Epic 2 Complete!** All 7 stories (US-009 through US-015) have been completed!
 
 **Current Epic:** Epic 3 - Power-ups and Special Abilities (In Progress)
-**Next User Story:** US-017 - Powerup Collection
-- Implement collision detection for power-ups
-- Path: `context/user_stories/epic_03_powerups/US-017_powerup_collection.md`
+**Next User Story:** US-018 - Powered-Up State
+- Add visual changes when player is powered up
+- Path: `context/user_stories/epic_03_powerups/US-018_powered_up_state.md`
 
 **Completed in Epic 3:**
 - US-016 - Golden Arepa Spawning ✓
+- US-017 - Powerup Collection ✓
 
-**Dependencies:** US-016 is complete
+**Dependencies:** US-016 and US-017 are complete
 
 ---
 
@@ -559,12 +604,21 @@ sancho_bros/
   - Each entity in its own file
   - Clean imports and package structure
 - **Epic 2 Complete!** All 7 stories completed successfully!
-- **Epic 3 In Progress:** Golden Arepa power-ups now spawn in the level
+- **Epic 3 In Progress:** Golden Arepa power-ups now spawn and can be collected
   - **Golden Arepa spawning fully functional (US-016):**
     - Three golden arepas float at different positions
     - 30x30 golden square sprites with distinct appearance
     - Smooth sine wave floating animation
     - Multiple power-ups can exist simultaneously
-    - Ready for collection system (US-017)
-- Next: US-017 (Powerup Collection)
+  - **Powerup collection fully functional (US-017):**
+    - Walking into power-ups collects them automatically
+    - Power-ups disappear when collected (removed from sprite groups)
+    - Player enters powered-up state for 10 seconds (600 frames)
+    - Visual feedback: golden border added to player when powered up
+    - Score increases by 200 points when collecting power-up
+    - Powered-up state timer counts down and expires automatically
+    - Multiple power-ups can be collected (timer resets each time)
+    - Placeholder for collection sound effect (audio in Epic 7)
+    - Placeholder for collection particle effect (visual polish in Epic 8)
+- Next: US-018 (Powered-Up State visual improvements)
 - Pygame must be installed: `pip install pygame`

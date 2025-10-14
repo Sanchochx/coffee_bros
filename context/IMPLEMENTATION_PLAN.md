@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 16
+- **Completed:** 17
 - **In Progress:** 0
-- **Remaining:** 56
-- **Progress:** 22.2%
+- **Remaining:** 55
+- **Progress:** 23.6%
 
 ---
 
@@ -115,7 +115,7 @@
   - Path: `context/user_stories/epic_03_powerups/US-016_golden_arepa_spawning.md`
   - [Details](context/user_stories/epic_03_powerups/US-016_golden_arepa_spawning.md)
 
-- [ ] **US-017** - Powerup Collection
+- [x] **US-017** - Powerup Collection
   - *Implement collision detection for power-ups*
   - Path: `context/user_stories/epic_03_powerups/US-017_powerup_collection.md`
   - [Details](context/user_stories/epic_03_powerups/US-017_powerup_collection.md)
@@ -476,7 +476,7 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 3 - Power-ups and Special Abilities (20% complete)
-**Current Story:** US-017 - Powerup Collection
-**Last Completed Story:** US-016 - Golden Arepa Spawning
+**Current Epic:** Epic 3 - Power-ups and Special Abilities (40% complete)
+**Current Story:** US-018 - Powered-Up State
+**Last Completed Story:** US-017 - Powerup Collection
 **Last Completed Epic:** Epic 2 - Enemies and Combat (100% complete)

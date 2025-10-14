@@ -5,7 +5,7 @@ A 2D platformer game inspired by Super Mario Bros with Colombian cultural themes
 
 import pygame
 import sys
-from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES
+from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE
 from src.entities import Player, Platform, Polocho, GoldenArepa
 
 
@@ -164,6 +164,16 @@ def main():
 
                         player.take_damage(knockback_direction)
                         # TODO (US-045): Play damage sound effect (audio system in Epic 7)
+
+            # Check for player-powerup collisions (US-017)
+            for powerup in powerups:
+                if player.rect.colliderect(powerup.rect):
+                    # Player collected the power-up!
+                    player.collect_powerup()  # Enter powered-up state
+                    score += POWERUP_SCORE  # Increase score
+                    powerup.kill()  # Remove from sprite groups (disappears)
+                    # TODO (US-044): Play powerup collection sound effect (audio system in Epic 7)
+                    # TODO (US-059): Add particle effect for powerup collection (visual polish in Epic 8)
 
             # Check for pit/fall death (US-015)
             if player.rect.top > WINDOW_HEIGHT:

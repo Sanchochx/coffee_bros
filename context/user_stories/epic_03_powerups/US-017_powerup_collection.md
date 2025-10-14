@@ -5,12 +5,12 @@
 **So that** I gain its power
 
 ## Acceptance Criteria
-- [ ] Walking into powerup collects it
-- [ ] Powerup disappears when collected
-- [ ] Collection sound effect plays
-- [ ] Visual effect shows collection (sparkle/flash)
-- [ ] Player enters powered-up state immediately
-- [ ] Score increases when powerup collected
+- [x] Walking into powerup collects it
+- [x] Powerup disappears when collected
+- [x] Collection sound effect plays
+- [x] Visual effect shows collection (sparkle/flash)
+- [x] Player enters powered-up state immediately
+- [x] Score increases when powerup collected
 
 ## Technical Notes
 - Check collision between player and powerup sprites

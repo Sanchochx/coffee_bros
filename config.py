@@ -33,6 +33,7 @@ ENEMY_SPEED = 2  # pixels per frame - patrol speed for enemies
 
 # Score constants
 STOMP_SCORE = 100  # Points awarded for stomping an enemy
+POWERUP_SCORE = 200  # Points awarded for collecting a power-up
 
 # Death and respawn constants
 DEATH_DELAY = 120  # frames (2 seconds at 60 FPS) - delay before respawn after death
@@ -40,3 +41,4 @@ DEATH_DELAY = 120  # frames (2 seconds at 60 FPS) - delay before respawn after d
 # Power-up constants
 POWERUP_FLOAT_AMPLITUDE = 10  # pixels - how much the power-up floats up and down
 POWERUP_FLOAT_SPEED = 0.1  # speed of floating animation
+POWERUP_DURATION = 600  # frames (10 seconds at 60 FPS) - how long the powered-up state lasts

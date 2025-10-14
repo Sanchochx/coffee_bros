@@ -8,7 +8,7 @@ from config import (
     YELLOW, PLAYER_SPEED, GRAVITY, TERMINAL_VELOCITY,
     JUMP_VELOCITY, JUMP_CUTOFF_VELOCITY, WINDOW_WIDTH,
     PLAYER_STARTING_LIVES, INVULNERABILITY_DURATION, BLINK_INTERVAL,
-    KNOCKBACK_DISTANCE, KNOCKBACK_BOUNCE
+    KNOCKBACK_DISTANCE, KNOCKBACK_BOUNCE, POWERUP_DURATION, GOLD
 )
 
 
@@ -54,6 +54,10 @@ class Player(pygame.sprite.Sprite):
         # Store original image for blinking effect
         self.original_image = self.image.copy()
 
+        # Powered-up state (US-017)
+        self.is_powered_up = False  # True when player has collected a power-up
+        self.powerup_timer = 0  # Frames remaining of powered-up state
+
     def take_damage(self, knockback_direction=0):
         """
         Handle player taking damage from an enemy
@@ -78,6 +82,35 @@ class Player(pygame.sprite.Sprite):
 
         # Placeholder for damage sound effect (will be implemented in Epic 7)
         # TODO: Play damage sound effect
+
+    def collect_powerup(self):
+        """
+        Handle player collecting a power-up (Golden Arepa)
+        Enters powered-up state for POWERUP_DURATION frames
+        """
+        # Enter powered-up state
+        self.is_powered_up = True
+        self.powerup_timer = POWERUP_DURATION
+
+        # Visual change: add golden glow/border to show powered-up state (US-018)
+        self._update_appearance()
+
+        # Placeholder for powerup collection sound effect (will be implemented in Epic 7)
+        # TODO (US-044): Play powerup collection sound effect
+
+    def _update_appearance(self):
+        """Update player visual appearance based on current state"""
+        # Create base image
+        self.image = pygame.Surface((self.width, self.height))
+        self.image.fill(YELLOW)
+
+        # If powered up, add golden border/glow effect
+        if self.is_powered_up:
+            # Draw golden border around player
+            pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)  # 3-pixel border
+
+        # Update original image for blinking effect
+        self.original_image = self.image.copy()
 
     def update(self, keys_pressed, platforms):
         """
@@ -176,3 +209,12 @@ class Player(pygame.sprite.Sprite):
                 self.is_invulnerable = False
                 self.visible = True
                 self.image = self.original_image.copy()
+
+        # Handle powered-up timer (US-017)
+        if self.is_powered_up:
+            self.powerup_timer -= 1
+
+            # End powered-up state when timer expires
+            if self.powerup_timer <= 0:
+                self.is_powered_up = False
+                self._update_appearance()  # Remove golden border visual
