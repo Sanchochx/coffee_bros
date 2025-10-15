@@ -259,9 +259,9 @@
     },
     {
       "type": "polocho",
-      "spawn_x": 800,
-      "spawn_y": 400,
-      "patrol_distance": 60
+      "spawn_x": 850,
+      "spawn_y": 500,
+      "patrol_distance": 120
     },
     {
       "type": "polocho",
@@ -283,9 +283,9 @@
     },
     {
       "type": "polocho",
-      "spawn_x": 1775,
-      "spawn_y": 400,
-      "patrol_distance": 60
+      "spawn_x": 1800,
+      "spawn_y": 500,
+      "patrol_distance": 120
     },
     {
       "type": "polocho",

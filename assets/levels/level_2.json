@@ -207,9 +207,9 @@
     },
     {
       "type": "polocho",
-      "spawn_x": 600,
-      "spawn_y": 320,
-      "patrol_distance": 80
+      "spawn_x": 250,
+      "spawn_y": 500,
+      "patrol_distance": 120
     },
     {
       "type": "polocho",
@@ -231,21 +231,21 @@
     },
     {
       "type": "polocho",
-      "spawn_x": 2500,
+      "spawn_x": 2400,
       "spawn_y": 500,
-      "patrol_distance": 150
+      "patrol_distance": 180
     },
     {
       "type": "polocho",
-      "spawn_x": 3100,
-      "spawn_y": 410,
+      "spawn_x": 3850,
+      "spawn_y": 450,
       "patrol_distance": 100
     },
     {
       "type": "polocho",
-      "spawn_x": 3650,
-      "spawn_y": 320,
-      "patrol_distance": 80
+      "spawn_x": 1350,
+      "spawn_y": 500,
+      "patrol_distance": 120
     }
   ],
   "powerups": [
