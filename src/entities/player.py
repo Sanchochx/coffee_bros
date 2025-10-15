@@ -4,6 +4,7 @@ Contains the Player sprite class and related functionality.
 """
 
 import pygame
+import math
 from config import (
     YELLOW, PLAYER_SPEED, GRAVITY, TERMINAL_VELOCITY,
     JUMP_VELOCITY, JUMP_CUTOFF_VELOCITY, WINDOW_WIDTH,
@@ -35,9 +36,15 @@ class Player(pygame.sprite.Sprite):
         self.width = 40
         self.height = 60
 
+        # Animation system (US-048)
+        self.walk_frames = self._generate_walk_frames()  # 6 frames for walk cycle
+        self.current_frame = 0  # Current animation frame index
+        self.animation_timer = 0  # Timer for frame cycling
+        self.animation_speed = 6  # Frames to display each animation frame (60 FPS / 6 = 10 FPS animation)
+        self.is_walking = False  # True when player is moving
+
         # Create player surface (placeholder colored rectangle)
-        self.image = pygame.Surface((self.width, self.height))
-        self.image.fill(YELLOW)
+        self.image = self.walk_frames[0].copy()
 
         # Get rect for positioning
         self.rect = self.image.get_rect()
@@ -67,6 +74,50 @@ class Player(pygame.sprite.Sprite):
         # Shooting system (US-019)
         self.facing_direction = 1  # 1 = right, -1 = left
         self.shoot_cooldown = 0  # Frames until can shoot again
+
+    def _generate_walk_frames(self):
+        """
+        Generate 6 walking animation frames programmatically
+        Creates a simple walking animation with leg movement
+
+        Returns:
+            list: List of 6 pygame.Surface objects representing walk cycle
+        """
+        frames = []
+
+        for i in range(6):
+            # Create a new surface for each frame
+            frame = pygame.Surface((self.width, self.height))
+            frame.fill(YELLOW)
+
+            # Calculate leg positions based on frame number
+            # Create a walking effect by varying leg positions
+            leg_offset = math.sin(i * math.pi / 3) * 5  # Oscillate between -5 and 5 pixels
+
+            # Draw simple legs (black rectangles) to show walking motion
+            leg_width = 8
+            leg_height = 15
+
+            # Left leg
+            left_leg_x = self.width // 2 - 10 + int(leg_offset)
+            left_leg_y = self.height - leg_height
+            pygame.draw.rect(frame, (0, 0, 0),
+                           (left_leg_x, left_leg_y, leg_width, leg_height))
+
+            # Right leg (opposite phase)
+            right_leg_x = self.width // 2 + 2 - int(leg_offset)
+            right_leg_y = self.height - leg_height
+            pygame.draw.rect(frame, (0, 0, 0),
+                           (right_leg_x, right_leg_y, leg_width, leg_height))
+
+            # Draw body (slightly darker yellow rectangle)
+            body_color = (230, 189, 0)
+            body_rect = pygame.Rect(5, 10, self.width - 10, self.height - 25)
+            pygame.draw.rect(frame, body_color, body_rect)
+
+            frames.append(frame)
+
+        return frames
 
     def take_damage(self, knockback_direction=0):
         """
@@ -145,13 +196,18 @@ class Player(pygame.sprite.Sprite):
 
     def _update_appearance(self):
         """Update player visual appearance based on current state"""
-        # Create base image
-        self.image = pygame.Surface((self.width, self.height))
-        self.image.fill(YELLOW)
+        # Regenerate walk frames with current powered-up state
+        self.walk_frames = self._generate_walk_frames()
+
+        # Set current image based on animation state
+        if self.is_walking:
+            self.image = self.walk_frames[self.current_frame].copy()
+        else:
+            self.image = self.walk_frames[0].copy()
 
         # If powered up, add golden border/glow effect
         if self.is_powered_up:
-            # Draw golden border around player
+            # Draw golden border around current image
             pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)  # 3-pixel border
 
         # Update original image for blinking effect
@@ -167,16 +223,24 @@ class Player(pygame.sprite.Sprite):
             platforms (pygame.sprite.Group): Group of platform sprites for collision detection
             level_width (int): Width of the current level (for boundary clamping with camera system)
         """
-        # Handle horizontal movement
+        # Handle horizontal movement and walking animation (US-048)
+        # Check if player is moving this frame
+        is_moving = False
+
         # Handle left movement (LEFT arrow or A key)
         if keys_pressed[pygame.K_LEFT] or keys_pressed[pygame.K_a]:
             self.rect.x -= PLAYER_SPEED
             self.facing_direction = -1  # Facing left
+            is_moving = True
 
         # Handle right movement (RIGHT arrow or D key)
         if keys_pressed[pygame.K_RIGHT] or keys_pressed[pygame.K_d]:
             self.rect.x += PLAYER_SPEED
             self.facing_direction = 1  # Facing right
+            is_moving = True
+
+        # Update walking state (US-048)
+        self.is_walking = is_moving
 
         # Keep player within level boundaries (horizontal) - US-038, US-039
         if self.rect.left < 0:
@@ -285,3 +349,45 @@ class Player(pygame.sprite.Sprite):
         # Handle shooting cooldown (US-019)
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1
+
+        # Update walking animation (US-048)
+        if self.is_walking:
+            # Increment animation timer
+            self.animation_timer += 1
+
+            # Advance to next frame when timer reaches animation speed
+            if self.animation_timer >= self.animation_speed:
+                self.animation_timer = 0
+                self.current_frame = (self.current_frame + 1) % len(self.walk_frames)
+
+            # Update image to current frame
+            self.image = self.walk_frames[self.current_frame].copy()
+
+            # Add powered-up border if applicable
+            if self.is_powered_up:
+                pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
+
+            # Flip sprite horizontally based on facing direction (US-048)
+            if self.facing_direction == -1:
+                self.image = pygame.transform.flip(self.image, True, False)
+
+            # Update original image for blinking effect
+            self.original_image = self.image.copy()
+        else:
+            # Player is not moving - reset animation to idle (frame 0)
+            self.current_frame = 0
+            self.animation_timer = 0
+
+            # Update image to idle frame
+            self.image = self.walk_frames[0].copy()
+
+            # Add powered-up border if applicable
+            if self.is_powered_up:
+                pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
+
+            # Flip sprite horizontally based on facing direction (US-048)
+            if self.facing_direction == -1:
+                self.image = pygame.transform.flip(self.image, True, False)
+
+            # Update original image for blinking effect
+            self.original_image = self.image.copy()

@@ -5,11 +5,11 @@
 **So that** movement looks natural
 
 ## Acceptance Criteria
-- [ ] Walking animation plays when moving left/right
-- [ ] Animation cycles through frames smoothly
-- [ ] Animation speed matches movement speed
-- [ ] Character faces correct direction
-- [ ] Animation stops when player stops moving
+- [x] Walking animation plays when moving left/right
+- [x] Animation cycles through frames smoothly
+- [x] Animation speed matches movement speed
+- [x] Character faces correct direction
+- [x] Animation stops when player stops moving
 
 ## Technical Notes
 - Load sprite sheet with walk frames
