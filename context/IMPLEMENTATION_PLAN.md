@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 43
+- **Completed:** 44
 - **In Progress:** 0
-- **Remaining:** 29
-- **Progress:** 59.7%
+- **Remaining:** 28
+- **Progress:** 61.1%
 
 ---
 
@@ -270,7 +270,7 @@
   - Path: `context/user_stories/epic_07_audio/US-043_laser_shoot_sound_effect.md`
   - [Details](context/user_stories/epic_07_audio/US-043_laser_shoot_sound_effect.md)
 
-- [ ] **US-044** - Powerup Collection Sound
+- [x] **US-044** - Powerup Collection Sound
   - *Add sound when collecting power-up*
   - Path: `context/user_stories/epic_07_audio/US-044_powerup_collection_sound.md`
   - [Details](context/user_stories/epic_07_audio/US-044_powerup_collection_sound.md)
@@ -477,7 +477,7 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 7 - Audio System (in progress)
-**Current Story:** US-044 - Powerup Collection Sound
-**Last Completed Story:** US-043 - Laser Shoot Sound Effect
+**Current Story:** US-045 - Death Sound Effect
+**Last Completed Story:** US-044 - Powerup Collection Sound
 **Last Completed Epic:** Epic 5 - User Interface and HUD (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

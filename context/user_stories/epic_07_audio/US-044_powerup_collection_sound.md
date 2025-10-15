@@ -5,10 +5,10 @@
 **So that** collection feels rewarding
 
 ## Acceptance Criteria
-- [ ] Sound plays when powerup is collected
-- [ ] Sound is positive and rewarding (chime/sparkle)
-- [ ] Sound is longer and more prominent than other effects
-- [ ] Sound conveys "special item" feeling
+- [x] Sound plays when powerup is collected
+- [x] Sound is positive and rewarding (chime/sparkle)
+- [x] Sound is longer and more prominent than other effects
+- [x] Sound conveys "special item" feeling
 
 ## Technical Notes
 - Play when powerup collected

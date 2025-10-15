@@ -529,7 +529,7 @@ def main():
                     player.collect_powerup()  # Enter powered-up state
                     score += POWERUP_SCORE  # Increase score
                     powerup.kill()  # Remove from sprite groups (disappears)
-                    # TODO (US-044): Play powerup collection sound effect (audio system in Epic 7)
+                    audio_manager.play_powerup()  # US-044: Play powerup collection sound effect
                     # TODO (US-059): Add particle effect for powerup collection (visual polish in Epic 8)
 
             # Check for level completion (US-023, US-029)

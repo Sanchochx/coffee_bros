@@ -203,3 +203,14 @@ class AudioManager:
         """
         print("play_laser() called")
         return self.play_sound("laser")
+
+    def play_powerup(self):
+        """
+        Play the powerup collection sound effect (US-044).
+        Positive, rewarding sound when player collects a Golden Arepa.
+
+        Returns:
+            bool: True if sound played successfully, False otherwise
+        """
+        print("play_powerup() called")
+        return self.play_sound("powerup")
