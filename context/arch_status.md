@@ -3,13 +3,68 @@
 ## Current Project State
 
 **Last Updated:** 2025-10-14
-**Completed User Stories:** 32 / 72
-**Current Phase:** Epic 4 - Level System and Progression (COMPLETED - 100%)
+**Completed User Stories:** 33 / 72
+**Current Phase:** Epic 5 - User Interface and HUD (IN PROGRESS - 14.3%)
 **Note:** Epic 6 (Camera System) completed early due to critical blocking issue
 
 ---
 
 ## Implemented Features
+
+### Epic 5: User Interface and HUD (IN PROGRESS)
+- **US-031: Score Display** ✓
+  - Score display implemented on HUD in standardized format
+  - **Display specifications:**
+    - Format: "SCORE: 00000" with zero-padding to 5 digits
+    - Location: Top-left corner at position (10, 10)
+    - Font size: 36pt (default pygame font)
+    - Color: White (255, 255, 255) for high contrast against backgrounds
+    - Always visible and fixed on screen (not affected by camera scrolling)
+  - **Score tracking:**
+    - Updates immediately when points earned (no delay)
+    - Enemy defeat: +100 points (STOMP_SCORE constant)
+    - Powerup collection: +50 points (POWERUP_SCORE constant)
+    - Laser kill: +100 points (same as stomp)
+    - Score tracked in main game loop (main.py line 26)
+  - **Score persistence:**
+    - Score persists across all level transitions
+    - Carries over from Level 1 through Level 5
+    - Only resets to 0 on player death (lives = 0)
+    - Only resets to 0 on game restart from victory screen (R key)
+    - level_start_score tracks score at beginning of each level for transition screen
+  - **Zero-padding implementation:**
+    - Uses Python f-string format: f"SCORE: {score:05d}"
+    - :05d formats integer with zero-padding to 5 digits minimum width
+    - Examples: 0 → "SCORE: 00000", 150 → "SCORE: 00150", 12345 → "SCORE: 12345"
+    - Handles scores beyond 99999 by expanding width automatically
+  - **HUD positioning:**
+    - Score at (10, 10) - top-left corner
+    - Lives display below at (10, 50) - to be improved in US-032
+    - Powerup timer at (10, 90) when active - to be improved in US-033
+    - HUD elements rendered after all sprites to appear on top
+    - HUD rendering uses screen coordinates (not affected by camera_x offset)
+  - **Integration with existing systems:**
+    - Works with score tracking from Epic 2 (US-011, US-012)
+    - Works with powerup collection from Epic 3 (US-017)
+    - Works with laser kills from Epic 3 (US-020)
+    - Displays correctly during level transitions (US-029)
+    - Displays correctly on victory screen (US-030)
+    - Compatible with camera system (US-038, US-039) - HUD unaffected by scrolling
+  - **Visual quality:**
+    - Clearly readable with white text on varied backgrounds
+    - Standardized format (SCORE: 00000) provides professional appearance
+    - Consistent placement in top-left makes it easy to find
+    - Font size 36 is large enough for clear visibility during gameplay
+  - **Code location:**
+    - main.py lines 320-322: Score rendering logic
+    - Uses font initialized at line 27 (pygame.font.Font(None, 36))
+    - Score variable initialized at line 26 and updated throughout game loop
+  - **Future improvements (later user stories):**
+    - US-032 will improve Lives display formatting
+    - US-033 will improve Powerup timer display formatting
+    - US-034 will add main menu
+    - US-035 will add pause menu
+    - Epic 8 may add visual polish to HUD elements
 
 ### Epic 6: Camera and Viewport (COMPLETED EARLY - Critical Fix)
 - **US-038: Scrolling Camera Implementation** ✓

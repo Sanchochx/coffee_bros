@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 32
+- **Completed:** 33
 - **In Progress:** 0
-- **Remaining:** 40
-- **Progress:** 44.4%
+- **Remaining:** 39
+- **Progress:** 45.8%
 
 ---
 
@@ -195,7 +195,7 @@
 ### Epic 5: User Interface and HUD (7 stories)
 **Priority:** SHOULD HAVE - Important for polish
 
-- [ ] **US-031** - Score Display
+- [x] **US-031** - Score Display
   - *Show player score on HUD*
   - Path: `context/user_stories/epic_05_ui_hud/US-031_score_display.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-031_score_display.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 5 - User Interface and HUD (0% complete)
-**Current Story:** US-031 - Score Display
-**Last Completed Story:** US-038, US-039 - Camera System (completed early - blocking issue)
+**Current Epic:** Epic 5 - User Interface and HUD (14.3% complete)
+**Current Story:** US-032 - Lives Display
+**Last Completed Story:** US-031 - Score Display
 **Last Completed Epic:** Epic 4 - Level System and Progression (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

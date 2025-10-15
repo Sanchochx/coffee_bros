@@ -5,11 +5,11 @@
 **So that** I know how well I'm performing
 
 ## Acceptance Criteria
-- [ ] Score is displayed in top-left or top-center of screen
-- [ ] Score updates immediately when points earned
-- [ ] Score is clearly readable (large, contrasting color)
-- [ ] Score persists across level transitions
-- [ ] Score format: "SCORE: 00000"
+- [x] Score is displayed in top-left or top-center of screen
+- [x] Score updates immediately when points earned
+- [x] Score is clearly readable (large, contrasting color)
+- [x] Score persists across level transitions
+- [x] Score format: "SCORE: 00000"
 
 ## Technical Notes
 - Render text using `pygame.font`

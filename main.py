@@ -317,8 +317,8 @@ def main():
             offset_rect.x -= camera_x
             screen.blit(sprite.image, offset_rect)
 
-        # Draw HUD (simple text display for now, will be improved in Epic 5)
-        score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White text
+        # Draw HUD - Score Display (US-031)
+        score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))  # White text, zero-padded to 5 digits
         screen.blit(score_text, (10, 10))  # Top-left corner
 
         lives_text = font.render(f"Lives: {player.lives}", True, (255, 255, 255))  # White text
