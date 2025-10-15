@@ -9,6 +9,7 @@ from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_
 from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
 from src.level import Level
 from src.menu import MainMenu, PauseMenu, GameOverMenu
+from src.level_name_display import LevelNameDisplay
 
 
 def main():
@@ -58,6 +59,9 @@ def main():
 
     # Camera system (US-038, US-039)
     camera_x = 0  # Camera horizontal offset for scrolling
+
+    # Level name display (US-037)
+    level_name_display = None
 
     # Level and entity references (initialized when game starts - US-034)
     level = None
@@ -122,6 +126,9 @@ def main():
                         camera_x = 0
                         level_start_time = pygame.time.get_ticks()
                         level_start_score = 0
+                        # Create level name display (US-037)
+                        level_name = level.metadata.get("name", f"Level {current_level_number}")
+                        level_name_display = LevelNameDisplay(current_level_number, level_name)
                         # TODO (US-047): Stop menu music, start gameplay music (audio system in Epic 7)
                     except (FileNotFoundError, ValueError) as e:
                         print(f"Error loading level: {e}")
@@ -165,6 +172,9 @@ def main():
                         # Keep current score (don't reset on restart)
                         # Reset camera
                         camera_x = 0
+                        # Create level name display (US-037)
+                        level_name = level.metadata.get("name", f"Level {current_level_number}")
+                        level_name_display = LevelNameDisplay(current_level_number, level_name)
                         # Return to playing state
                         game_state = "playing"
                     except (FileNotFoundError, ValueError) as e:
@@ -206,6 +216,9 @@ def main():
                         level_start_score = 0
                         # Reset camera
                         camera_x = 0
+                        # Create level name display (US-037)
+                        level_name = level.metadata.get("name", f"Level {current_level_number}")
+                        level_name_display = LevelNameDisplay(current_level_number, level_name)
                         # Return to playing state
                         game_state = "playing"
                     except (FileNotFoundError, ValueError) as e:
@@ -247,6 +260,9 @@ def main():
                             level_start_score = score  # Record starting score for next level
                             # Reset camera for new level (US-038)
                             camera_x = 0
+                            # Create level name display (US-037)
+                            level_name = level.metadata.get("name", f"Level {current_level_number}")
+                            level_name_display = LevelNameDisplay(current_level_number, level_name)
                             # Score carries over between levels
                         except (FileNotFoundError, ValueError) as e:
                             print(f"Error loading level {current_level_number}: {e}")
@@ -286,6 +302,9 @@ def main():
                             level_start_score = 0
                             # Reset camera (US-038)
                             camera_x = 0
+                            # Create level name display (US-037)
+                            level_name = level.metadata.get("name", f"Level {current_level_number}")
+                            level_name_display = LevelNameDisplay(current_level_number, level_name)
                         except (FileNotFoundError, ValueError) as e:
                             print(f"Error loading level 1: {e}")
                             running = False
@@ -438,6 +457,10 @@ def main():
 
         else:
             # Normal gameplay when not dead
+            # Update level name display if active (US-037)
+            if level_name_display and level_name_display.is_active:
+                level_name_display.update()
+
             # Update player with current key states, platform collision, and level width (US-038, US-039)
             level_width = level.metadata.get("width", WINDOW_WIDTH)
             player.update(keys, platforms, level_width)
@@ -581,6 +604,11 @@ def main():
             timer_rect.top = 10  # 10px from top (same as score/lives)
 
             screen.blit(timer_text, timer_rect)
+
+        # Display level name at level start (US-037)
+        # Only show during normal gameplay, not during special screens
+        if level_name_display and not is_level_complete and not is_transition_screen and not is_victory_screen:
+            level_name_display.draw(screen)
 
         # Display level completion screen (US-023)
         if is_level_complete:

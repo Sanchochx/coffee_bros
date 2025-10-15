@@ -5,11 +5,11 @@
 **So that** I know which level I'm playing
 
 ## Acceptance Criteria
-- [ ] Level name displays briefly at level start
-- [ ] Shows level number and name (e.g., "Level 1 - Coffee Hills")
-- [ ] Appears for 2-3 seconds then fades
-- [ ] Centered on screen
-- [ ] Doesn't block important gameplay elements
+- [x] Level name displays briefly at level start
+- [x] Shows level number and name (e.g., "Level 1 - Coffee Hills")
+- [x] Appears for 2-3 seconds then fades
+- [x] Centered on screen
+- [x] Doesn't block important gameplay elements
 
 ## Technical Notes
 - Display as overlay at level start

@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 38
+- **Completed:** 39
 - **In Progress:** 0
-- **Remaining:** 34
-- **Progress:** 52.8%
+- **Remaining:** 33
+- **Progress:** 54.2%
 
 ---
 
@@ -225,7 +225,7 @@
   - Path: `context/user_stories/epic_05_ui_hud/US-036_game_over_screen.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-036_game_over_screen.md)
 
-- [ ] **US-037** - Level Name Display
+- [x] **US-037** - Level Name Display
   - *Show level name at start of each level*
   - Path: `context/user_stories/epic_05_ui_hud/US-037_level_name_display.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-037_level_name_display.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 5 - User Interface and HUD (85.7% complete)
-**Current Story:** US-037 - Level Name Display
-**Last Completed Story:** US-036 - Game Over Screen
-**Last Completed Epic:** Epic 4 - Level System and Progression (100% complete)
+**Current Epic:** Epic 5 - User Interface and HUD (100% complete)
+**Current Story:** Epic 5 Complete - Ready for Epic 7
+**Last Completed Story:** US-037 - Level Name Display
+**Last Completed Epic:** Epic 5 - User Interface and HUD (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera
