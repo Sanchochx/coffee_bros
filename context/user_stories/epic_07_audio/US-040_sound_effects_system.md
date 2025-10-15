@@ -5,12 +5,12 @@
 **So that** game actions have audio feedback
 
 ## Acceptance Criteria
-- [ ] Sound effects can be loaded from files
-- [ ] Sounds play when triggered by events
-- [ ] Multiple sounds can play simultaneously
-- [ ] Sound volume is adjustable
-- [ ] Missing sound files don't crash game
-- [ ] Sounds are in appropriate format (WAV)
+- [x] Sound effects can be loaded from files
+- [x] Sounds play when triggered by events
+- [x] Multiple sounds can play simultaneously
+- [x] Sound volume is adjustable
+- [x] Missing sound files don't crash game
+- [x] Sounds are in appropriate format (WAV)
 
 ## Technical Notes
 - Use `pygame.mixer` for audio
