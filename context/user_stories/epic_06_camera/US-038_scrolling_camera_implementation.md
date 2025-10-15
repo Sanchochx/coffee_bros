@@ -5,12 +5,12 @@
 **So that** I can see where I'm going in large levels
 
 ## Acceptance Criteria
-- [ ] Camera follows player horizontally
-- [ ] Camera scrolls when player passes screen center
-- [ ] Camera doesn't scroll beyond level boundaries
-- [ ] Camera movement is smooth (no sudden jumps)
-- [ ] Camera doesn't show areas outside level bounds
-- [ ] Vertical scrolling not needed (levels fit in screen height)
+- [x] Camera follows player horizontally
+- [x] Camera scrolls when player passes screen center
+- [x] Camera doesn't scroll beyond level boundaries
+- [x] Camera movement is smooth (no sudden jumps)
+- [x] Camera doesn't show areas outside level bounds
+- [x] Vertical scrolling not needed (levels fit in screen height)
 
 ## Technical Notes
 - Create Camera class to manage viewport offset

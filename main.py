@@ -49,6 +49,9 @@ def main():
     is_victory_screen = False
     total_game_time = 0  # Total time played across all levels (in seconds)
 
+    # Camera system (US-038, US-039)
+    camera_x = 0  # Camera horizontal offset for scrolling
+
     # Load level from JSON file (US-022)
     try:
         level = Level.load_from_file(current_level_number)  # Load current level
@@ -102,6 +105,8 @@ def main():
                             # Reset time tracking for new level
                             level_start_time = pygame.time.get_ticks()
                             level_start_score = score  # Record starting score for next level
+                            # Reset camera for new level (US-038)
+                            camera_x = 0
                             # Score carries over between levels
                         except (FileNotFoundError, ValueError) as e:
                             print(f"Error loading level {current_level_number}: {e}")
@@ -139,6 +144,8 @@ def main():
                             # Reset time tracking
                             level_start_time = pygame.time.get_ticks()
                             level_start_score = 0
+                            # Reset camera (US-038)
+                            camera_x = 0
                         except (FileNotFoundError, ValueError) as e:
                             print(f"Error loading level 1: {e}")
                             running = False
@@ -194,12 +201,14 @@ def main():
                 score = 0  # Reset score on respawn
                 is_dead = False
                 death_timer = 0
+                camera_x = 0  # Reset camera (US-038)
                 # TODO (US-045): Play respawn sound effect (audio system in Epic 7)
 
         else:
             # Normal gameplay when not dead
-            # Update player with current key states and platform collision
-            player.update(keys, platforms)
+            # Update player with current key states, platform collision, and level width (US-038, US-039)
+            level_width = level.metadata.get("width", WINDOW_WIDTH)
+            player.update(keys, platforms, level_width)
 
             # Update all enemies with platform collision
             for enemy in enemies:
@@ -289,11 +298,24 @@ def main():
                 death_timer = 0
                 # TODO (US-045): Play death sound effect (audio system in Epic 7)
 
+        # Update camera position (US-038, US-039)
+        # Camera follows player horizontally, centered on player
+        camera_x = player.rect.centerx - WINDOW_WIDTH // 2
+
+        # Clamp camera to level boundaries (US-039)
+        level_width = level.metadata.get("width", WINDOW_WIDTH)
+        max_camera_x = max(0, level_width - WINDOW_WIDTH)  # Don't scroll if level smaller than screen
+        camera_x = max(0, min(camera_x, max_camera_x))  # Clamp to [0, max_camera_x]
+
         # Fill screen with black background
         screen.fill(BLACK)
 
-        # Draw all sprites
-        all_sprites.draw(screen)
+        # Draw all sprites with camera offset (US-038)
+        for sprite in all_sprites:
+            # Create a temporary rect with camera offset applied
+            offset_rect = sprite.rect.copy()
+            offset_rect.x -= camera_x
+            screen.blit(sprite.image, offset_rect)
 
         # Draw HUD (simple text display for now, will be improved in Epic 5)
         score_text = font.render(f"Score: {score}", True, (255, 255, 255))  # White text

@@ -150,14 +150,15 @@ class Player(pygame.sprite.Sprite):
         # Update original image for blinking effect
         self.original_image = self.image.copy()
 
-    def update(self, keys_pressed, platforms):
+    def update(self, keys_pressed, platforms, level_width=WINDOW_WIDTH):
         """
         Update player state based on keyboard input, gravity, and collision
-        Handles horizontal movement, gravity physics, jumping, platform collision, and screen boundaries
+        Handles horizontal movement, gravity physics, jumping, platform collision, and level boundaries
 
         Args:
             keys_pressed (tuple): Result from pygame.key.get_pressed()
             platforms (pygame.sprite.Group): Group of platform sprites for collision detection
+            level_width (int): Width of the current level (for boundary clamping with camera system)
         """
         # Handle horizontal movement
         # Handle left movement (LEFT arrow or A key)
@@ -170,11 +171,11 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += PLAYER_SPEED
             self.facing_direction = 1  # Facing right
 
-        # Keep player within screen boundaries (horizontal)
+        # Keep player within level boundaries (horizontal) - US-038, US-039
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.right > WINDOW_WIDTH:
-            self.rect.right = WINDOW_WIDTH
+        if self.rect.right > level_width:
+            self.rect.right = level_width
 
         # Check for horizontal collision with platforms (side collision)
         for platform in platforms:
