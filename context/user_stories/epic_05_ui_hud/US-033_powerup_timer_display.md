@@ -5,12 +5,12 @@
 **So that** I can plan my actions
 
 ## Acceptance Criteria
-- [ ] Timer appears when powerup collected
-- [ ] Shows remaining seconds in powered state
-- [ ] Counts down in real-time
-- [ ] Positioned near player or in HUD
-- [ ] Changes color when timer low (warning)
-- [ ] Disappears when powerup expires
+- [x] Timer appears when powerup collected
+- [x] Shows remaining seconds in powered state
+- [x] Counts down in real-time
+- [x] Positioned near player or in HUD
+- [x] Changes color when timer low (warning)
+- [x] Disappears when powerup expires
 
 ## Technical Notes
 - Convert frame timer to seconds for display

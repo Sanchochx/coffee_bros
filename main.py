@@ -327,12 +327,27 @@ def main():
         lives_rect.topright = (WINDOW_WIDTH - 10, 10)  # Top-right corner with 10px margin
         screen.blit(lives_text, lives_rect)
 
-        # Display powerup timer when powered up (US-018)
+        # Display powerup timer when powered up (US-033)
         if player.is_powered_up:
-            # Convert frames to seconds (60 frames = 1 second)
+            # Convert frames to seconds (60 frames = 1 second at 60 FPS)
             powerup_seconds = player.powerup_timer / 60
-            powerup_text = font.render(f"Powerup: {powerup_seconds:.1f}s", True, (255, 215, 0))  # Gold text
-            screen.blit(powerup_text, (10, 50))  # Below score
+
+            # Determine timer color based on remaining time
+            # Warning color (red) when less than 3 seconds, gold otherwise
+            if powerup_seconds < 3.0:
+                timer_color = (255, 50, 50)  # Red warning color
+            else:
+                timer_color = (255, 215, 0)  # Gold color (normal)
+
+            # Format timer text to show countdown
+            timer_text = font.render(f"POWERUP: {powerup_seconds:.1f}s", True, timer_color)
+
+            # Position at top-center of screen for visibility
+            timer_rect = timer_text.get_rect()
+            timer_rect.centerx = WINDOW_WIDTH // 2  # Centered horizontally
+            timer_rect.top = 10  # 10px from top (same as score/lives)
+
+            screen.blit(timer_text, timer_rect)
 
         # Display level completion screen (US-023)
         if is_level_complete:

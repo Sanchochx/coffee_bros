@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 34
+- **Completed:** 35
 - **In Progress:** 0
-- **Remaining:** 38
-- **Progress:** 47.2%
+- **Remaining:** 37
+- **Progress:** 48.6%
 
 ---
 
@@ -205,7 +205,7 @@
   - Path: `context/user_stories/epic_05_ui_hud/US-032_lives_display.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-032_lives_display.md)
 
-- [ ] **US-033** - Powerup Timer Display
+- [x] **US-033** - Powerup Timer Display
   - *Show remaining power-up time on HUD*
   - Path: `context/user_stories/epic_05_ui_hud/US-033_powerup_timer_display.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-033_powerup_timer_display.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 5 - User Interface and HUD (28.6% complete)
-**Current Story:** US-033 - Powerup Timer Display
-**Last Completed Story:** US-032 - Lives Display
+**Current Epic:** Epic 5 - User Interface and HUD (42.9% complete)
+**Current Story:** US-034 - Main Menu
+**Last Completed Story:** US-033 - Powerup Timer Display
 **Last Completed Epic:** Epic 4 - Level System and Progression (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera
