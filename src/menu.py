@@ -137,3 +137,94 @@ class MainMenu:
         screen.blit(controls_text, controls_rect)
 
         # TODO (US-047): Play menu background music (audio system in Epic 7)
+
+
+class PauseMenu:
+    """Pause menu overlay displayed during gameplay (US-035)"""
+
+    def __init__(self):
+        """Initialize the pause menu"""
+        # Menu options
+        self.options = ["Resume", "Restart Level", "Return to Menu"]
+        self.selected_index = 0  # Currently selected option (0 = Resume)
+
+        # Fonts
+        self.title_font = pygame.font.Font(None, 96)  # Large font for "PAUSED"
+        self.option_font = pygame.font.Font(None, 48)  # Medium font for options
+
+        # Colors
+        self.title_color = YELLOW  # Yellow for "PAUSED" title
+        self.selected_color = GOLD  # Gold for selected option
+        self.unselected_color = (200, 200, 200)  # Light gray for unselected options
+
+    def handle_input(self, event):
+        """
+        Handle keyboard input for pause menu navigation.
+        Returns: 'resume', 'restart', 'menu', or None
+        """
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                # Move selection up
+                self.selected_index = (self.selected_index - 1) % len(self.options)
+                # TODO (US-041): Play menu navigation sound effect (audio system in Epic 7)
+
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                # Move selection down
+                self.selected_index = (self.selected_index + 1) % len(self.options)
+                # TODO (US-041): Play menu navigation sound effect (audio system in Epic 7)
+
+            elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+                # Select current option
+                # TODO (US-041): Play menu selection sound effect (audio system in Epic 7)
+                selected_option = self.options[self.selected_index]
+
+                if selected_option == "Resume":
+                    return "resume"
+                elif selected_option == "Restart Level":
+                    return "restart"
+                elif selected_option == "Return to Menu":
+                    return "menu"
+
+            elif event.key == pygame.K_ESCAPE:
+                # ESC key unpauses the game (same as Resume)
+                return "resume"
+
+        return None
+
+    def draw(self, screen):
+        """Draw the pause menu overlay on top of the game"""
+        # Create semi-transparent dark overlay (dims the background game)
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+        overlay.set_alpha(180)  # Semi-transparent (0-255)
+        overlay.fill(BLACK)
+        screen.blit(overlay, (0, 0))
+
+        # Draw "PAUSED" title
+        title_text = self.title_font.render("PAUSED", True, self.title_color)
+        title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 150))
+        # Add shadow effect for title
+        shadow_text = self.title_font.render("PAUSED", True, (50, 50, 50))
+        shadow_rect = shadow_text.get_rect(center=(WINDOW_WIDTH // 2 + 3, 150 + 3))
+        screen.blit(shadow_text, shadow_rect)
+        screen.blit(title_text, title_rect)
+
+        # Draw menu options (centered vertically)
+        start_y = 300  # Starting y position for first option
+        option_spacing = 80  # Vertical spacing between options
+
+        for i, option in enumerate(self.options):
+            # Determine color based on selection
+            if i == self.selected_index:
+                color = self.selected_color
+                # Add selection indicator (arrow)
+                arrow_text = self.option_font.render(">", True, color)
+                arrow_rect = arrow_text.get_rect()
+                arrow_rect.midright = (WINDOW_WIDTH // 2 - 150, start_y + i * option_spacing)
+                screen.blit(arrow_text, arrow_rect)
+            else:
+                color = self.unselected_color
+
+            # Render option text
+            option_text = self.option_font.render(option, True, color)
+            option_rect = option_text.get_rect(center=(WINDOW_WIDTH // 2, start_y + i * option_spacing))
+            screen.blit(option_text, option_rect)

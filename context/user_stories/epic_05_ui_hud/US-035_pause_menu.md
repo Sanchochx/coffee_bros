@@ -5,14 +5,14 @@
 **So that** I can take breaks without losing progress
 
 ## Acceptance Criteria
-- [ ] Pressing ESC pauses the game
-- [ ] Game freezes (no updates) when paused
-- [ ] Pause menu overlays game screen
-- [ ] Shows "PAUSED" text
-- [ ] Includes "Resume" option
-- [ ] Includes "Restart Level" option
-- [ ] Includes "Return to Menu" option
-- [ ] Can unpause with ESC or selecting Resume
+- [x] Pressing ESC pauses the game
+- [x] Game freezes (no updates) when paused
+- [x] Pause menu overlays game screen
+- [x] Shows "PAUSED" text
+- [x] Includes "Resume" option
+- [x] Includes "Restart Level" option
+- [x] Includes "Return to Menu" option
+- [x] Can unpause with ESC or selecting Resume
 
 ## Technical Notes
 - Set game state to `PAUSED`

@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 36
+- **Completed:** 37
 - **In Progress:** 0
-- **Remaining:** 36
-- **Progress:** 50.0%
+- **Remaining:** 35
+- **Progress:** 51.4%
 
 ---
 
@@ -215,7 +215,7 @@
   - Path: `context/user_stories/epic_05_ui_hud/US-034_main_menu.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-034_main_menu.md)
 
-- [ ] **US-035** - Pause Menu
+- [x] **US-035** - Pause Menu
   - *Implement pause functionality and menu*
   - Path: `context/user_stories/epic_05_ui_hud/US-035_pause_menu.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-035_pause_menu.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 5 - User Interface and HUD (57.1% complete)
-**Current Story:** US-035 - Pause Menu
-**Last Completed Story:** US-034 - Main Menu
+**Current Epic:** Epic 5 - User Interface and HUD (71.4% complete)
+**Current Story:** US-036 - Game Over Screen
+**Last Completed Story:** US-035 - Pause Menu
 **Last Completed Epic:** Epic 4 - Level System and Progression (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

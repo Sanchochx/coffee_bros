@@ -8,7 +8,7 @@ import sys
 from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS, LEVEL_COMPLETE_DELAY
 from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
 from src.level import Level
-from src.menu import MainMenu
+from src.menu import MainMenu, PauseMenu
 
 
 def main():
@@ -23,9 +23,10 @@ def main():
     # Create clock for FPS control
     clock = pygame.time.Clock()
 
-    # Game state management (US-034)
-    game_state = "menu"  # Possible states: "menu", "playing", "settings"
+    # Game state management (US-034, US-035)
+    game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings"
     main_menu = MainMenu()  # Initialize main menu
+    pause_menu = PauseMenu()  # Initialize pause menu (US-035)
 
     # Initialize game state
     score = 0
@@ -78,8 +79,11 @@ def main():
                 # Handle ESC key based on game state
                 if event.key == pygame.K_ESCAPE:
                     if game_state == "playing":
-                        # ESC returns to menu from gameplay (US-035: Pause Menu - for future)
-                        game_state = "menu"
+                        # ESC pauses the game (US-035)
+                        game_state = "paused"
+                    elif game_state == "paused":
+                        # ESC unpauses the game (US-035)
+                        game_state = "playing"
                     elif game_state == "menu":
                         # ESC quits from main menu
                         running = False
@@ -129,6 +133,48 @@ def main():
                     # Quit game
                     running = False
                 # Skip rest of event handling when in menu
+                continue
+
+            # Handle pause menu input when in paused state (US-035)
+            if game_state == "paused":
+                menu_action = pause_menu.handle_input(event)
+                if menu_action == "resume":
+                    # Resume gameplay
+                    game_state = "playing"
+                elif menu_action == "restart":
+                    # Restart current level
+                    try:
+                        level = Level.load_from_file(current_level_number)
+                        # Get fresh references to level entities
+                        player = level.player
+                        all_sprites = level.all_sprites
+                        platforms = level.platforms
+                        enemies = level.enemies
+                        powerups = level.powerups
+                        goals = level.goals
+                        lasers.empty()  # Clear all lasers
+                        # Reset all state flags
+                        is_dead = False
+                        is_level_complete = False
+                        is_transition_screen = False
+                        completion_timer = 0
+                        death_timer = 0
+                        # Reset time tracking for restarted level
+                        level_start_time = pygame.time.get_ticks()
+                        # Keep current score (don't reset on restart)
+                        # Reset camera
+                        camera_x = 0
+                        # Return to playing state
+                        game_state = "playing"
+                    except (FileNotFoundError, ValueError) as e:
+                        print(f"Error restarting level {current_level_number}: {e}")
+                        running = False
+                elif menu_action == "menu":
+                    # Return to main menu
+                    game_state = "menu"
+                    # Reset pause menu selection
+                    pause_menu.selected_index = 0
+                # Skip rest of event handling when in pause menu
                 continue
 
             # Gameplay event handling (only when in playing state)
@@ -205,11 +251,54 @@ def main():
                         # Quit game
                         running = False
 
-        # Update and draw based on game state (US-034)
+        # Update and draw based on game state (US-034, US-035)
         if game_state == "menu":
             # Menu state - update and draw menu
             main_menu.update()
             main_menu.draw(screen)
+            # Update display
+            pygame.display.flip()
+            clock.tick(FPS)
+            continue  # Skip gameplay logic
+
+        # Paused state - freeze game and show pause menu (US-035)
+        if game_state == "paused":
+            # Don't update any game entities - game is frozen!
+            # Just draw the current game state with pause overlay on top
+
+            # Fill screen with black background
+            screen.fill(BLACK)
+
+            # Draw all sprites at their frozen positions with camera offset
+            for sprite in all_sprites:
+                offset_rect = sprite.rect.copy()
+                offset_rect.x -= camera_x
+                screen.blit(sprite.image, offset_rect)
+
+            # Draw HUD elements (so player can see their current state)
+            score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))
+            screen.blit(score_text, (10, 10))
+
+            lives_text = font.render(f"x{player.lives}", True, (255, 255, 255))
+            lives_rect = lives_text.get_rect()
+            lives_rect.topright = (WINDOW_WIDTH - 10, 10)
+            screen.blit(lives_text, lives_rect)
+
+            if player.is_powered_up:
+                powerup_seconds = player.powerup_timer / 60
+                if powerup_seconds < 3.0:
+                    timer_color = (255, 50, 50)
+                else:
+                    timer_color = (255, 215, 0)
+                timer_text = font.render(f"POWERUP: {powerup_seconds:.1f}s", True, timer_color)
+                timer_rect = timer_text.get_rect()
+                timer_rect.centerx = WINDOW_WIDTH // 2
+                timer_rect.top = 10
+                screen.blit(timer_text, timer_rect)
+
+            # Draw pause menu overlay on top
+            pause_menu.draw(screen)
+
             # Update display
             pygame.display.flip()
             clock.tick(FPS)
