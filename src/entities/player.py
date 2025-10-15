@@ -16,15 +16,19 @@ from config import (
 class Player(pygame.sprite.Sprite):
     """Player character class for Sancho"""
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, audio_manager=None):
         """
         Initialize the player
 
         Args:
             x (int): Initial x position
             y (int): Initial y position
+            audio_manager (AudioManager): Optional audio manager for sound effects
         """
         super().__init__()
+
+        # Store audio manager reference (US-041)
+        self.audio_manager = audio_manager
 
         # Player dimensions
         self.width = 40
@@ -192,6 +196,9 @@ class Player(pygame.sprite.Sprite):
             keys_pressed[pygame.K_SPACE]) and self.is_grounded:
             self.velocity_y = JUMP_VELOCITY
             self.is_grounded = False
+            # Play jump sound effect (US-041)
+            if self.audio_manager:
+                self.audio_manager.play_jump()
 
         # Variable jump height: cut jump short if button released early
         # Only reduce velocity if moving upward and above cutoff threshold

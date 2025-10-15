@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 40
+- **Completed:** 41
 - **In Progress:** 0
-- **Remaining:** 32
-- **Progress:** 55.6%
+- **Remaining:** 31
+- **Progress:** 56.9%
 
 ---
 
@@ -255,7 +255,7 @@
   - Path: `context/user_stories/epic_07_audio/US-040_sound_effects_system.md`
   - [Details](context/user_stories/epic_07_audio/US-040_sound_effects_system.md)
 
-- [ ] **US-041** - Jump Sound Effect
+- [x] **US-041** - Jump Sound Effect
   - *Add sound when player jumps*
   - Path: `context/user_stories/epic_07_audio/US-041_jump_sound_effect.md`
   - [Details](context/user_stories/epic_07_audio/US-041_jump_sound_effect.md)

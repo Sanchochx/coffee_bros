@@ -10,6 +10,7 @@ from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
 from src.level import Level
 from src.menu import MainMenu, PauseMenu, GameOverMenu
 from src.level_name_display import LevelNameDisplay
+from src.audio_manager import AudioManager
 
 
 def main():
@@ -23,6 +24,9 @@ def main():
 
     # Create clock for FPS control
     clock = pygame.time.Clock()
+
+    # Initialize audio manager (US-040, US-041)
+    audio_manager = AudioManager()
 
     # Game state management (US-034, US-035, US-036)
     game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings", "game_over"
@@ -105,9 +109,9 @@ def main():
                     current_level_number = 1
                     score = 0
                     total_game_time = 0
-                    # Load level from JSON file (US-022)
+                    # Load level from JSON file (US-022, US-041)
                     try:
-                        level = Level.load_from_file(current_level_number)
+                        level = Level.load_from_file(current_level_number, audio_manager)
                         # Get references to level entities for easy access
                         player = level.player
                         all_sprites = level.all_sprites
@@ -152,7 +156,7 @@ def main():
                 elif menu_action == "restart":
                     # Restart current level
                     try:
-                        level = Level.load_from_file(current_level_number)
+                        level = Level.load_from_file(current_level_number, audio_manager)
                         # Get fresh references to level entities
                         player = level.player
                         all_sprites = level.all_sprites
@@ -194,7 +198,7 @@ def main():
                 if menu_action == "retry":
                     # Retry current level - reload it completely
                     try:
-                        level = Level.load_from_file(current_level_number)
+                        level = Level.load_from_file(current_level_number, audio_manager)
                         # Get fresh references to level entities
                         player = level.player
                         all_sprites = level.all_sprites
@@ -242,7 +246,7 @@ def main():
                         # Load next level
                         current_level_number += 1
                         try:
-                            level = Level.load_from_file(current_level_number)
+                            level = Level.load_from_file(current_level_number, audio_manager)
                             # Get fresh references to level entities
                             player = level.player
                             all_sprites = level.all_sprites
@@ -281,7 +285,7 @@ def main():
                         score = 0
                         total_game_time = 0
                         try:
-                            level = Level.load_from_file(current_level_number)
+                            level = Level.load_from_file(current_level_number, audio_manager)
                             # Get fresh references to level entities
                             player = level.player
                             all_sprites = level.all_sprites

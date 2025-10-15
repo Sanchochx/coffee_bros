@@ -15,8 +15,13 @@ class Level:
     Handles creation of all game entities including platforms, enemies, powerups, and player.
     """
 
-    def __init__(self):
-        """Initialize empty level."""
+    def __init__(self, audio_manager=None):
+        """
+        Initialize empty level.
+
+        Args:
+            audio_manager (AudioManager): Optional audio manager for sound effects (US-041)
+        """
         self.metadata = {}
         self.player_spawn = {"spawn_x": 100, "spawn_y": 400}  # Default spawn
         self.goal_data = {}
@@ -29,14 +34,16 @@ class Level:
         self.goal_sprite = None  # Reference to the goal sprite
         self.initial_enemy_positions = []
         self.level_data = None
+        self.audio_manager = audio_manager  # Store audio manager reference (US-041)
 
     @classmethod
-    def load_from_file(cls, level_number):
+    def load_from_file(cls, level_number, audio_manager=None):
         """
         Load level data from JSON file and create all game entities.
 
         Args:
             level_number (int): The level number to load (e.g., 1 for level_1.json)
+            audio_manager (AudioManager): Optional audio manager for sound effects (US-041)
 
         Returns:
             Level: A Level instance with all entities created and ready to use
@@ -45,7 +52,7 @@ class Level:
             FileNotFoundError: If level file doesn't exist
             ValueError: If JSON is malformed or missing required fields
         """
-        level = cls()
+        level = cls(audio_manager)
 
         # Construct file path
         level_file = f"assets/levels/level_{level_number}.json"
@@ -74,8 +81,8 @@ class Level:
             "spawn_y": player_data.get("spawn_y", 400)
         }
 
-        # Create player at spawn position
-        level.player = Player(level.player_spawn["spawn_x"], level.player_spawn["spawn_y"])
+        # Create player at spawn position (US-041: pass audio_manager)
+        level.player = Player(level.player_spawn["spawn_x"], level.player_spawn["spawn_y"], audio_manager)
         level.all_sprites.add(level.player)
 
         # Load goal data
@@ -222,8 +229,8 @@ class Level:
 
         # Reload level from stored data
         if self.level_data:
-            # Recreate player
-            self.player = Player(self.player_spawn["spawn_x"], self.player_spawn["spawn_y"])
+            # Recreate player (US-041: pass audio_manager)
+            self.player = Player(self.player_spawn["spawn_x"], self.player_spawn["spawn_y"], self.audio_manager)
             self.all_sprites.add(self.player)
 
             # Recreate platforms

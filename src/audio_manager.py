@@ -158,3 +158,14 @@ class AudioManager:
         Useful for pausing or transitioning between game states.
         """
         pygame.mixer.stop()
+
+    # Convenience methods for specific sound effects (US-041+)
+    def play_jump(self):
+        """
+        Play the jump sound effect (US-041).
+        Short, snappy sound when player jumps.
+
+        Returns:
+            bool: True if sound played successfully, False otherwise
+        """
+        return self.play_sound("jump")
