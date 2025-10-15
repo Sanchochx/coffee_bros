@@ -8,6 +8,7 @@ import sys
 from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS, LEVEL_COMPLETE_DELAY
 from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
 from src.level import Level
+from src.menu import MainMenu
 
 
 def main():
@@ -21,6 +22,10 @@ def main():
 
     # Create clock for FPS control
     clock = pygame.time.Clock()
+
+    # Game state management (US-034)
+    game_state = "menu"  # Possible states: "menu", "playing", "settings"
+    main_menu = MainMenu()  # Initialize main menu
 
     # Initialize game state
     score = 0
@@ -52,24 +57,15 @@ def main():
     # Camera system (US-038, US-039)
     camera_x = 0  # Camera horizontal offset for scrolling
 
-    # Load level from JSON file (US-022)
-    try:
-        level = Level.load_from_file(current_level_number)  # Load current level
-    except (FileNotFoundError, ValueError) as e:
-        print(f"Error loading level: {e}")
-        pygame.quit()
-        sys.exit()
-
-    # Get references to level entities for easy access
-    player = level.player
-    all_sprites = level.all_sprites
-    platforms = level.platforms
-    enemies = level.enemies
-    powerups = level.powerups
-    goals = level.goals  # Goal sprite group (US-023)
-
-    # Create laser sprite group (US-019)
-    lasers = pygame.sprite.Group()
+    # Level and entity references (initialized when game starts - US-034)
+    level = None
+    player = None
+    all_sprites = None
+    platforms = None
+    enemies = None
+    powerups = None
+    goals = None
+    lasers = pygame.sprite.Group()  # Create laser sprite group (US-019)
 
     # Game loop
     running = True
@@ -79,10 +75,66 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
+                # Handle ESC key based on game state
                 if event.key == pygame.K_ESCAPE:
+                    if game_state == "playing":
+                        # ESC returns to menu from gameplay (US-035: Pause Menu - for future)
+                        game_state = "menu"
+                    elif game_state == "menu":
+                        # ESC quits from main menu
+                        running = False
+                    elif game_state == "settings":
+                        # ESC returns to menu from settings
+                        game_state = "menu"
+
+            # Handle menu input when in menu state (US-034)
+            if game_state == "menu":
+                menu_action = main_menu.handle_input(event)
+                if menu_action == "start":
+                    # Start game - load first level
+                    game_state = "playing"
+                    current_level_number = 1
+                    score = 0
+                    total_game_time = 0
+                    # Load level from JSON file (US-022)
+                    try:
+                        level = Level.load_from_file(current_level_number)
+                        # Get references to level entities for easy access
+                        player = level.player
+                        all_sprites = level.all_sprites
+                        platforms = level.platforms
+                        enemies = level.enemies
+                        powerups = level.powerups
+                        goals = level.goals
+                        lasers.empty()  # Clear any existing lasers
+                        # Reset all game state flags
+                        is_dead = False
+                        is_level_complete = False
+                        is_transition_screen = False
+                        is_victory_screen = False
+                        death_timer = 0
+                        completion_timer = 0
+                        camera_x = 0
+                        level_start_time = pygame.time.get_ticks()
+                        level_start_score = 0
+                        # TODO (US-047): Stop menu music, start gameplay music (audio system in Epic 7)
+                    except (FileNotFoundError, ValueError) as e:
+                        print(f"Error loading level: {e}")
+                        running = False
+                elif menu_action == "settings":
+                    # Go to settings (US-060: Settings Menu - for future)
+                    game_state = "settings"
+                    # TODO (US-060): Implement settings screen
+                elif menu_action == "quit":
+                    # Quit game
                     running = False
+                # Skip rest of event handling when in menu
+                continue
+
+            # Gameplay event handling (only when in playing state)
+            if game_state == "playing" and event.type == pygame.KEYDOWN:
                 # Handle transition screen continuation (US-029)
-                elif is_transition_screen:
+                if is_transition_screen:
                     # Any key press continues to next level
                     # Check if there's a next level available
                     if current_level_number < max_level_number:
@@ -153,6 +205,32 @@ def main():
                         # Quit game
                         running = False
 
+        # Update and draw based on game state (US-034)
+        if game_state == "menu":
+            # Menu state - update and draw menu
+            main_menu.update()
+            main_menu.draw(screen)
+            # Update display
+            pygame.display.flip()
+            clock.tick(FPS)
+            continue  # Skip gameplay logic
+
+        # Settings state placeholder (US-060)
+        if game_state == "settings":
+            # Settings screen - placeholder for future implementation
+            screen.fill(BLACK)
+            settings_font = pygame.font.Font(None, 48)
+            settings_text = settings_font.render("Settings Screen - Coming Soon", True, (255, 255, 255))
+            settings_rect = settings_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+            screen.blit(settings_text, settings_rect)
+            hint_text = settings_font.render("Press ESC to return to menu", True, (200, 200, 200))
+            hint_rect = hint_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 60))
+            screen.blit(hint_text, hint_rect)
+            pygame.display.flip()
+            clock.tick(FPS)
+            continue  # Skip gameplay logic
+
+        # Gameplay state - only execute when game_state == "playing"
         # Get currently pressed keys for continuous input
         keys = pygame.key.get_pressed()
 

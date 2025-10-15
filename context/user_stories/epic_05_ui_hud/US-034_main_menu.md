@@ -5,14 +5,14 @@
 **So that** I can choose to start or configure settings
 
 ## Acceptance Criteria
-- [ ] Menu appears on game start
-- [ ] Shows game title "Sancho Bros"
-- [ ] Includes "Start Game" option
-- [ ] Includes "Settings" option
-- [ ] Includes "Quit" option
-- [ ] Options are selectable with arrow keys and Enter
-- [ ] Has Colombian-themed background
-- [ ] Plays menu music
+- [x] Menu appears on game start
+- [x] Shows game title "Sancho Bros"
+- [x] Includes "Start Game" option
+- [x] Includes "Settings" option
+- [x] Includes "Quit" option
+- [x] Options are selectable with arrow keys and Enter
+- [x] Has Colombian-themed background
+- [ ] Plays menu music (deferred to US-047: Background Music in Epic 7)
 
 ## Technical Notes
 - Create menu state separate from gameplay
