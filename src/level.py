@@ -118,7 +118,7 @@ class Level:
 
             # Create enemy (currently only Polocho type supported)
             if enemy_type == "polocho":
-                enemy = Polocho(spawn_x, spawn_y, patrol_distance)
+                enemy = Polocho(spawn_x, spawn_y, patrol_distance, audio_manager)
                 level.enemies.add(enemy)
                 level.all_sprites.add(enemy)
 
@@ -210,7 +210,7 @@ class Level:
             patrol_distance = enemy_pos.get("patrol_distance", 150)
 
             if enemy_type == "polocho":
-                enemy = Polocho(spawn_x, spawn_y, patrol_distance)
+                enemy = Polocho(spawn_x, spawn_y, patrol_distance, self.audio_manager)
                 self.enemies.add(enemy)
                 # Note: Don't add to all_sprites here - it's managed by reset_level()
 
@@ -253,7 +253,7 @@ class Level:
                 patrol_distance = enemy_pos.get("patrol_distance", 150)
 
                 if enemy_type == "polocho":
-                    enemy = Polocho(spawn_x, spawn_y, patrol_distance)
+                    enemy = Polocho(spawn_x, spawn_y, patrol_distance, self.audio_manager)
                     self.enemies.add(enemy)
                     self.all_sprites.add(enemy)
 

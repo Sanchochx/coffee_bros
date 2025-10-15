@@ -29,6 +29,7 @@ class Player(pygame.sprite.Sprite):
 
         # Store audio manager reference (US-041)
         self.audio_manager = audio_manager
+        print(f"Player initialized with audio_manager: {audio_manager}")
 
         # Player dimensions
         self.width = 40
@@ -135,8 +136,9 @@ class Player(pygame.sprite.Sprite):
         laser_x = self.rect.centerx
         laser_y = self.rect.centery
 
-        # Placeholder for shooting sound effect (will be implemented in Epic 7)
-        # TODO (US-043): Play laser shoot sound effect
+        # Play laser shoot sound effect (US-043)
+        if self.audio_manager:
+            self.audio_manager.play_laser()
 
         return (laser_x, laser_y, self.facing_direction)
 

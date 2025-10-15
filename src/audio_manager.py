@@ -32,7 +32,15 @@ class AudioManager:
 
         # Initialize pygame mixer for audio (US-040)
         # 44100 Hz frequency, 16-bit samples, 2 channels (stereo), 512 buffer size
-        pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
+        try:
+            pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=512)
+            print("Audio system initialized successfully")
+        except pygame.error as e:
+            print(f"Warning: Failed to initialize audio system: {e}")
+            print("Game will run without sound.")
+            self._initialized = True
+            self.sounds = {}
+            return
 
         # Set number of mixer channels for simultaneous sounds (US-040: multiple sounds)
         # 8 channels allow multiple sound effects to play at once
@@ -106,6 +114,8 @@ class AudioManager:
         Returns:
             bool: True if sound played successfully, False otherwise
         """
+        print(f"play_sound('{sound_name}') called")
+
         # Check if sound exists in loaded sounds
         if sound_name not in self.sounds:
             print(f"Warning: Sound '{sound_name}' not registered.")
@@ -115,13 +125,14 @@ class AudioManager:
 
         # Check if sound was loaded successfully (not None)
         if sound is None:
-            # Sound file was missing or failed to load - fail silently
+            print(f"Warning: Sound '{sound_name}' is None (failed to load)")
             return False
 
         try:
             # Play the sound (US-040: triggered by events)
             # play() returns a Channel object, which we don't need to store
-            sound.play()
+            channel = sound.play()
+            print(f"Successfully played sound '{sound_name}' on channel: {channel}")
             return True
         except pygame.error as e:
             print(f"Warning: Error playing sound '{sound_name}': {e}")
@@ -168,4 +179,27 @@ class AudioManager:
         Returns:
             bool: True if sound played successfully, False otherwise
         """
+        print("play_jump() called")
         return self.play_sound("jump")
+
+    def play_stomp(self):
+        """
+        Play the stomp sound effect (US-042).
+        Satisfying squish/pop sound when player stomps on an enemy.
+
+        Returns:
+            bool: True if sound played successfully, False otherwise
+        """
+        print("play_stomp() called")
+        return self.play_sound("stomp")
+
+    def play_laser(self):
+        """
+        Play the laser shoot sound effect (US-043).
+        Sci-fi energy beam sound when player shoots a laser.
+
+        Returns:
+            bool: True if sound played successfully, False otherwise
+        """
+        print("play_laser() called")
+        return self.play_sound("laser")

@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 41
+- **Completed:** 43
 - **In Progress:** 0
-- **Remaining:** 31
-- **Progress:** 56.9%
+- **Remaining:** 29
+- **Progress:** 59.7%
 
 ---
 
@@ -260,12 +260,12 @@
   - Path: `context/user_stories/epic_07_audio/US-041_jump_sound_effect.md`
   - [Details](context/user_stories/epic_07_audio/US-041_jump_sound_effect.md)
 
-- [ ] **US-042** - Stomp Sound Effect
+- [x] **US-042** - Stomp Sound Effect
   - *Add sound when player stomps enemy*
   - Path: `context/user_stories/epic_07_audio/US-042_stomp_sound_effect.md`
   - [Details](context/user_stories/epic_07_audio/US-042_stomp_sound_effect.md)
 
-- [ ] **US-043** - Laser Shoot Sound Effect
+- [x] **US-043** - Laser Shoot Sound Effect
   - *Add sound when player shoots laser*
   - Path: `context/user_stories/epic_07_audio/US-043_laser_shoot_sound_effect.md`
   - [Details](context/user_stories/epic_07_audio/US-043_laser_shoot_sound_effect.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 5 - User Interface and HUD (100% complete)
-**Current Story:** Epic 5 Complete - Ready for Epic 7
-**Last Completed Story:** US-037 - Level Name Display
+**Current Epic:** Epic 7 - Audio System (in progress)
+**Current Story:** US-044 - Powerup Collection Sound
+**Last Completed Story:** US-043 - Laser Shoot Sound Effect
 **Last Completed Epic:** Epic 5 - User Interface and HUD (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

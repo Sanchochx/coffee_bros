@@ -5,10 +5,10 @@
 **So that** shooting feels impactful
 
 ## Acceptance Criteria
-- [ ] Sound plays each time laser is fired
-- [ ] Sound is sci-fi/energy beam style
-- [ ] Sound doesn't overlap muddy when rapid-firing
-- [ ] Volume is appropriate
+- [x] Sound plays each time laser is fired
+- [x] Sound is sci-fi/energy beam style
+- [x] Sound doesn't overlap muddy when rapid-firing
+- [x] Volume is appropriate
 
 ## Technical Notes
 - Play in player's `shoot()` method

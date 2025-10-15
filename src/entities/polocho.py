@@ -8,7 +8,7 @@ from config import GRAVITY, TERMINAL_VELOCITY, RED, ENEMY_SPEED
 class Polocho(pygame.sprite.Sprite):
     """Enemy sprite class - Polocho enemies patrol and can be stomped."""
 
-    def __init__(self, x, y, patrol_distance=150):
+    def __init__(self, x, y, patrol_distance=150, audio_manager=None):
         """
         Initialize Polocho enemy.
 
@@ -16,8 +16,13 @@ class Polocho(pygame.sprite.Sprite):
             x: Initial x position
             y: Initial y position
             patrol_distance: Distance in pixels the enemy patrols (half on each side)
+            audio_manager: Optional audio manager for sound effects (US-042)
         """
         super().__init__()
+
+        # Store audio manager reference (US-042)
+        self.audio_manager = audio_manager
+        print(f"Polocho initialized with audio_manager: {audio_manager}")
 
         # Enemy appearance - 40x40 pixels, red colored
         self.width = 40
@@ -43,7 +48,7 @@ class Polocho(pygame.sprite.Sprite):
         self.squash_timer = 0  # Frames remaining in squashed state
 
     def squash(self):
-        """Mark enemy as squashed and start squash timer."""
+        """Mark enemy as squashed and start squash timer (US-042)."""
         if not self.is_squashed:
             self.is_squashed = True
             self.squash_timer = 15  # Show squashed state for 15 frames (~0.25 seconds)
@@ -54,6 +59,10 @@ class Polocho(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.bottom = old_bottom  # Keep bottom position same
             self.rect.centerx = self.rect.centerx  # Keep horizontal center
+
+            # Play stomp sound effect (US-042)
+            if self.audio_manager:
+                self.audio_manager.play_stomp()
 
     def update(self, platforms):
         """

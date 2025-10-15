@@ -87,12 +87,17 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 # Handle ESC key based on game state
                 if event.key == pygame.K_ESCAPE:
+                    print(f"ESC pressed! Current game state: {game_state}")
                     if game_state == "playing":
                         # ESC pauses the game (US-035)
                         game_state = "paused"
+                        print("Game paused")
+                        continue  # Skip rest of event handling to prevent pause menu from handling same event
                     elif game_state == "paused":
                         # ESC unpauses the game (US-035)
                         game_state = "playing"
+                        print("Game resumed")
+                        continue  # Skip rest of event handling
                     elif game_state == "menu":
                         # ESC quits from main menu
                         running = False
