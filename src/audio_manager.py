@@ -114,8 +114,6 @@ class AudioManager:
         Returns:
             bool: True if sound played successfully, False otherwise
         """
-        print(f"play_sound('{sound_name}') called")
-
         # Check if sound exists in loaded sounds
         if sound_name not in self.sounds:
             print(f"Warning: Sound '{sound_name}' not registered.")
@@ -131,8 +129,7 @@ class AudioManager:
         try:
             # Play the sound (US-040: triggered by events)
             # play() returns a Channel object, which we don't need to store
-            channel = sound.play()
-            print(f"Successfully played sound '{sound_name}' on channel: {channel}")
+            sound.play()
             return True
         except pygame.error as e:
             print(f"Warning: Error playing sound '{sound_name}': {e}")
@@ -179,7 +176,6 @@ class AudioManager:
         Returns:
             bool: True if sound played successfully, False otherwise
         """
-        print("play_jump() called")
         return self.play_sound("jump")
 
     def play_stomp(self):
@@ -190,7 +186,6 @@ class AudioManager:
         Returns:
             bool: True if sound played successfully, False otherwise
         """
-        print("play_stomp() called")
         return self.play_sound("stomp")
 
     def play_laser(self):
@@ -201,7 +196,6 @@ class AudioManager:
         Returns:
             bool: True if sound played successfully, False otherwise
         """
-        print("play_laser() called")
         return self.play_sound("laser")
 
     def play_powerup(self):
@@ -212,5 +206,14 @@ class AudioManager:
         Returns:
             bool: True if sound played successfully, False otherwise
         """
-        print("play_powerup() called")
         return self.play_sound("powerup")
+
+    def play_death(self):
+        """
+        Play the death sound effect (US-045).
+        Descending/sad tone when player loses a life from damage or falling.
+
+        Returns:
+            bool: True if sound played successfully, False otherwise
+        """
+        return self.play_sound("death")

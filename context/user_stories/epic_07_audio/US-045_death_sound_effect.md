@@ -5,10 +5,10 @@
 **So that** failure is clearly communicated
 
 ## Acceptance Criteria
-- [ ] Sound plays when player takes fatal damage
-- [ ] Sound is descending or sad tone
-- [ ] Sound doesn't play during invulnerability
-- [ ] Sound is distinct from damage sound
+- [x] Sound plays when player takes fatal damage
+- [x] Sound is descending or sad tone
+- [x] Sound doesn't play during invulnerability
+- [x] Sound is distinct from damage sound
 
 ## Technical Notes
 - Play in player's death method

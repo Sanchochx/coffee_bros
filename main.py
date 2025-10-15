@@ -549,7 +549,9 @@ def main():
             if player.rect.top > WINDOW_HEIGHT:
                 # Player fell into a pit - lose one life immediately
                 player.lives -= 1
-                # TODO (US-045): Play fall death sound effect (audio system in Epic 7)
+                # Play fall death sound effect (US-045)
+                if audio_manager:
+                    audio_manager.play_death()
 
                 # If still have lives left, respawn at spawn position
                 if player.lives > 0:

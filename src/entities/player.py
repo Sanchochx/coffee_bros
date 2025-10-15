@@ -90,8 +90,9 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += knockback_direction * KNOCKBACK_DISTANCE  # Push player away
             self.velocity_y = KNOCKBACK_BOUNCE  # Small upward bounce
 
-        # Placeholder for damage sound effect (will be implemented in Epic 7)
-        # TODO: Play damage sound effect
+        # Play death sound effect (US-045)
+        if self.audio_manager:
+            self.audio_manager.play_death()
 
     def collect_powerup(self):
         """
