@@ -152,21 +152,21 @@ def main():
                     elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
                         # Quit game
                         running = False
-                # Handle shooting (US-019) - X or J key (only during normal gameplay)
-                elif event.key == pygame.K_x or event.key == pygame.K_j:
-                    if not is_level_complete and not is_dead:
-                        # Only shoot if powered up and not at max lasers
-                        if len(lasers) < MAX_LASERS:
-                            laser_info = player.shoot()
-                            if laser_info is not None:
-                                x, y, direction = laser_info
-                                laser = Laser(x, y, direction)
-                                lasers.add(laser)
-                                all_sprites.add(laser)
-                                # TODO (US-043): Play laser shoot sound effect (audio system in Epic 7)
 
         # Get currently pressed keys for continuous input
         keys = pygame.key.get_pressed()
+
+        # Handle continuous shooting when powered up (US-019) - X or J key (only during normal gameplay)
+        if not is_level_complete and not is_dead and not is_transition_screen and not is_victory_screen:
+            if keys[pygame.K_x] or keys[pygame.K_j]:
+                # Shoot unlimited lasers while powered up (no MAX_LASERS limit)
+                laser_info = player.shoot()
+                if laser_info is not None:
+                    x, y, direction = laser_info
+                    laser = Laser(x, y, direction)
+                    lasers.add(laser)
+                    all_sprites.add(laser)
+                    # TODO (US-043): Play laser shoot sound effect (audio system in Epic 7)
 
         # Handle level completion state (US-023, US-029)
         if is_level_complete:
@@ -220,7 +220,7 @@ def main():
 
             # Update all lasers (US-019) - handles movement and off-screen removal
             for laser in lasers:
-                laser.update()
+                laser.update(level_width)
 
             # Check for laser-enemy collisions (US-020)
             for laser in lasers:

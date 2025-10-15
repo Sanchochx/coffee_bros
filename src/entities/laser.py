@@ -37,13 +37,18 @@ class Laser(pygame.sprite.Sprite):
         self.direction = direction  # 1 = right, -1 = left
         self.speed = LASER_SPEED
 
-    def update(self):
+    def update(self, level_width=None):
         """
         Update laser position and check if it should be removed.
+
+        Args:
+            level_width (int, optional): Width of the level. If None, uses WINDOW_WIDTH.
         """
         # Move laser horizontally
         self.rect.x += self.speed * self.direction
 
-        # Remove laser if it goes off screen
-        if self.rect.right < 0 or self.rect.left > WINDOW_WIDTH:
+        # Remove laser if it goes way off screen (give it a large buffer)
+        # Use level_width if provided, otherwise use a very large default
+        max_width = level_width if level_width else 10000
+        if self.rect.right < -100 or self.rect.left > max_width + 100:
             self.kill()  # Remove from sprite groups
