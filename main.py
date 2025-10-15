@@ -8,7 +8,7 @@ import sys
 from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS, LEVEL_COMPLETE_DELAY
 from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
 from src.level import Level
-from src.menu import MainMenu, PauseMenu
+from src.menu import MainMenu, PauseMenu, GameOverMenu
 
 
 def main():
@@ -23,10 +23,11 @@ def main():
     # Create clock for FPS control
     clock = pygame.time.Clock()
 
-    # Game state management (US-034, US-035)
-    game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings"
+    # Game state management (US-034, US-035, US-036)
+    game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings", "game_over"
     main_menu = MainMenu()  # Initialize main menu
     pause_menu = PauseMenu()  # Initialize pause menu (US-035)
+    game_over_menu = GameOverMenu()  # Initialize game over menu (US-036)
 
     # Initialize game state
     score = 0
@@ -177,6 +178,47 @@ def main():
                 # Skip rest of event handling when in pause menu
                 continue
 
+            # Handle game over menu input when in game over state (US-036)
+            if game_state == "game_over":
+                menu_action = game_over_menu.handle_input(event)
+                if menu_action == "retry":
+                    # Retry current level - reload it completely
+                    try:
+                        level = Level.load_from_file(current_level_number)
+                        # Get fresh references to level entities
+                        player = level.player
+                        all_sprites = level.all_sprites
+                        platforms = level.platforms
+                        enemies = level.enemies
+                        powerups = level.powerups
+                        goals = level.goals
+                        lasers.empty()  # Clear all lasers
+                        # Reset all state flags
+                        is_dead = False
+                        is_level_complete = False
+                        is_transition_screen = False
+                        completion_timer = 0
+                        death_timer = 0
+                        # Reset time tracking for restarted level
+                        level_start_time = pygame.time.get_ticks()
+                        # Reset score to 0 on game over retry (US-036 technical notes)
+                        score = 0
+                        level_start_score = 0
+                        # Reset camera
+                        camera_x = 0
+                        # Return to playing state
+                        game_state = "playing"
+                    except (FileNotFoundError, ValueError) as e:
+                        print(f"Error retrying level {current_level_number}: {e}")
+                        running = False
+                elif menu_action == "menu":
+                    # Return to main menu
+                    game_state = "menu"
+                    # Reset game over menu selection
+                    game_over_menu.selected_index = 0
+                # Skip rest of event handling when in game over menu
+                continue
+
             # Gameplay event handling (only when in playing state)
             if game_state == "playing" and event.type == pygame.KEYDOWN:
                 # Handle transition screen continuation (US-029)
@@ -315,6 +357,29 @@ def main():
             hint_text = settings_font.render("Press ESC to return to menu", True, (200, 200, 200))
             hint_rect = hint_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 60))
             screen.blit(hint_text, hint_rect)
+            pygame.display.flip()
+            clock.tick(FPS)
+            continue  # Skip gameplay logic
+
+        # Game over state - freeze game and show game over menu (US-036)
+        if game_state == "game_over":
+            # Don't update any game entities - game is frozen!
+            # Update game over menu (for delay timer)
+            game_over_menu.update()
+
+            # Fill screen with black background
+            screen.fill(BLACK)
+
+            # Draw all sprites at their frozen positions with camera offset
+            for sprite in all_sprites:
+                offset_rect = sprite.rect.copy()
+                offset_rect.x -= camera_x
+                screen.blit(sprite.image, offset_rect)
+
+            # Draw game over menu overlay on top
+            game_over_menu.draw(screen, score)
+
+            # Update display
             pygame.display.flip()
             clock.tick(FPS)
             continue  # Skip gameplay logic
@@ -459,11 +524,12 @@ def main():
                     level.respawn_player()  # Use Level's respawn method
                 # If no lives left, trigger death state
 
-            # Check for death condition (US-014)
+            # Check for death condition (US-014, US-036)
             if player.lives <= 0:
-                is_dead = True
-                death_timer = 0
-                # TODO (US-045): Play death sound effect (audio system in Epic 7)
+                # Player has run out of lives - trigger game over state (US-036)
+                game_state = "game_over"
+                game_over_menu.reset()  # Reset game over menu selection and delay timer
+                # TODO (US-036): Play game over sound/music (audio system in Epic 7)
 
         # Update camera position (US-038, US-039)
         # Camera follows player horizontally, centered on player

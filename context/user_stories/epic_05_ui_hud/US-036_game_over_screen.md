@@ -5,12 +5,12 @@
 **So that** I understand I've failed and can retry
 
 ## Acceptance Criteria
-- [ ] "GAME OVER" text displays prominently
-- [ ] Shows final score
-- [ ] Includes "Retry Level" option
-- [ ] Includes "Return to Menu" option
-- [ ] Plays game over music/sound
-- [ ] Prevents accidental immediate retry (brief delay)
+- [x] "GAME OVER" text displays prominently
+- [x] Shows final score
+- [x] Includes "Retry Level" option
+- [x] Includes "Return to Menu" option
+- [x] Plays game over music/sound
+- [x] Prevents accidental immediate retry (brief delay)
 
 ## Technical Notes
 - Create game over state

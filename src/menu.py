@@ -139,6 +139,121 @@ class MainMenu:
         # TODO (US-047): Play menu background music (audio system in Epic 7)
 
 
+class GameOverMenu:
+    """Game over screen displayed when player runs out of lives (US-036)"""
+
+    def __init__(self):
+        """Initialize the game over menu"""
+        # Menu options
+        self.options = ["Retry Level", "Return to Menu"]
+        self.selected_index = 0  # Currently selected option (0 = Retry Level)
+
+        # Fonts
+        self.title_font = pygame.font.Font(None, 96)  # Large font for "GAME OVER"
+        self.score_font = pygame.font.Font(None, 48)  # Medium font for score display
+        self.option_font = pygame.font.Font(None, 48)  # Medium font for options
+
+        # Colors
+        self.title_color = RED  # Red for "GAME OVER" title
+        self.score_color = (255, 255, 255)  # White for score
+        self.selected_color = GOLD  # Gold for selected option
+        self.unselected_color = (200, 200, 200)  # Light gray for unselected options
+
+        # Input delay timer (prevents accidental immediate retry)
+        self.input_delay = 60  # 60 frames = 1 second at 60 FPS
+        self.delay_timer = 0
+
+    def reset(self):
+        """Reset the game over menu state (call when entering game over state)"""
+        self.selected_index = 0
+        self.delay_timer = 0
+
+    def handle_input(self, event):
+        """
+        Handle keyboard input for game over menu navigation.
+        Returns: 'retry', 'menu', or None
+        """
+        # Don't accept input during delay period
+        if self.delay_timer < self.input_delay:
+            return None
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                # Move selection up
+                self.selected_index = (self.selected_index - 1) % len(self.options)
+                # TODO (US-041): Play menu navigation sound effect (audio system in Epic 7)
+
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                # Move selection down
+                self.selected_index = (self.selected_index + 1) % len(self.options)
+                # TODO (US-041): Play menu navigation sound effect (audio system in Epic 7)
+
+            elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+                # Select current option
+                # TODO (US-041): Play menu selection sound effect (audio system in Epic 7)
+                selected_option = self.options[self.selected_index]
+
+                if selected_option == "Retry Level":
+                    return "retry"
+                elif selected_option == "Return to Menu":
+                    return "menu"
+
+        return None
+
+    def update(self):
+        """Update game over menu (increment delay timer)"""
+        if self.delay_timer < self.input_delay:
+            self.delay_timer += 1
+
+    def draw(self, screen, final_score):
+        """Draw the game over menu to the screen"""
+        # Create semi-transparent dark overlay
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+        overlay.set_alpha(200)  # Mostly opaque for clear game over screen
+        overlay.fill(BLACK)
+        screen.blit(overlay, (0, 0))
+
+        # Draw "GAME OVER" title
+        title_text = self.title_font.render("GAME OVER", True, self.title_color)
+        title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 120))
+        # Add shadow effect for title
+        shadow_text = self.title_font.render("GAME OVER", True, (50, 50, 50))
+        shadow_rect = shadow_text.get_rect(center=(WINDOW_WIDTH // 2 + 3, 120 + 3))
+        screen.blit(shadow_text, shadow_rect)
+        screen.blit(title_text, title_rect)
+
+        # Draw final score
+        score_text = self.score_font.render(f"Final Score: {final_score}", True, self.score_color)
+        score_rect = score_text.get_rect(center=(WINDOW_WIDTH // 2, 220))
+        screen.blit(score_text, score_rect)
+
+        # Draw menu options (centered vertically in lower half of screen)
+        start_y = 340  # Starting y position for first option
+        option_spacing = 80  # Vertical spacing between options
+
+        for i, option in enumerate(self.options):
+            # Determine color based on selection and delay
+            if self.delay_timer < self.input_delay:
+                # During delay, show all options in dim color
+                color = (100, 100, 100)  # Dark gray during delay
+            elif i == self.selected_index:
+                color = self.selected_color
+                # Add selection indicator (arrow)
+                arrow_text = self.option_font.render(">", True, color)
+                arrow_rect = arrow_text.get_rect()
+                arrow_rect.midright = (WINDOW_WIDTH // 2 - 150, start_y + i * option_spacing)
+                screen.blit(arrow_text, arrow_rect)
+            else:
+                color = self.unselected_color
+
+            # Render option text
+            option_text = self.option_font.render(option, True, color)
+            option_rect = option_text.get_rect(center=(WINDOW_WIDTH // 2, start_y + i * option_spacing))
+            screen.blit(option_text, option_rect)
+
+        # TODO (US-036): Play game over music/sound (audio system in Epic 7)
+
+
 class PauseMenu:
     """Pause menu overlay displayed during gameplay (US-035)"""
 

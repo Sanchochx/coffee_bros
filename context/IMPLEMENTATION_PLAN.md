@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 37
+- **Completed:** 38
 - **In Progress:** 0
-- **Remaining:** 35
-- **Progress:** 51.4%
+- **Remaining:** 34
+- **Progress:** 52.8%
 
 ---
 
@@ -220,7 +220,7 @@
   - Path: `context/user_stories/epic_05_ui_hud/US-035_pause_menu.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-035_pause_menu.md)
 
-- [ ] **US-036** - Game Over Screen
+- [x] **US-036** - Game Over Screen
   - *Create game over screen with options*
   - Path: `context/user_stories/epic_05_ui_hud/US-036_game_over_screen.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-036_game_over_screen.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 5 - User Interface and HUD (71.4% complete)
-**Current Story:** US-036 - Game Over Screen
-**Last Completed Story:** US-035 - Pause Menu
+**Current Epic:** Epic 5 - User Interface and HUD (85.7% complete)
+**Current Story:** US-037 - Level Name Display
+**Last Completed Story:** US-036 - Game Over Screen
 **Last Completed Epic:** Epic 4 - Level System and Progression (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera
