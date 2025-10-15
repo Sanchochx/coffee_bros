@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 33
+- **Completed:** 34
 - **In Progress:** 0
-- **Remaining:** 39
-- **Progress:** 45.8%
+- **Remaining:** 38
+- **Progress:** 47.2%
 
 ---
 
@@ -200,7 +200,7 @@
   - Path: `context/user_stories/epic_05_ui_hud/US-031_score_display.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-031_score_display.md)
 
-- [ ] **US-032** - Lives Display
+- [x] **US-032** - Lives Display
   - *Show remaining lives on HUD*
   - Path: `context/user_stories/epic_05_ui_hud/US-032_lives_display.md`
   - [Details](context/user_stories/epic_05_ui_hud/US-032_lives_display.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 5 - User Interface and HUD (14.3% complete)
-**Current Story:** US-032 - Lives Display
-**Last Completed Story:** US-031 - Score Display
+**Current Epic:** Epic 5 - User Interface and HUD (28.6% complete)
+**Current Story:** US-033 - Powerup Timer Display
+**Last Completed Story:** US-032 - Lives Display
 **Last Completed Epic:** Epic 4 - Level System and Progression (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

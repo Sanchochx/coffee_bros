@@ -321,15 +321,18 @@ def main():
         score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))  # White text, zero-padded to 5 digits
         screen.blit(score_text, (10, 10))  # Top-left corner
 
-        lives_text = font.render(f"Lives: {player.lives}", True, (255, 255, 255))  # White text
-        screen.blit(lives_text, (10, 50))  # Below score
+        # Draw HUD - Lives Display (US-032)
+        lives_text = font.render(f"x{player.lives}", True, (255, 255, 255))  # White text in "x3" format
+        lives_rect = lives_text.get_rect()
+        lives_rect.topright = (WINDOW_WIDTH - 10, 10)  # Top-right corner with 10px margin
+        screen.blit(lives_text, lives_rect)
 
         # Display powerup timer when powered up (US-018)
         if player.is_powered_up:
             # Convert frames to seconds (60 frames = 1 second)
             powerup_seconds = player.powerup_timer / 60
             powerup_text = font.render(f"Powerup: {powerup_seconds:.1f}s", True, (255, 215, 0))  # Gold text
-            screen.blit(powerup_text, (10, 90))  # Below lives
+            screen.blit(powerup_text, (10, 50))  # Below score
 
         # Display level completion screen (US-023)
         if is_level_complete:

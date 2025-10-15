@@ -2,9 +2,9 @@
 
 ## Current Project State
 
-**Last Updated:** 2025-10-14
-**Completed User Stories:** 33 / 72
-**Current Phase:** Epic 5 - User Interface and HUD (IN PROGRESS - 14.3%)
+**Last Updated:** 2025-10-15
+**Completed User Stories:** 34 / 72
+**Current Phase:** Epic 5 - User Interface and HUD (IN PROGRESS - 28.6%)
 **Note:** Epic 6 (Camera System) completed early due to critical blocking issue
 
 ---
@@ -39,8 +39,8 @@
     - Handles scores beyond 99999 by expanding width automatically
   - **HUD positioning:**
     - Score at (10, 10) - top-left corner
-    - Lives display below at (10, 50) - to be improved in US-032
-    - Powerup timer at (10, 90) when active - to be improved in US-033
+    - Lives display in top-right - implemented in US-032
+    - Powerup timer at (10, 50) when active - to be improved in US-033
     - HUD elements rendered after all sprites to appear on top
     - HUD rendering uses screen coordinates (not affected by camera_x offset)
   - **Integration with existing systems:**
@@ -60,11 +60,71 @@
     - Uses font initialized at line 27 (pygame.font.Font(None, 36))
     - Score variable initialized at line 26 and updated throughout game loop
   - **Future improvements (later user stories):**
-    - US-032 will improve Lives display formatting
     - US-033 will improve Powerup timer display formatting
     - US-034 will add main menu
     - US-035 will add pause menu
     - Epic 8 may add visual polish to HUD elements
+
+- **US-032: Lives Display** ✓
+  - Lives display implemented on HUD in compact "x3" format positioned in top-right corner
+  - **Display specifications:**
+    - Format: "x3" (shows remaining lives count with 'x' prefix)
+    - Location: Top-right corner with 10px margin from right edge
+    - Position: topright = (WINDOW_WIDTH - 10, 10) using pygame rect positioning
+    - Font size: 36pt (default pygame font, same as score display)
+    - Color: White (255, 255, 255) for high contrast and consistency with score
+    - Always visible and fixed on screen (not affected by camera scrolling)
+  - **Lives tracking:**
+    - Displays player.lives variable which is updated by game systems
+    - Updates immediately when life is lost (no delay or animation required)
+    - Lives decremented at main.py line 287 when player falls into pit
+    - Lives decremented by player.take_damage() method when hit by enemy
+    - Initial lives set by PLAYER_STARTING_LIVES constant (default: 3)
+  - **Display behavior:**
+    - Shows during all normal gameplay (not during transition/victory screens)
+    - Rendered every frame - automatically reflects current lives count
+    - No caching or buffering - instant visual update when lives change
+    - Positioned using get_rect() for precise right-alignment
+  - **Visual design rationale:**
+    - "x3" format is compact and universally understood (game convention)
+    - Top-right placement balances score in top-left, creating symmetric HUD
+    - White color maintains consistency with other HUD elements
+    - Right-aligned text prevents shifting when lives count changes (3→2→1)
+    - 10px margin prevents text from touching screen edge
+  - **HUD layout with US-032:**
+    - Top-left (10, 10): Score display "SCORE: 00000"
+    - Top-right (WIDTH-10, 10): Lives display "x3"
+    - Left side (10, 50): Powerup timer when active (below score)
+    - Balanced layout with information spread across top of screen
+    - Player can see critical info (lives, score) with peripheral vision during gameplay
+  - **Integration with existing systems:**
+    - Works with lives system from Epic 2 (US-013, US-014)
+    - Displays lives tracked by player.take_damage() (US-012)
+    - Shows lives lost from pit falls (US-015)
+    - Updates during respawn and death mechanics
+    - Compatible with camera system (US-038, US-039) - HUD unaffected by scrolling
+    - Displays correctly during all game states (gameplay, level completion)
+  - **Code location:**
+    - main.py lines 324-328: Lives rendering logic with right-alignment
+    - Uses font initialized at line 27 (pygame.font.Font(None, 36))
+    - player.lives variable read from Player entity
+    - Rendered after sprites but before overlay screens (proper z-ordering)
+  - **Technical implementation details:**
+    - lives_text = font.render(f"x{player.lives}", True, (255, 255, 255))
+    - lives_rect = lives_text.get_rect() to get text bounding box
+    - lives_rect.topright = (WINDOW_WIDTH - 10, 10) for right-alignment
+    - screen.blit(lives_text, lives_rect) to render at calculated position
+    - Right-alignment ensures text stays in same visual position regardless of digit count
+  - **Acceptance criteria verification:**
+    - ✓ Lives displayed in top-right of screen
+    - ✓ Shows in "x3" format (compact and clear)
+    - ✓ Updates immediately when life lost (rendered every frame)
+    - ✓ Remains visible at all times during gameplay
+    - ✓ Uses clear iconography ("x" prefix is standard gaming convention)
+  - **Future improvements (later user stories):**
+    - US-033 may adjust positioning if powerup timer layout changes
+    - Epic 8 may add heart icons or visual polish to lives display
+    - Epic 7 may add sound effects when lives change (already implemented for damage)
 
 ### Epic 6: Camera and Viewport (COMPLETED EARLY - Critical Fix)
 - **US-038: Scrolling Camera Implementation** ✓
