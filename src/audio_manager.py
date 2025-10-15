@@ -217,3 +217,13 @@ class AudioManager:
             bool: True if sound played successfully, False otherwise
         """
         return self.play_sound("death")
+
+    def play_level_complete(self):
+        """
+        Play the level complete sound effect (US-046).
+        Triumphant fanfare when player reaches the level goal.
+
+        Returns:
+            bool: True if sound played successfully, False otherwise
+        """
+        return self.play_sound("level_complete")

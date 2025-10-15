@@ -5,10 +5,10 @@
 **So that** success feels rewarding
 
 ## Acceptance Criteria
-- [ ] Fanfare plays when reaching goal
-- [ ] Sound is triumphant and celebratory
-- [ ] Sound plays fully before transition
-- [ ] Background music stops when fanfare plays
+- [x] Fanfare plays when reaching goal
+- [x] Sound is triumphant and celebratory
+- [x] Sound plays fully before transition
+- [x] Background music stops when fanfare plays
 
 ## Technical Notes
 - Play when level goal reached

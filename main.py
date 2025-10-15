@@ -543,7 +543,8 @@ def main():
                         completion_time = (pygame.time.get_ticks() - level_start_time) / 1000
                         # Calculate score earned in this level (US-029)
                         score_earned_in_level = score - level_start_score
-                        # TODO (US-046): Play level complete sound/music (audio system in Epic 7)
+                        # Play level complete sound effect (US-046)
+                        audio_manager.play_level_complete()
 
             # Check for pit/fall death (US-015)
             if player.rect.top > WINDOW_HEIGHT:
