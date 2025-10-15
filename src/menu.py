@@ -136,8 +136,6 @@ class MainMenu:
         controls_rect = controls_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 40))
         screen.blit(controls_text, controls_rect)
 
-        # TODO (US-047): Play menu background music (audio system in Epic 7)
-
 
 class GameOverMenu:
     """Game over screen displayed when player runs out of lives (US-036)"""
@@ -250,8 +248,6 @@ class GameOverMenu:
             option_text = self.option_font.render(option, True, color)
             option_rect = option_text.get_rect(center=(WINDOW_WIDTH // 2, start_y + i * option_spacing))
             screen.blit(option_text, option_rect)
-
-        # TODO (US-036): Play game over music/sound (audio system in Epic 7)
 
 
 class PauseMenu:

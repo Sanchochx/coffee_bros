@@ -70,6 +70,23 @@ class AudioManager:
         # Load all sound effects (US-040)
         self._load_sounds()
 
+        # Music system (US-047)
+        self.music_dir = os.path.join("assets", "music")
+        self.music_volume = 0.4  # Music volume (lower than SFX to not overpower them)
+        self.is_music_muted = False  # Music mute state
+        self.current_music = None  # Track currently playing music
+
+        # Music file names (US-047)
+        # Using WAV format since ffmpeg/OGG conversion not available
+        self.music_files = {
+            "menu": "menu_music.wav",      # Background music for menu screens
+            "gameplay": "gameplay_music.wav",  # Background music for gameplay levels
+            "victory": "victory_music.wav",    # Background music for victory screen
+        }
+
+        # Initialize music system (US-047)
+        self._init_music()
+
     def _load_sounds(self):
         """
         Load all sound effects from the sounds directory.
@@ -227,3 +244,194 @@ class AudioManager:
             bool: True if sound played successfully, False otherwise
         """
         return self.play_sound("level_complete")
+
+    # Background Music Methods (US-047)
+    def _init_music(self):
+        """
+        Initialize the music system (US-047).
+        Creates music directory if it doesn't exist.
+        """
+        # Create music directory if it doesn't exist
+        if not os.path.exists(self.music_dir):
+            print(f"Warning: Music directory not found at '{self.music_dir}'. Creating it...")
+            try:
+                os.makedirs(self.music_dir)
+            except OSError as e:
+                print(f"Error creating music directory: {e}")
+
+    def play_music(self, music_name, loops=-1, fade_ms=0):
+        """
+        Play background music by name (US-047).
+
+        Args:
+            music_name (str): Name of the music to play (from music_files dict)
+            loops (int): Number of times to loop (-1 = infinite loop, 0 = play once)
+            fade_ms (int): Fade in time in milliseconds (default: 0 = no fade)
+
+        Returns:
+            bool: True if music started successfully, False otherwise
+        """
+        # Check if music exists in music files
+        if music_name not in self.music_files:
+            print(f"Warning: Music '{music_name}' not registered.")
+            return False
+
+        # If music is muted, don't play
+        if self.is_music_muted:
+            print(f"Music is muted, not playing '{music_name}'")
+            self.current_music = music_name  # Still track it for when unmuting
+            return False
+
+        # Get music file path
+        music_file = self.music_files[music_name]
+        music_path = os.path.join(self.music_dir, music_file)
+
+        # Check if file exists
+        if not os.path.exists(music_path):
+            print(f"Warning: Music file not found: {music_path}")
+            return False
+
+        try:
+            # Stop any currently playing music
+            pygame.mixer.music.stop()
+
+            # Load the music file (US-047: WAV format - OGG requires ffmpeg conversion)
+            pygame.mixer.music.load(music_path)
+
+            # Set music volume (US-047: lower than SFX)
+            pygame.mixer.music.set_volume(self.music_volume)
+
+            # Play the music with looping (US-047: loops seamlessly)
+            if fade_ms > 0:
+                pygame.mixer.music.play(loops=loops, fade_ms=fade_ms)
+            else:
+                pygame.mixer.music.play(loops=loops)
+
+            # Track currently playing music
+            self.current_music = music_name
+
+            print(f"Playing music: {music_name} from {music_path}")
+            return True
+
+        except pygame.error as e:
+            print(f"Warning: Error loading/playing music '{music_name}': {e}")
+            return False
+
+    def stop_music(self, fade_ms=0):
+        """
+        Stop the currently playing background music (US-047).
+
+        Args:
+            fade_ms (int): Fade out time in milliseconds (default: 0 = immediate stop)
+        """
+        try:
+            if fade_ms > 0:
+                pygame.mixer.music.fadeout(fade_ms)
+            else:
+                pygame.mixer.music.stop()
+            self.current_music = None
+        except pygame.error as e:
+            print(f"Warning: Error stopping music: {e}")
+
+    def set_music_volume(self, volume):
+        """
+        Set the music volume level (US-047: adjustable volume).
+
+        Args:
+            volume (float): Volume level from 0.0 (silent) to 1.0 (maximum)
+        """
+        # Clamp volume to valid range [0.0, 1.0]
+        volume = max(0.0, min(1.0, volume))
+        self.music_volume = volume
+
+        # Update pygame music volume
+        try:
+            pygame.mixer.music.set_volume(volume)
+        except pygame.error as e:
+            print(f"Warning: Error setting music volume: {e}")
+
+    def get_music_volume(self):
+        """
+        Get the current music volume level (US-047).
+
+        Returns:
+            float: Current music volume level (0.0 to 1.0)
+        """
+        return self.music_volume
+
+    def mute_music(self):
+        """
+        Mute the background music (US-047: can be muted in settings).
+        Music continues to "play" but at 0 volume.
+        """
+        self.is_music_muted = True
+        try:
+            pygame.mixer.music.set_volume(0.0)
+            print("Music muted")
+        except pygame.error as e:
+            print(f"Warning: Error muting music: {e}")
+
+    def unmute_music(self):
+        """
+        Unmute the background music (US-047).
+        Restores music to previous volume level.
+        """
+        self.is_music_muted = False
+        try:
+            pygame.mixer.music.set_volume(self.music_volume)
+            print("Music unmuted")
+        except pygame.error as e:
+            print(f"Warning: Error unmuting music: {e}")
+
+    def toggle_music_mute(self):
+        """
+        Toggle music mute on/off (US-047).
+
+        Returns:
+            bool: New mute state (True = muted, False = unmuted)
+        """
+        if self.is_music_muted:
+            self.unmute_music()
+        else:
+            self.mute_music()
+        return self.is_music_muted
+
+    def is_music_playing(self):
+        """
+        Check if music is currently playing (US-047).
+
+        Returns:
+            bool: True if music is playing, False otherwise
+        """
+        try:
+            return pygame.mixer.music.get_busy()
+        except pygame.error:
+            return False
+
+    # Convenience methods for specific music tracks (US-047)
+    def play_menu_music(self):
+        """
+        Play menu background music with infinite looping (US-047).
+
+        Returns:
+            bool: True if music started successfully, False otherwise
+        """
+        return self.play_music("menu", loops=-1, fade_ms=1000)
+
+    def play_gameplay_music(self):
+        """
+        Play gameplay background music with infinite looping (US-047).
+
+        Returns:
+            bool: True if music started successfully, False otherwise
+        """
+        return self.play_music("gameplay", loops=-1, fade_ms=1000)
+
+    def play_victory_music(self):
+        """
+        Play victory screen music with infinite looping (US-047).
+
+        Returns:
+            bool: True if music started successfully, False otherwise
+        """
+        return self.play_music("victory", loops=-1, fade_ms=1000)

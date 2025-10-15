@@ -28,6 +28,9 @@ def main():
     # Initialize audio manager (US-040, US-041)
     audio_manager = AudioManager()
 
+    # Start menu music (US-047)
+    audio_manager.play_menu_music()
+
     # Game state management (US-034, US-035, US-036)
     game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings", "game_over"
     main_menu = MainMenu()  # Initialize main menu
@@ -138,7 +141,9 @@ def main():
                         # Create level name display (US-037)
                         level_name = level.metadata.get("name", f"Level {current_level_number}")
                         level_name_display = LevelNameDisplay(current_level_number, level_name)
-                        # TODO (US-047): Stop menu music, start gameplay music (audio system in Epic 7)
+                        # Start gameplay music (US-047)
+                        audio_manager.stop_music(fade_ms=500)  # Fade out menu music
+                        audio_manager.play_gameplay_music()  # Start gameplay music
                     except (FileNotFoundError, ValueError) as e:
                         print(f"Error loading level: {e}")
                         running = False
@@ -194,6 +199,9 @@ def main():
                     game_state = "menu"
                     # Reset pause menu selection
                     pause_menu.selected_index = 0
+                    # Return to menu music (US-047)
+                    audio_manager.stop_music(fade_ms=500)
+                    audio_manager.play_menu_music()
                 # Skip rest of event handling when in pause menu
                 continue
 
@@ -238,6 +246,9 @@ def main():
                     game_state = "menu"
                     # Reset game over menu selection
                     game_over_menu.selected_index = 0
+                    # Return to menu music (US-047)
+                    audio_manager.stop_music(fade_ms=500)
+                    audio_manager.play_menu_music()
                 # Skip rest of event handling when in game over menu
                 continue
 
@@ -281,7 +292,9 @@ def main():
                         is_transition_screen = False
                         is_victory_screen = True
                         # total_game_time already includes all level times from transition screens
-                        # TODO (US-047): Play victory music (audio system in Epic 7)
+                        # Play victory music (US-047)
+                        audio_manager.stop_music(fade_ms=500)
+                        audio_manager.play_victory_music()
                 # Handle victory screen options (US-030)
                 elif is_victory_screen:
                     if event.key == pygame.K_r:
@@ -314,6 +327,9 @@ def main():
                             # Create level name display (US-037)
                             level_name = level.metadata.get("name", f"Level {current_level_number}")
                             level_name_display = LevelNameDisplay(current_level_number, level_name)
+                            # Start gameplay music (US-047)
+                            audio_manager.stop_music(fade_ms=500)
+                            audio_manager.play_gameplay_music()
                         except (FileNotFoundError, ValueError) as e:
                             print(f"Error loading level 1: {e}")
                             running = False
@@ -697,8 +713,6 @@ def main():
                 continue_rect = continue_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 100))
                 screen.blit(continue_text, continue_rect)
 
-            # TODO (US-029): Play transition music/fanfare (audio system in Epic 7)
-
         # Display victory screen (US-030)
         if is_victory_screen:
             # Create semi-transparent overlay
@@ -752,8 +766,6 @@ def main():
             quit_text = small_font.render("Press Q or ESC to Quit", True, (200, 200, 200))  # Light gray
             quit_rect = quit_text.get_rect(center=(WINDOW_WIDTH // 2, 530))
             screen.blit(quit_text, quit_rect)
-
-            # TODO (US-047): Play victory music (audio system in Epic 7)
 
         # Update display
         pygame.display.flip()

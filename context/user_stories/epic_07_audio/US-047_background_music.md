@@ -5,12 +5,12 @@
 **So that** the game has atmosphere
 
 ## Acceptance Criteria
-- [ ] Different music for menu and gameplay
-- [ ] Music loops seamlessly
-- [ ] Music volume is adjustable
-- [ ] Music doesn't overpower sound effects
-- [ ] Music can be muted in settings
-- [ ] Music matches Colombian/upbeat theme
+- [x] Different music for menu and gameplay
+- [x] Music loops seamlessly
+- [x] Music volume is adjustable
+- [x] Music doesn't overpower sound effects
+- [x] Music can be muted in settings
+- [x] Music matches Colombian/upbeat theme
 
 ## Technical Notes
 - Use `pygame.mixer.music` for background tracks
