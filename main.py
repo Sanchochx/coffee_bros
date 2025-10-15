@@ -45,6 +45,10 @@ def main():
     is_transition_screen = False
     score_earned_in_level = 0  # Score earned specifically in completed level
 
+    # Victory screen state (US-030)
+    is_victory_screen = False
+    total_game_time = 0  # Total time played across all levels (in seconds)
+
     # Load level from JSON file (US-022)
     try:
         level = Level.load_from_file(current_level_number)  # Load current level
@@ -103,9 +107,44 @@ def main():
                             print(f"Error loading level {current_level_number}: {e}")
                             running = False
                     else:
-                        # No more levels - exit transition screen to show victory screen
+                        # No more levels - show victory screen! (US-030)
                         is_transition_screen = False
-                        # TODO (US-030): Show victory screen when implemented
+                        is_victory_screen = True
+                        # total_game_time already includes all level times from transition screens
+                        # TODO (US-047): Play victory music (audio system in Epic 7)
+                # Handle victory screen options (US-030)
+                elif is_victory_screen:
+                    if event.key == pygame.K_r:
+                        # Restart game from Level 1
+                        current_level_number = 1
+                        score = 0
+                        total_game_time = 0
+                        try:
+                            level = Level.load_from_file(current_level_number)
+                            # Get fresh references to level entities
+                            player = level.player
+                            all_sprites = level.all_sprites
+                            platforms = level.platforms
+                            enemies = level.enemies
+                            powerups = level.powerups
+                            goals = level.goals
+                            lasers.empty()  # Clear all lasers
+                            # Reset all state flags
+                            is_victory_screen = False
+                            is_level_complete = False
+                            is_transition_screen = False
+                            is_dead = False
+                            completion_timer = 0
+                            death_timer = 0
+                            # Reset time tracking
+                            level_start_time = pygame.time.get_ticks()
+                            level_start_score = 0
+                        except (FileNotFoundError, ValueError) as e:
+                            print(f"Error loading level 1: {e}")
+                            running = False
+                    elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
+                        # Quit game
+                        running = False
                 # Handle shooting (US-019) - X or J key (only during normal gameplay)
                 elif event.key == pygame.K_x or event.key == pygame.K_j:
                     if not is_level_complete and not is_dead:
@@ -133,6 +172,8 @@ def main():
                 is_transition_screen = True
                 is_level_complete = False  # Exit level complete state
                 completion_timer = 0  # Reset timer for future use
+                # Add level completion time to total game time (US-030)
+                total_game_time += completion_time
 
         # Handle death state
         elif is_dead:
@@ -344,6 +385,62 @@ def main():
                 screen.blit(continue_text, continue_rect)
 
             # TODO (US-029): Play transition music/fanfare (audio system in Epic 7)
+
+        # Display victory screen (US-030)
+        if is_victory_screen:
+            # Create semi-transparent overlay
+            overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+            overlay.set_alpha(220)  # Mostly opaque for clear victory screen
+            overlay.fill((0, 0, 0))  # Black overlay
+            screen.blit(overlay, (0, 0))
+
+            # Create fonts for victory screen
+            huge_font = pygame.font.Font(None, 96)  # Extra large for main title
+            big_font = pygame.font.Font(None, 72)
+            medium_font = pygame.font.Font(None, 48)
+            small_font = pygame.font.Font(None, 36)
+
+            # Colombian flag colors for celebration theme
+            yellow_col = (255, 209, 0)  # Colombian yellow
+            blue_col = (0, 56, 168)     # Colombian blue
+            red_col = (206, 17, 38)     # Colombian red
+            gold_col = (255, 215, 0)    # Gold for highlights
+
+            # Display main congratulations message
+            congrats_text = huge_font.render("¡FELICIDADES!", True, yellow_col)  # Spanish for "Congratulations!"
+            congrats_rect = congrats_text.get_rect(center=(WINDOW_WIDTH // 2, 80))
+            screen.blit(congrats_text, congrats_rect)
+
+            # Display "You completed Sancho Bros!" message
+            completed_text = big_font.render("You completed Sancho Bros!", True, (255, 255, 255))  # White
+            completed_rect = completed_text.get_rect(center=(WINDOW_WIDTH // 2, 180))
+            screen.blit(completed_text, completed_rect)
+
+            # Display total score
+            score_text = medium_font.render(f"Total Score: {score}", True, gold_col)  # Gold
+            score_rect = score_text.get_rect(center=(WINDOW_WIDTH // 2, 270))
+            screen.blit(score_text, score_rect)
+
+            # Display total time played
+            time_text = medium_font.render(f"Total Time: {total_game_time:.1f}s", True, gold_col)  # Gold
+            time_rect = time_text.get_rect(center=(WINDOW_WIDTH // 2, 330))
+            screen.blit(time_text, time_rect)
+
+            # Colombian-themed celebration message
+            celebration_text = small_font.render("¡Eres el mejor cafetero!", True, yellow_col)  # "You're the best coffee grower!"
+            celebration_rect = celebration_text.get_rect(center=(WINDOW_WIDTH // 2, 400))
+            screen.blit(celebration_text, celebration_rect)
+
+            # Display options
+            restart_text = small_font.render("Press R to Restart", True, (200, 200, 200))  # Light gray
+            restart_rect = restart_text.get_rect(center=(WINDOW_WIDTH // 2, 480))
+            screen.blit(restart_text, restart_rect)
+
+            quit_text = small_font.render("Press Q or ESC to Quit", True, (200, 200, 200))  # Light gray
+            quit_rect = quit_text.get_rect(center=(WINDOW_WIDTH // 2, 530))
+            screen.blit(quit_text, quit_rect)
+
+            # TODO (US-047): Play victory music (audio system in Epic 7)
 
         # Update display
         pygame.display.flip()

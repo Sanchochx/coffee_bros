@@ -5,13 +5,13 @@
 **So that** I feel accomplished
 
 ## Acceptance Criteria
-- [ ] Victory screen shows after Level 5 completion
-- [ ] Displays total score across all levels
-- [ ] Shows total time played
-- [ ] Shows congratulations message
-- [ ] Includes Colombian-themed celebration visuals
-- [ ] Plays victory music
-- [ ] Offers option to restart game or return to menu
+- [x] Victory screen shows after Level 5 completion
+- [x] Displays total score across all levels
+- [x] Shows total time played
+- [x] Shows congratulations message
+- [x] Includes Colombian-themed celebration visuals
+- [x] Plays victory music
+- [x] Offers option to restart game or return to menu
 
 ## Technical Notes
 - Track cumulative score and time
