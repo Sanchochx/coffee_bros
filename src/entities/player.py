@@ -36,8 +36,10 @@ class Player(pygame.sprite.Sprite):
         self.width = 40
         self.height = 60
 
-        # Animation system (US-048)
+        # Animation system (US-048, US-049)
         self.walk_frames = self._generate_walk_frames()  # 6 frames for walk cycle
+        self.jump_frame = self._generate_jump_frame()  # Frame for ascending (US-049)
+        self.fall_frame = self._generate_fall_frame()  # Frame for descending (US-049)
         self.current_frame = 0  # Current animation frame index
         self.animation_timer = 0  # Timer for frame cycling
         self.animation_speed = 6  # Frames to display each animation frame (60 FPS / 6 = 10 FPS animation)
@@ -119,6 +121,65 @@ class Player(pygame.sprite.Sprite):
 
         return frames
 
+    def _generate_jump_frame(self):
+        """
+        Generate jumping animation frame (ascending - velocity_y < 0)
+        Shows player with legs tucked in/bent for jumping pose
+
+        Returns:
+            pygame.Surface: Jump frame surface
+        """
+        frame = pygame.Surface((self.width, self.height))
+        frame.fill(YELLOW)
+
+        # Draw body (slightly darker yellow rectangle) - higher up for jump
+        body_color = (230, 189, 0)
+        body_rect = pygame.Rect(5, 8, self.width - 10, self.height - 20)
+        pygame.draw.rect(frame, body_color, body_rect)
+
+        # Draw legs tucked/bent (both legs together for jump pose)
+        leg_width = 16  # Wider combined legs
+        leg_height = 12  # Shorter legs (tucked)
+
+        # Centered legs tucked under body
+        leg_x = (self.width - leg_width) // 2
+        leg_y = self.height - leg_height
+        pygame.draw.rect(frame, (0, 0, 0), (leg_x, leg_y, leg_width, leg_height))
+
+        return frame
+
+    def _generate_fall_frame(self):
+        """
+        Generate falling animation frame (descending - velocity_y > 0)
+        Shows player with legs slightly extended for landing preparation
+
+        Returns:
+            pygame.Surface: Fall frame surface
+        """
+        frame = pygame.Surface((self.width, self.height))
+        frame.fill(YELLOW)
+
+        # Draw body (slightly darker yellow rectangle)
+        body_color = (230, 189, 0)
+        body_rect = pygame.Rect(5, 10, self.width - 10, self.height - 25)
+        pygame.draw.rect(frame, body_color, body_rect)
+
+        # Draw legs extended/spread for landing preparation
+        leg_width = 8
+        leg_height = 18  # Longer legs (extended)
+
+        # Left leg (slightly spread)
+        left_leg_x = self.width // 2 - 12
+        left_leg_y = self.height - leg_height
+        pygame.draw.rect(frame, (0, 0, 0), (left_leg_x, left_leg_y, leg_width, leg_height))
+
+        # Right leg (slightly spread)
+        right_leg_x = self.width // 2 + 4
+        right_leg_y = self.height - leg_height
+        pygame.draw.rect(frame, (0, 0, 0), (right_leg_x, right_leg_y, leg_width, leg_height))
+
+        return frame
+
     def take_damage(self, knockback_direction=0):
         """
         Handle player taking damage from an enemy
@@ -196,11 +257,19 @@ class Player(pygame.sprite.Sprite):
 
     def _update_appearance(self):
         """Update player visual appearance based on current state"""
-        # Regenerate walk frames with current powered-up state
+        # Regenerate animation frames with current powered-up state (US-048, US-049)
         self.walk_frames = self._generate_walk_frames()
+        self.jump_frame = self._generate_jump_frame()
+        self.fall_frame = self._generate_fall_frame()
 
         # Set current image based on animation state
-        if self.is_walking:
+        if not self.is_grounded:
+            # In air - use jump/fall animation (US-049)
+            if self.velocity_y < 0:
+                self.image = self.jump_frame.copy()  # Ascending
+            else:
+                self.image = self.fall_frame.copy()  # Descending
+        elif self.is_walking:
             self.image = self.walk_frames[self.current_frame].copy()
         else:
             self.image = self.walk_frames[0].copy()
@@ -350,8 +419,28 @@ class Player(pygame.sprite.Sprite):
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1
 
-        # Update walking animation (US-048)
-        if self.is_walking:
+        # Update animation based on player state (US-048, US-049)
+        if not self.is_grounded:
+            # Player is in air - use jump/fall animation (US-049)
+            if self.velocity_y < 0:
+                # Ascending (jumping up)
+                self.image = self.jump_frame.copy()
+            else:
+                # Descending (falling down)
+                self.image = self.fall_frame.copy()
+
+            # Add powered-up border if applicable
+            if self.is_powered_up:
+                pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
+
+            # Flip sprite horizontally based on facing direction
+            if self.facing_direction == -1:
+                self.image = pygame.transform.flip(self.image, True, False)
+
+            # Update original image for blinking effect
+            self.original_image = self.image.copy()
+        elif self.is_walking:
+            # Player is walking on ground - use walking animation (US-048)
             # Increment animation timer
             self.animation_timer += 1
 
@@ -374,7 +463,7 @@ class Player(pygame.sprite.Sprite):
             # Update original image for blinking effect
             self.original_image = self.image.copy()
         else:
-            # Player is not moving - reset animation to idle (frame 0)
+            # Player is idle (not moving, on ground) - reset animation to idle (frame 0)
             self.current_frame = 0
             self.animation_timer = 0
 

@@ -5,10 +5,10 @@
 **So that** jumping looks dynamic
 
 ## Acceptance Criteria
-- [ ] Jump animation shows when player in air
-- [ ] Different frames for ascending vs descending
-- [ ] Transitions smoothly from walk to jump
-- [ ] Lands with appropriate frame
+- [x] Jump animation shows when player in air
+- [x] Different frames for ascending vs descending
+- [x] Transitions smoothly from walk to jump
+- [x] Lands with appropriate frame
 
 ## Technical Notes
 - Use jump frame when `velocity_y < 0` (going up)
