@@ -36,17 +36,19 @@ class Player(pygame.sprite.Sprite):
         self.width = 40
         self.height = 60
 
-        # Animation system (US-048, US-049)
+        # Animation system (US-048, US-049, US-050)
         self.walk_frames = self._generate_walk_frames()  # 6 frames for walk cycle
         self.jump_frame = self._generate_jump_frame()  # Frame for ascending (US-049)
         self.fall_frame = self._generate_fall_frame()  # Frame for descending (US-049)
+        self.idle_frames = self._generate_idle_frames()  # 4 frames for idle animation (US-050)
         self.current_frame = 0  # Current animation frame index
         self.animation_timer = 0  # Timer for frame cycling
         self.animation_speed = 6  # Frames to display each animation frame (60 FPS / 6 = 10 FPS animation)
+        self.idle_animation_speed = 12  # Slower cycle for idle (60 FPS / 12 = 5 FPS animation)
         self.is_walking = False  # True when player is moving
 
-        # Create player surface (placeholder colored rectangle)
-        self.image = self.walk_frames[0].copy()
+        # Create player surface (start with idle animation frame 0)
+        self.image = self.idle_frames[0].copy()
 
         # Get rect for positioning
         self.rect = self.image.get_rect()
@@ -180,6 +182,50 @@ class Player(pygame.sprite.Sprite):
 
         return frame
 
+    def _generate_idle_frames(self):
+        """
+        Generate 4-frame idle animation with subtle breathing effect (US-050)
+        Creates a gentle breathing animation when player is standing still
+
+        Returns:
+            list: List of 4 pygame.Surface objects representing idle cycle
+        """
+        frames = []
+
+        for i in range(4):
+            # Create a new surface for each frame
+            frame = pygame.Surface((self.width, self.height))
+            frame.fill(YELLOW)
+
+            # Subtle breathing effect - body moves up/down slightly
+            # Creates a sine wave pattern: 0 -> 1 -> 0 -> -1 -> 0
+            breathing_offset = int(math.sin(i * math.pi / 2) * 2)  # Oscillate between -2 and 2 pixels
+
+            # Draw body (slightly darker yellow rectangle) with breathing offset
+            body_color = (230, 189, 0)
+            body_y = 10 + breathing_offset
+            body_height = self.height - 25
+            body_rect = pygame.Rect(5, body_y, self.width - 10, body_height)
+            pygame.draw.rect(frame, body_color, body_rect)
+
+            # Draw legs (stationary, no movement during idle)
+            leg_width = 8
+            leg_height = 15
+
+            # Left leg (stationary position)
+            left_leg_x = self.width // 2 - 10
+            left_leg_y = self.height - leg_height
+            pygame.draw.rect(frame, (0, 0, 0), (left_leg_x, left_leg_y, leg_width, leg_height))
+
+            # Right leg (stationary position)
+            right_leg_x = self.width // 2 + 2
+            right_leg_y = self.height - leg_height
+            pygame.draw.rect(frame, (0, 0, 0), (right_leg_x, right_leg_y, leg_width, leg_height))
+
+            frames.append(frame)
+
+        return frames
+
     def take_damage(self, knockback_direction=0):
         """
         Handle player taking damage from an enemy
@@ -257,10 +303,11 @@ class Player(pygame.sprite.Sprite):
 
     def _update_appearance(self):
         """Update player visual appearance based on current state"""
-        # Regenerate animation frames with current powered-up state (US-048, US-049)
+        # Regenerate animation frames with current powered-up state (US-048, US-049, US-050)
         self.walk_frames = self._generate_walk_frames()
         self.jump_frame = self._generate_jump_frame()
         self.fall_frame = self._generate_fall_frame()
+        self.idle_frames = self._generate_idle_frames()
 
         # Set current image based on animation state
         if not self.is_grounded:
@@ -272,7 +319,8 @@ class Player(pygame.sprite.Sprite):
         elif self.is_walking:
             self.image = self.walk_frames[self.current_frame].copy()
         else:
-            self.image = self.walk_frames[0].copy()
+            # Idle - use idle animation (US-050)
+            self.image = self.idle_frames[self.current_frame].copy()
 
         # If powered up, add golden border/glow effect
         if self.is_powered_up:
@@ -463,18 +511,23 @@ class Player(pygame.sprite.Sprite):
             # Update original image for blinking effect
             self.original_image = self.image.copy()
         else:
-            # Player is idle (not moving, on ground) - reset animation to idle (frame 0)
-            self.current_frame = 0
-            self.animation_timer = 0
+            # Player is idle (not moving, on ground) - use idle animation (US-050)
+            # Increment animation timer
+            self.animation_timer += 1
 
-            # Update image to idle frame
-            self.image = self.walk_frames[0].copy()
+            # Advance to next frame when timer reaches idle animation speed (slower than walk)
+            if self.animation_timer >= self.idle_animation_speed:
+                self.animation_timer = 0
+                self.current_frame = (self.current_frame + 1) % len(self.idle_frames)
+
+            # Update image to current idle frame
+            self.image = self.idle_frames[self.current_frame].copy()
 
             # Add powered-up border if applicable
             if self.is_powered_up:
                 pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
 
-            # Flip sprite horizontally based on facing direction (US-048)
+            # Flip sprite horizontally based on facing direction
             if self.facing_direction == -1:
                 self.image = pygame.transform.flip(self.image, True, False)
 

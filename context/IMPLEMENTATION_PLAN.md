@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 49
+- **Completed:** 50
 - **In Progress:** 0
-- **Remaining:** 23
-- **Progress:** 68.1%
+- **Remaining:** 22
+- **Progress:** 69.4%
 
 ---
 
@@ -305,7 +305,7 @@
   - Path: `context/user_stories/epic_08_visual_polish/US-049_player_animation_jumping.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-049_player_animation_jumping.md)
 
-- [ ] **US-050** - Player Animation: Idle
+- [x] **US-050** - Player Animation: Idle
   - *Add idle/standing animation frames*
   - Path: `context/user_stories/epic_08_visual_polish/US-050_player_animation_idle.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-050_player_animation_idle.md)
@@ -477,7 +477,7 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 8 - Visual Polish and Animation (in progress)
-**Current Story:** US-050 - Player Animation: Idle
-**Last Completed Story:** US-049 - Player Animation: Jumping
+**Current Story:** US-051 - Player Animation: Shooting
+**Last Completed Story:** US-050 - Player Animation: Idle
 **Last Completed Epic:** Epic 7 - Audio System (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

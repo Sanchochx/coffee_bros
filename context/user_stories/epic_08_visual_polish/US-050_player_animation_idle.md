@@ -5,10 +5,10 @@
 **So that** the character feels alive
 
 ## Acceptance Criteria
-- [ ] Idle animation plays when not moving
-- [ ] Animation is subtle (breathing, blinking)
-- [ ] Loops seamlessly
-- [ ] Doesn't distract from gameplay
+- [x] Idle animation plays when not moving
+- [x] Animation is subtle (breathing, blinking)
+- [x] Loops seamlessly
+- [x] Doesn't distract from gameplay
 
 ## Technical Notes
 - Use 4-frame idle animation
