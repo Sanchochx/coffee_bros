@@ -40,7 +40,7 @@ DEATH_DELAY = 120  # frames (2 seconds at 60 FPS) - delay before respawn after d
 
 # Power-up constants
 POWERUP_FLOAT_AMPLITUDE = 10  # pixels - how much the power-up floats up and down
-POWERUP_FLOAT_SPEED = 0.1  # speed of floating animation
+POWERUP_FLOAT_SPEED = 0.05  # radians per frame - speed of floating animation
 POWERUP_DURATION = 600  # frames (10 seconds at 60 FPS) - how long the powered-up state lasts
 
 # Laser constants

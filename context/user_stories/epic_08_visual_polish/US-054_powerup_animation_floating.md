@@ -5,10 +5,10 @@
 **So that** it's attractive and noticeable
 
 ## Acceptance Criteria
-- [ ] Powerup bobs up and down smoothly
-- [ ] Animation is continuous loop
-- [ ] Movement is subtle (not distracting)
-- [ ] Easy to spot in level
+- [x] Powerup bobs up and down smoothly
+- [x] Animation is continuous loop
+- [x] Movement is subtle (not distracting)
+- [x] Easy to spot in level
 
 ## Technical Notes
 - Use sine wave for vertical position offset
