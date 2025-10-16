@@ -2,6 +2,7 @@
 Polocho enemy entity for Sancho Bros game.
 """
 import pygame
+import math
 from config import GRAVITY, TERMINAL_VELOCITY, RED, ENEMY_SPEED
 
 
@@ -27,8 +28,15 @@ class Polocho(pygame.sprite.Sprite):
         # Enemy appearance - 40x40 pixels, red colored
         self.width = 40
         self.height = 40
-        self.image = pygame.Surface((self.width, self.height))
-        self.image.fill(RED)
+
+        # Animation system (US-052)
+        self.walk_frames = self._generate_walk_frames()  # 4 frames for walk cycle
+        self.current_frame = 0  # Current animation frame index
+        self.animation_timer = 0  # Timer for frame cycling
+        self.animation_speed = 8  # Frames to display each animation frame (60 FPS / 8 = 7.5 FPS animation)
+
+        # Create enemy surface with first walk frame
+        self.image = self.walk_frames[0].copy()
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -46,6 +54,63 @@ class Polocho(pygame.sprite.Sprite):
         # Squashed state for stomp mechanic
         self.is_squashed = False
         self.squash_timer = 0  # Frames remaining in squashed state
+
+    def _generate_walk_frames(self):
+        """
+        Generate 4 walking animation frames for Polocho enemy (US-052)
+        Creates a simple walking animation with leg/body movement
+
+        Returns:
+            list: List of 4 pygame.Surface objects representing walk cycle
+        """
+        frames = []
+
+        for i in range(4):
+            # Create a new surface for each frame
+            frame = pygame.Surface((self.width, self.height))
+            frame.fill(RED)
+
+            # Calculate leg positions based on frame number
+            # Create a walking effect by varying leg positions
+            leg_offset = math.sin(i * math.pi / 2) * 4  # Oscillate between -4 and 4 pixels
+
+            # Draw simple legs (darker red rectangles) to show walking motion
+            leg_width = 6
+            leg_height = 12
+            darker_red = (180, 0, 0)
+
+            # Left leg
+            left_leg_x = self.width // 2 - 8 + int(leg_offset)
+            left_leg_y = self.height - leg_height
+            pygame.draw.rect(frame, darker_red,
+                           (left_leg_x, left_leg_y, leg_width, leg_height))
+
+            # Right leg (opposite phase)
+            right_leg_x = self.width // 2 + 2 - int(leg_offset)
+            right_leg_y = self.height - leg_height
+            pygame.draw.rect(frame, darker_red,
+                           (right_leg_x, right_leg_y, leg_width, leg_height))
+
+            # Draw body (slightly darker red ellipse for better visual)
+            body_color = (200, 0, 0)
+            body_rect = pygame.Rect(4, 4, self.width - 8, self.height - 16)
+            pygame.draw.ellipse(frame, body_color, body_rect)
+
+            # Draw eyes (small white circles)
+            eye_color = (255, 255, 255)
+            left_eye_pos = (self.width // 2 - 8, self.height // 3)
+            right_eye_pos = (self.width // 2 + 8, self.height // 3)
+            pygame.draw.circle(frame, eye_color, left_eye_pos, 3)
+            pygame.draw.circle(frame, eye_color, right_eye_pos, 3)
+
+            # Draw pupils (small black circles)
+            pupil_color = (0, 0, 0)
+            pygame.draw.circle(frame, pupil_color, left_eye_pos, 1)
+            pygame.draw.circle(frame, pupil_color, right_eye_pos, 1)
+
+            frames.append(frame)
+
+        return frames
 
     def squash(self):
         """Mark enemy as squashed and start squash timer (US-042)."""
@@ -140,3 +205,25 @@ class Polocho(pygame.sprite.Sprite):
                 elif self.velocity_y < 0 and self.rect.top >= platform.rect.top:
                     self.rect.top = platform.rect.bottom
                     self.velocity_y = 0
+
+        # Update walking animation (US-052)
+        # Increment animation timer
+        self.animation_timer += 1
+
+        # Advance to next frame when timer reaches animation speed
+        if self.animation_timer >= self.animation_speed:
+            self.animation_timer = 0
+            self.current_frame = (self.current_frame + 1) % len(self.walk_frames)
+
+        # Safety check: ensure current_frame is within bounds
+        if self.current_frame >= len(self.walk_frames):
+            self.current_frame = 0
+
+        # Update image to current frame
+        self.image = self.walk_frames[self.current_frame].copy()
+
+        # Flip sprite horizontally based on movement direction (US-052)
+        # direction = 1 means moving right (no flip)
+        # direction = -1 means moving left (flip horizontally)
+        if self.direction == -1:
+            self.image = pygame.transform.flip(self.image, True, False)

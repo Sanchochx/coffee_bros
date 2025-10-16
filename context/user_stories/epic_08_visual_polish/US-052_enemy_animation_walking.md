@@ -5,10 +5,10 @@
 **So that** enemies look animated
 
 ## Acceptance Criteria
-- [ ] Walking animation plays continuously
-- [ ] Animation cycles smoothly
-- [ ] Enemies face movement direction
-- [ ] Animation speed matches movement speed
+- [x] Walking animation plays continuously
+- [x] Animation cycles smoothly
+- [x] Enemies face movement direction
+- [x] Animation speed matches movement speed
 
 ## Technical Notes
 - 4-frame walk cycle for Polocho

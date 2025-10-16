@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 51
+- **Completed:** 52
 - **In Progress:** 0
-- **Remaining:** 21
-- **Progress:** 70.8%
+- **Remaining:** 20
+- **Progress:** 72.2%
 
 ---
 
@@ -315,7 +315,7 @@
   - Path: `context/user_stories/epic_08_visual_polish/US-051_player_animation_shooting.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-051_player_animation_shooting.md)
 
-- [ ] **US-052** - Enemy Animation: Walking
+- [x] **US-052** - Enemy Animation: Walking
   - *Add enemy walking animation frames*
   - Path: `context/user_stories/epic_08_visual_polish/US-052_enemy_animation_walking.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-052_enemy_animation_walking.md)
@@ -477,7 +477,7 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 8 - Visual Polish and Animation (in progress)
-**Current Story:** US-052 - Enemy Animation: Walking
-**Last Completed Story:** US-051 - Player Animation: Shooting
+**Current Story:** US-053 - Enemy Animation: Squashed
+**Last Completed Story:** US-052 - Enemy Animation: Walking
 **Last Completed Epic:** Epic 7 - Audio System (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera
