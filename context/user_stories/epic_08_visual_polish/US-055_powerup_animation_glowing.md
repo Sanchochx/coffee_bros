@@ -5,10 +5,10 @@
 **So that** it looks special and magical
 
 ## Acceptance Criteria
-- [ ] Powerup has glowing effect
-- [ ] Glow pulses smoothly
-- [ ] Effect draws attention without being garish
-- [ ] Animation loops seamlessly
+- [x] Powerup has glowing effect
+- [x] Glow pulses smoothly
+- [x] Effect draws attention without being garish
+- [x] Animation loops seamlessly
 
 ## Technical Notes
 - 6-frame glow animation
