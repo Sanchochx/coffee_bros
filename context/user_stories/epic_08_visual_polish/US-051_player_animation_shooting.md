@@ -5,11 +5,11 @@
 **So that** firing lasers looks cool
 
 ## Acceptance Criteria
-- [ ] Shooting animation plays when firing
-- [ ] Shows laser emanating from hands
-- [ ] Animation is brief (returns to normal quickly)
-- [ ] Can play while walking or standing
-- [ ] Faces correct direction
+- [x] Shooting animation plays when firing
+- [x] Shows laser emanating from hands
+- [x] Animation is brief (returns to normal quickly)
+- [x] Can play while walking or standing
+- [x] Faces correct direction
 
 ## Technical Notes
 - 4-frame shooting animation

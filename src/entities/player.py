@@ -36,16 +36,20 @@ class Player(pygame.sprite.Sprite):
         self.width = 40
         self.height = 60
 
-        # Animation system (US-048, US-049, US-050)
+        # Animation system (US-048, US-049, US-050, US-051)
         self.walk_frames = self._generate_walk_frames()  # 6 frames for walk cycle
         self.jump_frame = self._generate_jump_frame()  # Frame for ascending (US-049)
         self.fall_frame = self._generate_fall_frame()  # Frame for descending (US-049)
         self.idle_frames = self._generate_idle_frames()  # 4 frames for idle animation (US-050)
+        self.shoot_frames = self._generate_shoot_frames()  # 4 frames for shooting animation (US-051)
         self.current_frame = 0  # Current animation frame index
         self.animation_timer = 0  # Timer for frame cycling
         self.animation_speed = 6  # Frames to display each animation frame (60 FPS / 6 = 10 FPS animation)
         self.idle_animation_speed = 12  # Slower cycle for idle (60 FPS / 12 = 5 FPS animation)
         self.is_walking = False  # True when player is moving
+        # Shooting animation state (US-051)
+        self.is_shooting = False  # True when playing shooting animation
+        self.shoot_animation_timer = 0  # Timer for shooting animation duration (frames)
 
         # Create player surface (start with idle animation frame 0)
         self.image = self.idle_frames[0].copy()
@@ -226,6 +230,67 @@ class Player(pygame.sprite.Sprite):
 
         return frames
 
+    def _generate_shoot_frames(self):
+        """
+        Generate 4-frame shooting animation (US-051)
+        Shows player with extended arm/hands for laser shooting pose
+
+        Returns:
+            list: List of 4 pygame.Surface objects representing shooting animation
+        """
+        frames = []
+
+        for i in range(4):
+            # Create a new surface for each frame
+            frame = pygame.Surface((self.width, self.height))
+            frame.fill(YELLOW)
+
+            # Draw body (slightly darker yellow rectangle)
+            body_color = (230, 189, 0)
+            body_rect = pygame.Rect(5, 10, self.width - 10, self.height - 25)
+            pygame.draw.rect(frame, body_color, body_rect)
+
+            # Draw legs (stationary during shooting)
+            leg_width = 8
+            leg_height = 15
+
+            # Left leg (stationary position)
+            left_leg_x = self.width // 2 - 10
+            left_leg_y = self.height - leg_height
+            pygame.draw.rect(frame, (0, 0, 0), (left_leg_x, left_leg_y, leg_width, leg_height))
+
+            # Right leg (stationary position)
+            right_leg_x = self.width // 2 + 2
+            right_leg_y = self.height - leg_height
+            pygame.draw.rect(frame, (0, 0, 0), (right_leg_x, right_leg_y, leg_width, leg_height))
+
+            # Draw extended arm/hand for shooting pose (US-051)
+            # Hand extends from body center, pointing outward
+            # Animation progresses: extend -> hold -> hold -> retract
+            if i == 0:
+                # Frame 0: Start extending hand
+                hand_offset = 8
+            elif i == 1:
+                # Frame 1: Fully extended (shooting pose)
+                hand_offset = 12
+            elif i == 2:
+                # Frame 2: Hold extended position
+                hand_offset = 12
+            else:
+                # Frame 3: Retracting hand
+                hand_offset = 6
+
+            # Draw hand rectangle extending from body (will face correct direction when flipped)
+            hand_width = 10 + hand_offset
+            hand_height = 6
+            hand_x = self.width - 5  # Right side of body (will flip for left direction)
+            hand_y = self.height // 2 - 5  # Center height (where laser emanates)
+            pygame.draw.rect(frame, (200, 150, 0), (hand_x - hand_width, hand_y, hand_width, hand_height))
+
+            frames.append(frame)
+
+        return frames
+
     def take_damage(self, knockback_direction=0):
         """
         Handle player taking damage from an enemy
@@ -291,6 +356,11 @@ class Player(pygame.sprite.Sprite):
         # Start cooldown
         self.shoot_cooldown = LASER_COOLDOWN
 
+        # Trigger shooting animation (US-051)
+        # Play shooting animation for 12 frames total (4 frames x 3 display frames each)
+        self.is_shooting = True
+        self.shoot_animation_timer = 12
+
         # Calculate laser spawn position (from center of player)
         laser_x = self.rect.centerx
         laser_y = self.rect.centery
@@ -303,11 +373,12 @@ class Player(pygame.sprite.Sprite):
 
     def _update_appearance(self):
         """Update player visual appearance based on current state"""
-        # Regenerate animation frames with current powered-up state (US-048, US-049, US-050)
+        # Regenerate animation frames with current powered-up state (US-048, US-049, US-050, US-051)
         self.walk_frames = self._generate_walk_frames()
         self.jump_frame = self._generate_jump_frame()
         self.fall_frame = self._generate_fall_frame()
         self.idle_frames = self._generate_idle_frames()
+        self.shoot_frames = self._generate_shoot_frames()
 
         # Set current image based on animation state
         if not self.is_grounded:
@@ -467,8 +538,37 @@ class Player(pygame.sprite.Sprite):
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1
 
-        # Update animation based on player state (US-048, US-049)
-        if not self.is_grounded:
+        # Handle shooting animation timer (US-051)
+        if self.is_shooting:
+            self.shoot_animation_timer -= 1
+            if self.shoot_animation_timer <= 0:
+                self.is_shooting = False  # End shooting animation
+                # Reset frame index to prevent out-of-bounds errors when returning to other animations
+                self.current_frame = 0
+                self.animation_timer = 0
+
+        # Update animation based on player state (US-048, US-049, US-051)
+        # Priority: shooting animation > jump/fall > walking > idle
+        if self.is_shooting:
+            # Player is shooting - use shooting animation (US-051)
+            # Calculate which frame to display based on timer
+            # Timer goes 12 -> 0, we have 4 frames, show each for 3 frames
+            frame_index = (12 - self.shoot_animation_timer) // 3
+            frame_index = min(frame_index, 3)  # Clamp to valid range (0-3)
+
+            self.image = self.shoot_frames[frame_index].copy()
+
+            # Add powered-up border if applicable
+            if self.is_powered_up:
+                pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
+
+            # Flip sprite horizontally based on facing direction
+            if self.facing_direction == -1:
+                self.image = pygame.transform.flip(self.image, True, False)
+
+            # Update original image for blinking effect
+            self.original_image = self.image.copy()
+        elif not self.is_grounded:
             # Player is in air - use jump/fall animation (US-049)
             if self.velocity_y < 0:
                 # Ascending (jumping up)
@@ -497,6 +597,10 @@ class Player(pygame.sprite.Sprite):
                 self.animation_timer = 0
                 self.current_frame = (self.current_frame + 1) % len(self.walk_frames)
 
+            # Safety check: ensure current_frame is within bounds
+            if self.current_frame >= len(self.walk_frames):
+                self.current_frame = 0
+
             # Update image to current frame
             self.image = self.walk_frames[self.current_frame].copy()
 
@@ -519,6 +623,10 @@ class Player(pygame.sprite.Sprite):
             if self.animation_timer >= self.idle_animation_speed:
                 self.animation_timer = 0
                 self.current_frame = (self.current_frame + 1) % len(self.idle_frames)
+
+            # Safety check: ensure current_frame is within bounds
+            if self.current_frame >= len(self.idle_frames):
+                self.current_frame = 0
 
             # Update image to current idle frame
             self.image = self.idle_frames[self.current_frame].copy()
