@@ -112,18 +112,68 @@ class Polocho(pygame.sprite.Sprite):
 
         return frames
 
+    def _generate_squashed_frame(self):
+        """
+        Generate squashed animation frame for defeated enemy (US-053)
+        Creates a flattened/compressed sprite showing clear defeat
+
+        Returns:
+            pygame.Surface: Squashed sprite frame
+        """
+        # Squashed dimensions - reduce height significantly, increase width
+        squashed_width = int(self.width * 1.5)  # 50% wider
+        squashed_height = int(self.height * 0.25)  # 25% of original height (very flat)
+
+        # Create squashed frame surface
+        frame = pygame.Surface((squashed_width, squashed_height))
+        frame.fill(RED)
+
+        # Draw flattened body (ellipse stretched horizontally)
+        body_color = (200, 0, 0)
+        body_rect = pygame.Rect(2, 2, squashed_width - 4, squashed_height - 4)
+        pygame.draw.ellipse(frame, body_color, body_rect)
+
+        # Draw squashed eyes (X's to show defeat)
+        eye_color = (255, 255, 255)
+        darker_color = (100, 0, 0)
+
+        # Left eye X
+        left_eye_x = squashed_width // 3
+        eye_y = squashed_height // 2
+        # Draw X by drawing two small lines
+        pygame.draw.line(frame, darker_color,
+                        (left_eye_x - 3, eye_y - 2),
+                        (left_eye_x + 3, eye_y + 2), 2)
+        pygame.draw.line(frame, darker_color,
+                        (left_eye_x - 3, eye_y + 2),
+                        (left_eye_x + 3, eye_y - 2), 2)
+
+        # Right eye X
+        right_eye_x = squashed_width * 2 // 3
+        pygame.draw.line(frame, darker_color,
+                        (right_eye_x - 3, eye_y - 2),
+                        (right_eye_x + 3, eye_y + 2), 2)
+        pygame.draw.line(frame, darker_color,
+                        (right_eye_x - 3, eye_y + 2),
+                        (right_eye_x + 3, eye_y - 2), 2)
+
+        return frame
+
     def squash(self):
-        """Mark enemy as squashed and start squash timer (US-042)."""
+        """Mark enemy as squashed and start squash timer (US-042, US-053)."""
         if not self.is_squashed:
             self.is_squashed = True
             self.squash_timer = 15  # Show squashed state for 15 frames (~0.25 seconds)
-            # Change appearance to show squashed state (flattened)
-            self.image = pygame.Surface((self.width, self.height // 3))  # Flatten to 1/3 height
-            self.image.fill(RED)
+
+            # Change appearance to show squashed state (US-053)
+            old_centerx = self.rect.centerx
             old_bottom = self.rect.bottom
+
+            # Generate and apply squashed sprite
+            self.image = self._generate_squashed_frame()
             self.rect = self.image.get_rect()
             self.rect.bottom = old_bottom  # Keep bottom position same
-            self.rect.centerx = self.rect.centerx  # Keep horizontal center
+            self.rect.centerx = old_centerx  # Keep horizontal center
 
             # Play stomp sound effect (US-042)
             if self.audio_manager:

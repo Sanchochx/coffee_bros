@@ -5,10 +5,10 @@
 **So that** defeating them is satisfying
 
 ## Acceptance Criteria
-- [ ] Squashed sprite shows when enemy defeated
-- [ ] Sprite is flattened/compressed vertically
-- [ ] Shows briefly before enemy disappears
-- [ ] Clearly conveys defeat
+- [x] Squashed sprite shows when enemy defeated
+- [x] Sprite is flattened/compressed vertically
+- [x] Shows briefly before enemy disappears
+- [x] Clearly conveys defeat
 
 ## Technical Notes
 - Single squashed frame

@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 52
+- **Completed:** 53
 - **In Progress:** 0
-- **Remaining:** 20
-- **Progress:** 72.2%
+- **Remaining:** 19
+- **Progress:** 73.6%
 
 ---
 
@@ -320,7 +320,7 @@
   - Path: `context/user_stories/epic_08_visual_polish/US-052_enemy_animation_walking.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-052_enemy_animation_walking.md)
 
-- [ ] **US-053** - Enemy Animation: Squashed
+- [x] **US-053** - Enemy Animation: Squashed
   - *Add enemy death/squashed animation*
   - Path: `context/user_stories/epic_08_visual_polish/US-053_enemy_animation_squashed.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-053_enemy_animation_squashed.md)
@@ -477,7 +477,7 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 8 - Visual Polish and Animation (in progress)
-**Current Story:** US-053 - Enemy Animation: Squashed
-**Last Completed Story:** US-052 - Enemy Animation: Walking
+**Current Story:** US-054 - Powerup Animation: Floating
+**Last Completed Story:** US-053 - Enemy Animation: Squashed
 **Last Completed Epic:** Epic 7 - Audio System (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera
