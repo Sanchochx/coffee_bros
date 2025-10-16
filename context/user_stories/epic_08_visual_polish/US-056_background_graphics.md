@@ -5,11 +5,11 @@
 **So that** levels have atmosphere
 
 ## Acceptance Criteria
-- [ ] Each level has appropriate background image
-- [ ] Backgrounds show Colombian highlands theme
-- [ ] Backgrounds don't interfere with gameplay visibility
-- [ ] Images are high quality and attractive
-- [ ] Sky, mountains, and coffee plants visible
+- [x] Each level has appropriate background image
+- [x] Backgrounds show Colombian highlands theme
+- [x] Backgrounds don't interfere with gameplay visibility
+- [x] Images are high quality and attractive
+- [x] Sky, mountains, and coffee plants visible
 
 ## Technical Notes
 - Load background image per level from JSON

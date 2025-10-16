@@ -5,7 +5,7 @@
     "description": "Platforming-focused level with precision jumps and vertical challenges",
     "width": 4000,
     "height": 600,
-    "background_type": "mountain",
+    "background_type": "mountain_paths",
     "background_color": [150, 180, 200],
     "music_track": "mountain_theme"
   },

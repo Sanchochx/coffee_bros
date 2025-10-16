@@ -355,6 +355,21 @@ def main():
             # Fill screen with black background
             screen.fill(BLACK)
 
+            # Draw background image behind everything (US-056)
+            if level and level.background_image:
+                level_width = level.metadata.get("width", WINDOW_WIDTH)
+                bg_width = level.background_image.get_width()
+                bg_height = level.background_image.get_height()
+
+                src_x = camera_x
+                src_y = 0
+                src_width = min(WINDOW_WIDTH, bg_width - src_x)
+                src_height = WINDOW_HEIGHT
+
+                if src_x < bg_width:
+                    source_rect = pygame.Rect(src_x, src_y, src_width, src_height)
+                    screen.blit(level.background_image, (0, 0), source_rect)
+
             # Draw all sprites at their frozen positions with camera offset
             for sprite in all_sprites:
                 offset_rect = sprite.rect.copy()
@@ -413,6 +428,21 @@ def main():
 
             # Fill screen with black background
             screen.fill(BLACK)
+
+            # Draw background image behind everything (US-056)
+            if level and level.background_image:
+                level_width = level.metadata.get("width", WINDOW_WIDTH)
+                bg_width = level.background_image.get_width()
+                bg_height = level.background_image.get_height()
+
+                src_x = camera_x
+                src_y = 0
+                src_width = min(WINDOW_WIDTH, bg_width - src_x)
+                src_height = WINDOW_HEIGHT
+
+                if src_x < bg_width:
+                    source_rect = pygame.Rect(src_x, src_y, src_width, src_height)
+                    screen.blit(level.background_image, (0, 0), source_rect)
 
             # Draw all sprites at their frozen positions with camera offset
             for sprite in all_sprites:
@@ -593,6 +623,26 @@ def main():
 
         # Fill screen with black background
         screen.fill(BLACK)
+
+        # Draw background image behind everything (US-056)
+        if level and level.background_image:
+            # Calculate how much of the background to show based on camera position
+            # We'll use a simple approach: draw the portion of the background that corresponds to the camera view
+            level_width = level.metadata.get("width", WINDOW_WIDTH)
+            bg_width = level.background_image.get_width()
+            bg_height = level.background_image.get_height()
+
+            # Calculate the source rectangle from the background image
+            # The background scrolls with the level (not parallax for now, can be added as enhancement)
+            src_x = camera_x
+            src_y = 0
+            src_width = min(WINDOW_WIDTH, bg_width - src_x)
+            src_height = WINDOW_HEIGHT
+
+            # Clamp source rectangle to background bounds
+            if src_x < bg_width:
+                source_rect = pygame.Rect(src_x, src_y, src_width, src_height)
+                screen.blit(level.background_image, (0, 0), source_rect)
 
         # Draw all sprites with camera offset (US-038)
         for sprite in all_sprites:

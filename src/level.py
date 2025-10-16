@@ -35,6 +35,7 @@ class Level:
         self.initial_enemy_positions = []
         self.level_data = None
         self.audio_manager = audio_manager  # Store audio manager reference (US-041)
+        self.background_image = None  # Background image surface (US-056)
 
     @classmethod
     def load_from_file(cls, level_number, audio_manager=None):
@@ -73,6 +74,20 @@ class Level:
 
         # Load metadata
         level.metadata = level.level_data.get("metadata", {})
+
+        # Load background image (US-056)
+        background_type = level.metadata.get("background_type")
+        if background_type:
+            background_path = f"assets/images/{background_type}.png"
+            if os.path.exists(background_path):
+                try:
+                    level.background_image = pygame.image.load(background_path).convert()
+                except pygame.error as e:
+                    print(f"Warning: Could not load background image {background_path}: {e}")
+                    level.background_image = None
+            else:
+                print(f"Warning: Background image not found: {background_path}")
+                level.background_image = None
 
         # Load player spawn position
         player_data = level.level_data.get("player", {})

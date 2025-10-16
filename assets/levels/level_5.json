@@ -5,11 +5,9 @@
     "description": "The ultimate challenge! Reach the peak of the mountain using all your skills!",
     "width": 6000,
     "height": 600,
-    "background": {
-      "type": "el_pico_peak",
-      "color": [100, 120, 160],
-      "music_track": "el_pico_theme"
-    }
+    "background_type": "el_pico_del_cafe",
+    "background_color": [100, 120, 160],
+    "music_track": "el_pico_theme"
   },
   "player": {
     "spawn_x": 100,
