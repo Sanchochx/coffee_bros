@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 60
+- **Completed:** 61
 - **In Progress:** 0
-- **Remaining:** 12
-- **Progress:** 83.3%
+- **Remaining:** 11
+- **Progress:** 84.7%
 
 ---
 
@@ -365,7 +365,7 @@
   - Path: `context/user_stories/epic_09_settings/US-060_settings_menu.md`
   - [Details](context/user_stories/epic_09_settings/US-060_settings_menu.md)
 
-- [ ] **US-061** - Volume Controls
+- [x] **US-061** - Volume Controls
   - *Add music and sound effects volume controls*
   - Path: `context/user_stories/epic_09_settings/US-061_volume_controls.md`
   - [Details](context/user_stories/epic_09_settings/US-061_volume_controls.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 9 - Settings and Configuration (1/3 stories complete, 33.3%)
-**Current Story:** US-061 - Volume Controls
-**Last Completed Story:** US-060 - Settings Menu
+**Current Epic:** Epic 9 - Settings and Configuration (2/3 stories complete, 66.7%)
+**Current Story:** US-062 - Controls Display
+**Last Completed Story:** US-061 - Volume Controls
 **Last Completed Epic:** Epic 8 - Visual Polish and Animation (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

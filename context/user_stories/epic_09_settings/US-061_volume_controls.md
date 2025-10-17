@@ -5,11 +5,11 @@
 **So that** audio suits my preference
 
 ## Acceptance Criteria
-- [ ] Separate sliders for music and SFX volume
-- [ ] Volume range: 0-100%
-- [ ] Changes apply immediately
-- [ ] Settings persist between sessions
-- [ ] Can mute completely (0%)
+- [x] Separate sliders for music and SFX volume
+- [x] Volume range: 0-100%
+- [x] Changes apply immediately
+- [x] Settings persist between sessions
+- [x] Can mute completely (0%)
 
 ## Technical Notes
 - Use slider or percentage display

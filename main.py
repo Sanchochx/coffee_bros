@@ -12,6 +12,7 @@ from src.level import Level
 from src.menu import MainMenu, PauseMenu, GameOverMenu, SettingsMenu
 from src.level_name_display import LevelNameDisplay
 from src.audio_manager import AudioManager
+from src.settings_manager import SettingsManager
 from src.draw_utils import draw_tiled_background, draw_hearts
 
 
@@ -27,18 +28,25 @@ def main():
     # Create clock for FPS control
     clock = pygame.time.Clock()
 
+    # Initialize settings manager for persistent settings (US-061)
+    settings_manager = SettingsManager()
+
     # Initialize audio manager (US-040, US-041)
     audio_manager = AudioManager()
+
+    # Load saved volume settings into audio manager (US-061)
+    audio_manager.set_music_volume(settings_manager.get_music_volume())
+    audio_manager.set_sfx_volume(settings_manager.get_sfx_volume())
 
     # Start menu music (US-047)
     audio_manager.play_menu_music()
 
-    # Game state management (US-034, US-035, US-036, US-060)
+    # Game state management (US-034, US-035, US-036, US-060, US-061)
     game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings", "game_over"
     main_menu = MainMenu()  # Initialize main menu
     pause_menu = PauseMenu()  # Initialize pause menu (US-035)
     game_over_menu = GameOverMenu()  # Initialize game over menu (US-036)
-    settings_menu = SettingsMenu(audio_manager)  # Initialize settings menu (US-060)
+    settings_menu = SettingsMenu(audio_manager, settings_manager)  # Initialize settings menu (US-060, US-061)
 
     # Initialize game state
     score = 0
@@ -214,6 +222,20 @@ def main():
                     audio_manager.stop_music(fade_ms=500)
                     audio_manager.play_menu_music()
                 # Skip rest of event handling when in pause menu
+                continue
+
+            # Handle settings menu input when in settings state (US-060, US-061)
+            if game_state == "settings":
+                menu_action = settings_menu.handle_input(event)
+                if menu_action == "back":
+                    # Return to previous menu (US-060: can return to previous menu)
+                    if settings_menu.return_to == "pause":
+                        game_state = "paused"
+                        pause_menu.selected_index = 0  # Reset pause menu selection
+                    else:
+                        game_state = "menu"
+                        main_menu.selected_index = 0  # Reset main menu selection
+                # Skip rest of event handling when in settings
                 continue
 
             # Handle game over menu input when in game over state (US-036)
@@ -404,21 +426,7 @@ def main():
             clock.tick(FPS)
             continue  # Skip gameplay logic
 
-            # Handle settings menu input when in settings state (US-060)
-            if game_state == "settings":
-                menu_action = settings_menu.handle_input(event)
-                if menu_action == "back":
-                    # Return to previous menu (US-060: can return to previous menu)
-                    if settings_menu.return_to == "pause":
-                        game_state = "paused"
-                        pause_menu.selected_index = 0  # Reset pause menu selection
-                    else:
-                        game_state = "menu"
-                        main_menu.selected_index = 0  # Reset main menu selection
-                # Skip rest of event handling when in settings
-                continue
-
-        # Settings state - draw menu (US-060)
+        # Settings state - draw menu (US-060, US-061)
         if game_state == "settings":
             # Draw settings menu (US-060)
             settings_menu.draw(screen)

@@ -251,16 +251,18 @@ class GameOverMenu:
 
 
 class SettingsMenu:
-    """Settings menu screen for adjusting game options (US-060)"""
+    """Settings menu screen for adjusting game options (US-060, US-061)"""
 
-    def __init__(self, audio_manager):
+    def __init__(self, audio_manager, settings_manager=None):
         """Initialize the settings menu
 
         Args:
             audio_manager (AudioManager): Audio manager to control volumes
+            settings_manager (SettingsManager): Settings manager for persistence
         """
-        # Store audio manager reference
+        # Store audio manager and settings manager references
         self.audio_manager = audio_manager
+        self.settings_manager = settings_manager
 
         # Menu options - settings items
         self.options = [
@@ -270,9 +272,13 @@ class SettingsMenu:
         ]
         self.selected_index = 0  # Currently selected option
 
-        # Volume settings (0.0 to 1.0)
-        self.music_volume = 0.7  # Default 70%
-        self.sfx_volume = 0.7    # Default 70%
+        # Volume settings (0.0 to 1.0) - load from settings manager or use defaults
+        if self.settings_manager:
+            self.music_volume = self.settings_manager.get_music_volume()
+            self.sfx_volume = self.settings_manager.get_sfx_volume()
+        else:
+            self.music_volume = 0.7  # Default 70%
+            self.sfx_volume = 0.7    # Default 70%
 
         # Initialize audio manager volumes
         if self.audio_manager:
@@ -321,10 +327,14 @@ class SettingsMenu:
                     self.music_volume = max(0.0, self.music_volume - 0.1)
                     if self.audio_manager:
                         self.audio_manager.set_music_volume(self.music_volume)
+                    if self.settings_manager:
+                        self.settings_manager.set_music_volume(self.music_volume)
                 elif self.options[self.selected_index] == "Sound Effects Volume":
                     self.sfx_volume = max(0.0, self.sfx_volume - 0.1)
                     if self.audio_manager:
                         self.audio_manager.set_sfx_volume(self.sfx_volume)
+                    if self.settings_manager:
+                        self.settings_manager.set_sfx_volume(self.sfx_volume)
 
             elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 # Increase volume for selected setting
@@ -332,10 +342,14 @@ class SettingsMenu:
                     self.music_volume = min(1.0, self.music_volume + 0.1)
                     if self.audio_manager:
                         self.audio_manager.set_music_volume(self.music_volume)
+                    if self.settings_manager:
+                        self.settings_manager.set_music_volume(self.music_volume)
                 elif self.options[self.selected_index] == "Sound Effects Volume":
                     self.sfx_volume = min(1.0, self.sfx_volume + 0.1)
                     if self.audio_manager:
                         self.audio_manager.set_sfx_volume(self.sfx_volume)
+                    if self.settings_manager:
+                        self.settings_manager.set_sfx_volume(self.sfx_volume)
 
             elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
                 # Select current option
