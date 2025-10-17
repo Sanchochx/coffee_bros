@@ -5,10 +5,10 @@
 **So that** I know how to play
 
 ## Acceptance Criteria
-- [ ] Shows all keyboard controls
-- [ ] Accessible from menu or pause screen
-- [ ] Clear visual representation of keys
-- [ ] Lists all actions (move, jump, shoot, pause)
+- [x] Shows all keyboard controls
+- [x] Accessible from menu or pause screen
+- [x] Clear visual representation of keys
+- [x] Lists all actions (move, jump, shoot, pause)
 
 ## Technical Notes
 - Create help/controls screen

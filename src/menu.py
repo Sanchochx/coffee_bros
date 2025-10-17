@@ -13,7 +13,7 @@ class MainMenu:
     def __init__(self):
         """Initialize the main menu"""
         # Menu options
-        self.options = ["Start Game", "Settings", "Quit"]
+        self.options = ["Start Game", "Settings", "Controls", "Quit"]
         self.selected_index = 0  # Currently selected option (0 = Start Game)
 
         # Fonts
@@ -61,6 +61,8 @@ class MainMenu:
                     return "start"
                 elif selected_option == "Settings":
                     return "settings"
+                elif selected_option == "Controls":
+                    return "controls"
                 elif selected_option == "Quit":
                     return "quit"
 
@@ -443,13 +445,119 @@ class SettingsMenu:
         screen.blit(value_text, value_rect)
 
 
+class ControlsMenu:
+    """Controls display screen showing keyboard controls (US-062)"""
+
+    def __init__(self):
+        """Initialize the controls display screen"""
+        # Control scheme - list of (action, keys) tuples
+        self.controls = [
+            ("Move Left", "A or Left Arrow"),
+            ("Move Right", "D or Right Arrow"),
+            ("Jump", "W, Up Arrow, or Space"),
+            ("Shoot Laser", "X or J (when powered up)"),
+            ("Pause Game", "ESC (during gameplay)"),
+            ("Menu Navigation", "W/S or Up/Down Arrows"),
+            ("Menu Select", "Enter or Space"),
+        ]
+
+        # Track where we came from (for returning to correct menu)
+        self.return_to = "menu"  # Can be "menu" or "pause"
+
+        # Fonts
+        self.title_font = pygame.font.Font(None, 96)  # Large font for title
+        self.section_font = pygame.font.Font(None, 48)  # Medium font for section headers
+        self.action_font = pygame.font.Font(None, 36)  # Font for action names
+        self.key_font = pygame.font.Font(None, 32)  # Font for key names
+
+        # Colors
+        self.title_color = YELLOW  # Yellow for title
+        self.action_color = (255, 255, 255)  # White for action names
+        self.key_color = GOLD  # Gold for key bindings
+        self.hint_color = (150, 150, 150)  # Gray for hints
+
+    def set_return_to(self, return_to):
+        """Set where the controls menu should return to
+
+        Args:
+            return_to (str): "menu" or "pause"
+        """
+        self.return_to = return_to
+
+    def handle_input(self, event):
+        """
+        Handle keyboard input for controls screen.
+        Returns: 'back' when user exits, or None
+        """
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE or event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+                # Any of these keys returns to previous menu
+                return "back"
+
+        return None
+
+    def draw(self, screen):
+        """Draw the controls display screen"""
+        # Fill with black background
+        screen.fill(BLACK)
+
+        # Draw "CONTROLS" title
+        title_text = self.title_font.render("CONTROLS", True, self.title_color)
+        title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 80))
+        # Add shadow effect for title
+        shadow_text = self.title_font.render("CONTROLS", True, (50, 50, 50))
+        shadow_rect = shadow_text.get_rect(center=(WINDOW_WIDTH // 2 + 3, 80 + 3))
+        screen.blit(shadow_text, shadow_rect)
+        screen.blit(title_text, title_rect)
+
+        # Starting position for controls list
+        start_y = 180
+        line_spacing = 55  # Vertical spacing between control entries
+
+        # Draw each control entry
+        for i, (action, keys) in enumerate(self.controls):
+            y_pos = start_y + i * line_spacing
+
+            # Draw action name (left-aligned)
+            action_text = self.action_font.render(action + ":", True, self.action_color)
+            action_rect = action_text.get_rect()
+            action_rect.midleft = (100, y_pos)
+            screen.blit(action_text, action_rect)
+
+            # Draw key binding (right side, with visual key box)
+            key_text = self.key_font.render(keys, True, self.key_color)
+            key_rect = key_text.get_rect()
+            key_rect.midleft = (400, y_pos)
+
+            # Draw rounded rectangle box around key text for visual emphasis
+            box_padding = 12
+            box_rect = pygame.Rect(
+                key_rect.left - box_padding,
+                key_rect.top - box_padding,
+                key_rect.width + box_padding * 2,
+                key_rect.height + box_padding * 2
+            )
+            # Draw box with border
+            pygame.draw.rect(screen, (60, 60, 60), box_rect, border_radius=8)  # Dark gray background
+            pygame.draw.rect(screen, self.key_color, box_rect, 2, border_radius=8)  # Gold border
+
+            # Draw key text on top of box
+            screen.blit(key_text, key_rect)
+
+        # Draw controls hint at bottom
+        hint_font = pygame.font.Font(None, 28)
+        hint_text = hint_font.render("Press ESC, Enter, or Space to go back", True, self.hint_color)
+        hint_rect = hint_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 40))
+        screen.blit(hint_text, hint_rect)
+
+
 class PauseMenu:
     """Pause menu overlay displayed during gameplay (US-035)"""
 
     def __init__(self):
         """Initialize the pause menu"""
         # Menu options
-        self.options = ["Resume", "Restart Level", "Settings", "Return to Menu"]
+        self.options = ["Resume", "Restart Level", "Settings", "Controls", "Return to Menu"]
         self.selected_index = 0  # Currently selected option (0 = Resume)
 
         # Fonts
@@ -488,6 +596,8 @@ class PauseMenu:
                     return "restart"
                 elif selected_option == "Settings":
                     return "settings"
+                elif selected_option == "Controls":
+                    return "controls"
                 elif selected_option == "Return to Menu":
                     return "menu"
 

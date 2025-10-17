@@ -9,7 +9,7 @@ from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_
 from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
 from src.entities.particle import ParticleSystem
 from src.level import Level
-from src.menu import MainMenu, PauseMenu, GameOverMenu, SettingsMenu
+from src.menu import MainMenu, PauseMenu, GameOverMenu, SettingsMenu, ControlsMenu
 from src.level_name_display import LevelNameDisplay
 from src.audio_manager import AudioManager
 from src.settings_manager import SettingsManager
@@ -41,12 +41,13 @@ def main():
     # Start menu music (US-047)
     audio_manager.play_menu_music()
 
-    # Game state management (US-034, US-035, US-036, US-060, US-061)
-    game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings", "game_over"
+    # Game state management (US-034, US-035, US-036, US-060, US-061, US-062)
+    game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings", "controls", "game_over"
     main_menu = MainMenu()  # Initialize main menu
     pause_menu = PauseMenu()  # Initialize pause menu (US-035)
     game_over_menu = GameOverMenu()  # Initialize game over menu (US-036)
     settings_menu = SettingsMenu(audio_manager, settings_manager)  # Initialize settings menu (US-060, US-061)
+    controls_menu = ControlsMenu()  # Initialize controls menu (US-062)
 
     # Initialize game state
     score = 0
@@ -122,6 +123,12 @@ def main():
                             game_state = "paused"
                         else:
                             game_state = "menu"
+                    elif game_state == "controls":
+                        # ESC returns to previous menu from controls (US-062)
+                        if controls_menu.return_to == "pause":
+                            game_state = "paused"
+                        else:
+                            game_state = "menu"
 
             # Handle menu input when in menu state (US-034)
             if game_state == "menu":
@@ -166,6 +173,10 @@ def main():
                     # Go to settings (US-060: Settings Menu)
                     game_state = "settings"
                     settings_menu.set_return_to("menu")  # Remember to return to main menu
+                elif menu_action == "controls":
+                    # Go to controls display (US-062: Controls Display)
+                    game_state = "controls"
+                    controls_menu.set_return_to("menu")  # Remember to return to main menu
                 elif menu_action == "quit":
                     # Quit game
                     running = False
@@ -182,6 +193,10 @@ def main():
                     # Go to settings from pause menu (US-060)
                     game_state = "settings"
                     settings_menu.set_return_to("pause")  # Remember to return to pause menu
+                elif menu_action == "controls":
+                    # Go to controls display from pause menu (US-062)
+                    game_state = "controls"
+                    controls_menu.set_return_to("pause")  # Remember to return to pause menu
                 elif menu_action == "restart":
                     # Restart current level
                     try:
@@ -236,6 +251,20 @@ def main():
                         game_state = "menu"
                         main_menu.selected_index = 0  # Reset main menu selection
                 # Skip rest of event handling when in settings
+                continue
+
+            # Handle controls menu input when in controls state (US-062)
+            if game_state == "controls":
+                menu_action = controls_menu.handle_input(event)
+                if menu_action == "back":
+                    # Return to previous menu (US-062: accessible from menu or pause screen)
+                    if controls_menu.return_to == "pause":
+                        game_state = "paused"
+                        pause_menu.selected_index = 0  # Reset pause menu selection
+                    else:
+                        game_state = "menu"
+                        main_menu.selected_index = 0  # Reset main menu selection
+                # Skip rest of event handling when in controls screen
                 continue
 
             # Handle game over menu input when in game over state (US-036)
@@ -430,6 +459,14 @@ def main():
         if game_state == "settings":
             # Draw settings menu (US-060)
             settings_menu.draw(screen)
+            pygame.display.flip()
+            clock.tick(FPS)
+            continue  # Skip gameplay logic
+
+        # Controls state - draw controls screen (US-062)
+        if game_state == "controls":
+            # Draw controls menu (US-062)
+            controls_menu.draw(screen)
             pygame.display.flip()
             clock.tick(FPS)
             continue  # Skip gameplay logic
