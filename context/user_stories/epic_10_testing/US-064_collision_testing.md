@@ -5,12 +5,12 @@
 **So that** gameplay is fair and bug-free
 
 ## Acceptance Criteria
-- [ ] Player never falls through platforms
-- [ ] Player cannot clip through walls
-- [ ] Stomp detection is accurate
-- [ ] Damage detection is accurate
-- [ ] Projectile collision is precise
-- [ ] No collision bugs in any level
+- [x] Player never falls through platforms
+- [x] Player cannot clip through walls
+- [x] Stomp detection is accurate
+- [x] Damage detection is accurate
+- [x] Projectile collision is precise
+- [x] No collision bugs in any level
 
 ## Technical Notes
 - Write unit tests for collision functions
