@@ -5,11 +5,11 @@
 **So that** I can customize my experience
 
 ## Acceptance Criteria
-- [ ] Settings accessible from main menu
-- [ ] Settings accessible from pause menu
-- [ ] Shows current setting values
-- [ ] Changes take effect immediately
-- [ ] Can return to previous menu
+- [x] Settings accessible from main menu
+- [x] Settings accessible from pause menu
+- [x] Shows current setting values
+- [x] Changes take effect immediately
+- [x] Can return to previous menu
 
 ## Technical Notes
 - Create settings state/screen

@@ -250,13 +250,192 @@ class GameOverMenu:
             screen.blit(option_text, option_rect)
 
 
+class SettingsMenu:
+    """Settings menu screen for adjusting game options (US-060)"""
+
+    def __init__(self, audio_manager):
+        """Initialize the settings menu
+
+        Args:
+            audio_manager (AudioManager): Audio manager to control volumes
+        """
+        # Store audio manager reference
+        self.audio_manager = audio_manager
+
+        # Menu options - settings items
+        self.options = [
+            "Music Volume",
+            "Sound Effects Volume",
+            "Back"
+        ]
+        self.selected_index = 0  # Currently selected option
+
+        # Volume settings (0.0 to 1.0)
+        self.music_volume = 0.7  # Default 70%
+        self.sfx_volume = 0.7    # Default 70%
+
+        # Initialize audio manager volumes
+        if self.audio_manager:
+            self.audio_manager.set_music_volume(self.music_volume)
+            self.audio_manager.set_sfx_volume(self.sfx_volume)
+
+        # Track where we came from (for returning to correct menu)
+        self.return_to = "menu"  # Can be "menu" or "pause"
+
+        # Fonts
+        self.title_font = pygame.font.Font(None, 96)
+        self.option_font = pygame.font.Font(None, 48)
+        self.value_font = pygame.font.Font(None, 36)
+
+        # Colors
+        self.title_color = YELLOW
+        self.selected_color = GOLD
+        self.unselected_color = (200, 200, 200)
+        self.value_color = (150, 255, 150)  # Light green for values
+
+    def set_return_to(self, return_to):
+        """Set where the settings menu should return to
+
+        Args:
+            return_to (str): "menu" or "pause"
+        """
+        self.return_to = return_to
+
+    def handle_input(self, event):
+        """
+        Handle keyboard input for settings menu navigation.
+        Returns: 'back' when user exits, or None
+        """
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                # Move selection up
+                self.selected_index = (self.selected_index - 1) % len(self.options)
+
+            elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                # Move selection down
+                self.selected_index = (self.selected_index + 1) % len(self.options)
+
+            elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                # Decrease volume for selected setting
+                if self.options[self.selected_index] == "Music Volume":
+                    self.music_volume = max(0.0, self.music_volume - 0.1)
+                    if self.audio_manager:
+                        self.audio_manager.set_music_volume(self.music_volume)
+                elif self.options[self.selected_index] == "Sound Effects Volume":
+                    self.sfx_volume = max(0.0, self.sfx_volume - 0.1)
+                    if self.audio_manager:
+                        self.audio_manager.set_sfx_volume(self.sfx_volume)
+
+            elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                # Increase volume for selected setting
+                if self.options[self.selected_index] == "Music Volume":
+                    self.music_volume = min(1.0, self.music_volume + 0.1)
+                    if self.audio_manager:
+                        self.audio_manager.set_music_volume(self.music_volume)
+                elif self.options[self.selected_index] == "Sound Effects Volume":
+                    self.sfx_volume = min(1.0, self.sfx_volume + 0.1)
+                    if self.audio_manager:
+                        self.audio_manager.set_sfx_volume(self.sfx_volume)
+
+            elif event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+                # Select current option
+                if self.options[self.selected_index] == "Back":
+                    return "back"
+
+            elif event.key == pygame.K_ESCAPE:
+                # ESC returns to previous menu
+                return "back"
+
+        return None
+
+    def draw(self, screen):
+        """Draw the settings menu to the screen"""
+        # Fill with black background
+        screen.fill(BLACK)
+
+        # Draw "SETTINGS" title
+        title_text = self.title_font.render("SETTINGS", True, self.title_color)
+        title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 100))
+        # Add shadow effect for title
+        shadow_text = self.title_font.render("SETTINGS", True, (50, 50, 50))
+        shadow_rect = shadow_text.get_rect(center=(WINDOW_WIDTH // 2 + 3, 100 + 3))
+        screen.blit(shadow_text, shadow_rect)
+        screen.blit(title_text, title_rect)
+
+        # Draw menu options
+        start_y = 250
+        option_spacing = 100
+
+        for i, option in enumerate(self.options):
+            # Determine color based on selection
+            if i == self.selected_index:
+                color = self.selected_color
+                # Add selection indicator (arrow)
+                arrow_text = self.option_font.render(">", True, color)
+                arrow_rect = arrow_text.get_rect()
+                arrow_rect.midright = (120, start_y + i * option_spacing)
+                screen.blit(arrow_text, arrow_rect)
+            else:
+                color = self.unselected_color
+
+            # Render option text
+            option_text = self.option_font.render(option, True, color)
+            option_rect = option_text.get_rect()
+            option_rect.midleft = (150, start_y + i * option_spacing)
+            screen.blit(option_text, option_rect)
+
+            # Draw volume sliders and values
+            if option == "Music Volume":
+                self._draw_volume_slider(screen, self.music_volume, start_y + i * option_spacing)
+            elif option == "Sound Effects Volume":
+                self._draw_volume_slider(screen, self.sfx_volume, start_y + i * option_spacing)
+
+        # Draw controls hint at bottom
+        controls_font = pygame.font.Font(None, 28)
+        controls_text = controls_font.render("Use Arrow Keys to navigate, Left/Right to adjust, Enter/ESC to go back", True, (150, 150, 150))
+        controls_rect = controls_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 40))
+        screen.blit(controls_text, controls_rect)
+
+    def _draw_volume_slider(self, screen, volume, y_pos):
+        """Draw a visual volume slider bar
+
+        Args:
+            screen: Pygame screen surface
+            volume (float): Volume level 0.0 to 1.0
+            y_pos (int): Y position for slider
+        """
+        # Slider dimensions
+        slider_x = 500
+        slider_y = y_pos - 15
+        slider_width = 200
+        slider_height = 30
+
+        # Draw slider background (empty bar)
+        pygame.draw.rect(screen, (80, 80, 80), (slider_x, slider_y, slider_width, slider_height))
+
+        # Draw filled portion (current volume level)
+        filled_width = int(slider_width * volume)
+        if filled_width > 0:
+            pygame.draw.rect(screen, self.value_color, (slider_x, slider_y, filled_width, slider_height))
+
+        # Draw slider border
+        pygame.draw.rect(screen, self.unselected_color, (slider_x, slider_y, slider_width, slider_height), 2)
+
+        # Draw percentage value
+        percentage = int(volume * 100)
+        value_text = self.value_font.render(f"{percentage}%", True, self.value_color)
+        value_rect = value_text.get_rect()
+        value_rect.midleft = (slider_x + slider_width + 20, y_pos)
+        screen.blit(value_text, value_rect)
+
+
 class PauseMenu:
     """Pause menu overlay displayed during gameplay (US-035)"""
 
     def __init__(self):
         """Initialize the pause menu"""
         # Menu options
-        self.options = ["Resume", "Restart Level", "Return to Menu"]
+        self.options = ["Resume", "Restart Level", "Settings", "Return to Menu"]
         self.selected_index = 0  # Currently selected option (0 = Resume)
 
         # Fonts
@@ -271,7 +450,7 @@ class PauseMenu:
     def handle_input(self, event):
         """
         Handle keyboard input for pause menu navigation.
-        Returns: 'resume', 'restart', 'menu', or None
+        Returns: 'resume', 'restart', 'settings', 'menu', or None
         """
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP or event.key == pygame.K_w:
@@ -293,6 +472,8 @@ class PauseMenu:
                     return "resume"
                 elif selected_option == "Restart Level":
                     return "restart"
+                elif selected_option == "Settings":
+                    return "settings"
                 elif selected_option == "Return to Menu":
                     return "menu"
 

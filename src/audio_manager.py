@@ -177,6 +177,26 @@ class AudioManager:
         """
         return self._volume
 
+    def set_sfx_volume(self, volume):
+        """
+        Set the sound effects volume level (US-060: settings menu volume control).
+        Alias for set_volume() for clarity in settings menu.
+
+        Args:
+            volume (float): Volume level from 0.0 (silent) to 1.0 (maximum)
+        """
+        self.set_volume(volume)
+
+    def get_sfx_volume(self):
+        """
+        Get the sound effects volume level (US-060: settings menu volume control).
+        Alias for get_volume() for clarity in settings menu.
+
+        Returns:
+            float: Current sound effects volume level (0.0 to 1.0)
+        """
+        return self.get_volume()
+
     def stop_all_sounds(self):
         """
         Stop all currently playing sound effects.
