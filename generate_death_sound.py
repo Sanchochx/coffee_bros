@@ -29,8 +29,9 @@ def generate_death_sound():
     # Convert to 16-bit PCM format
     audio = (audio * 32767 * 0.3).astype(np.int16)  # 30% volume
 
-    # Write to WAV file
-    output_path = 'assets/sounds/death.wav'
+    # Write to WAV file (US-067: cross-platform compatible path)
+    import os
+    output_path = os.path.join('assets', 'sounds', 'death.wav')
     with wave.open(output_path, 'w') as wav_file:
         wav_file.setnchannels(1)  # Mono
         wav_file.setsampwidth(2)  # 16-bit

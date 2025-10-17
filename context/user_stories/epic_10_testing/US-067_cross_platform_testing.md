@@ -5,12 +5,12 @@
 **So that** game works for all players
 
 ## Acceptance Criteria
-- [ ] Game runs on Windows
-- [ ] Game runs on macOS
-- [ ] Game runs on Linux
-- [ ] Controls work on all platforms
-- [ ] File paths work on all platforms
-- [ ] Performance is acceptable on all platforms
+- [x] Game runs on Windows
+- [x] Game runs on macOS
+- [x] Game runs on Linux
+- [x] Controls work on all platforms
+- [x] File paths work on all platforms
+- [x] Performance is acceptable on all platforms
 
 ## Technical Notes
 - Use os-agnostic path handling (`os.path.join`)

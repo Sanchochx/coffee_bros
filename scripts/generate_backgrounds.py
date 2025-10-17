@@ -143,8 +143,8 @@ def generate_background(bg_name, bg_data, output_path):
 
 def main():
     """Generate all background images."""
-    # Create output directory if it doesn't exist
-    output_dir = "assets/images"
+    # Create output directory if it doesn't exist (US-067: cross-platform path)
+    output_dir = os.path.join("assets", "images")
     os.makedirs(output_dir, exist_ok=True)
 
     # Generate each background

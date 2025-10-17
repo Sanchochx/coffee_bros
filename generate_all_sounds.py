@@ -155,8 +155,8 @@ def generate_death_sound():
 if __name__ == '__main__':
     print('Generating all sound effects for Sancho Bros...\n')
 
-    # Ensure sounds directory exists
-    os.makedirs('assets/sounds', exist_ok=True)
+    # Ensure sounds directory exists (US-067: cross-platform path)
+    os.makedirs(os.path.join('assets', 'sounds'), exist_ok=True)
 
     # Generate all sounds
     generate_jump_sound()

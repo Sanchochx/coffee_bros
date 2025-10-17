@@ -60,8 +60,8 @@ class Level:
 
         level = cls(audio_manager)
 
-        # Construct file path
-        level_file = f"assets/levels/level_{level_number}.json"
+        # Construct file path (cross-platform compatible - US-067)
+        level_file = os.path.join("assets", "levels", f"level_{level_number}.json")
 
         # Check if file exists
         if not os.path.exists(level_file):
@@ -80,10 +80,10 @@ class Level:
         # Load metadata
         level.metadata = level.level_data.get("metadata", {})
 
-        # Load background image (US-056)
+        # Load background image (US-056, US-067: cross-platform paths)
         background_type = level.metadata.get("background_type")
         if background_type:
-            background_path = f"assets/images/{background_type}.png"
+            background_path = os.path.join("assets", "images", f"{background_type}.png")
             if os.path.exists(background_path):
                 try:
                     level.background_image = pygame.image.load(background_path).convert()
