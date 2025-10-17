@@ -110,8 +110,10 @@ class Level:
             y = platform_data.get("y", 0)
             width = platform_data.get("width", 100)
             height = platform_data.get("height", 20)
+            platform_type = platform_data.get("type", "ground")
+            texture = platform_data.get("texture", "grass")
 
-            platform = Platform(x, y, width, height)
+            platform = Platform(x, y, width, height, platform_type, texture)
             level.platforms.add(platform)
             level.all_sprites.add(platform)
 
@@ -255,8 +257,10 @@ class Level:
                 y = platform_data.get("y", 0)
                 width = platform_data.get("width", 100)
                 height = platform_data.get("height", 20)
+                platform_type = platform_data.get("type", "ground")
+                texture = platform_data.get("texture", "grass")
 
-                platform = Platform(x, y, width, height)
+                platform = Platform(x, y, width, height, platform_type, texture)
                 self.platforms.add(platform)
                 self.all_sprites.add(platform)
 

@@ -5,10 +5,10 @@
 **So that** levels look polished
 
 ## Acceptance Criteria
-- [ ] Platforms have earth/stone texture
-- [ ] Tiles connect seamlessly
-- [ ] Different platform types have different appearances
-- [ ] Graphics don't obscure platform boundaries
+- [x] Platforms have earth/stone texture
+- [x] Tiles connect seamlessly
+- [x] Different platform types have different appearances
+- [x] Graphics don't obscure platform boundaries
 
 ## Technical Notes
 - Create 50x50 pixel tile sprites

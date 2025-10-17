@@ -11,6 +11,7 @@ from src.level import Level
 from src.menu import MainMenu, PauseMenu, GameOverMenu
 from src.level_name_display import LevelNameDisplay
 from src.audio_manager import AudioManager
+from src.draw_utils import draw_tiled_background, draw_hearts
 
 
 def main():
@@ -358,17 +359,7 @@ def main():
             # Draw background image behind everything (US-056)
             if level and level.background_image:
                 level_width = level.metadata.get("width", WINDOW_WIDTH)
-                bg_width = level.background_image.get_width()
-                bg_height = level.background_image.get_height()
-
-                src_x = camera_x
-                src_y = 0
-                src_width = min(WINDOW_WIDTH, bg_width - src_x)
-                src_height = WINDOW_HEIGHT
-
-                if src_x < bg_width:
-                    source_rect = pygame.Rect(src_x, src_y, src_width, src_height)
-                    screen.blit(level.background_image, (0, 0), source_rect)
+                draw_tiled_background(screen, level.background_image, camera_x, level_width, WINDOW_WIDTH, WINDOW_HEIGHT)
 
             # Draw all sprites at their frozen positions with camera offset
             for sprite in all_sprites:
@@ -380,10 +371,8 @@ def main():
             score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))
             screen.blit(score_text, (10, 10))
 
-            lives_text = font.render(f"x{player.lives}", True, (255, 255, 255))
-            lives_rect = lives_text.get_rect()
-            lives_rect.topright = (WINDOW_WIDTH - 10, 10)
-            screen.blit(lives_text, lives_rect)
+            # Draw lives as hearts
+            draw_hearts(screen, player.lives, WINDOW_WIDTH - 10, 10)
 
             if player.is_powered_up:
                 powerup_seconds = player.powerup_timer / 60
@@ -432,17 +421,7 @@ def main():
             # Draw background image behind everything (US-056)
             if level and level.background_image:
                 level_width = level.metadata.get("width", WINDOW_WIDTH)
-                bg_width = level.background_image.get_width()
-                bg_height = level.background_image.get_height()
-
-                src_x = camera_x
-                src_y = 0
-                src_width = min(WINDOW_WIDTH, bg_width - src_x)
-                src_height = WINDOW_HEIGHT
-
-                if src_x < bg_width:
-                    source_rect = pygame.Rect(src_x, src_y, src_width, src_height)
-                    screen.blit(level.background_image, (0, 0), source_rect)
+                draw_tiled_background(screen, level.background_image, camera_x, level_width, WINDOW_WIDTH, WINDOW_HEIGHT)
 
             # Draw all sprites at their frozen positions with camera offset
             for sprite in all_sprites:
@@ -626,23 +605,8 @@ def main():
 
         # Draw background image behind everything (US-056)
         if level and level.background_image:
-            # Calculate how much of the background to show based on camera position
-            # We'll use a simple approach: draw the portion of the background that corresponds to the camera view
             level_width = level.metadata.get("width", WINDOW_WIDTH)
-            bg_width = level.background_image.get_width()
-            bg_height = level.background_image.get_height()
-
-            # Calculate the source rectangle from the background image
-            # The background scrolls with the level (not parallax for now, can be added as enhancement)
-            src_x = camera_x
-            src_y = 0
-            src_width = min(WINDOW_WIDTH, bg_width - src_x)
-            src_height = WINDOW_HEIGHT
-
-            # Clamp source rectangle to background bounds
-            if src_x < bg_width:
-                source_rect = pygame.Rect(src_x, src_y, src_width, src_height)
-                screen.blit(level.background_image, (0, 0), source_rect)
+            draw_tiled_background(screen, level.background_image, camera_x, level_width, WINDOW_WIDTH, WINDOW_HEIGHT)
 
         # Draw all sprites with camera offset (US-038)
         for sprite in all_sprites:
@@ -655,11 +619,8 @@ def main():
         score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))  # White text, zero-padded to 5 digits
         screen.blit(score_text, (10, 10))  # Top-left corner
 
-        # Draw HUD - Lives Display (US-032)
-        lives_text = font.render(f"x{player.lives}", True, (255, 255, 255))  # White text in "x3" format
-        lives_rect = lives_text.get_rect()
-        lives_rect.topright = (WINDOW_WIDTH - 10, 10)  # Top-right corner with 10px margin
-        screen.blit(lives_text, lives_rect)
+        # Draw HUD - Lives Display (US-032) - Hearts instead of number
+        draw_hearts(screen, player.lives, WINDOW_WIDTH - 10, 10)
 
         # Display powerup timer when powered up (US-033)
         if player.is_powered_up:

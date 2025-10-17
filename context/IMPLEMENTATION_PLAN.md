@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 56
+- **Completed:** 57
 - **In Progress:** 0
-- **Remaining:** 16
-- **Progress:** 77.8%
+- **Remaining:** 15
+- **Progress:** 79.2%
 
 ---
 
@@ -340,7 +340,7 @@
   - Path: `context/user_stories/epic_08_visual_polish/US-056_background_graphics.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-056_background_graphics.md)
 
-- [ ] **US-057** - Platform/Tile Graphics
+- [x] **US-057** - Platform/Tile Graphics
   - *Create themed tile graphics for platforms*
   - Path: `context/user_stories/epic_08_visual_polish/US-057_platform_tile_graphics.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-057_platform_tile_graphics.md)
@@ -477,7 +477,7 @@ After completing each epic:
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
 **Current Epic:** Epic 8 - Visual Polish and Animation (in progress)
-**Current Story:** US-057 - Platform/Tile Graphics
-**Last Completed Story:** US-056 - Background Graphics
+**Current Story:** US-058 - Particle Effects: Stomping
+**Last Completed Story:** US-057 - Platform/Tile Graphics
 **Last Completed Epic:** Epic 7 - Audio System (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

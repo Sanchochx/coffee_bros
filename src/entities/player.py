@@ -380,6 +380,10 @@ class Player(pygame.sprite.Sprite):
         self.idle_frames = self._generate_idle_frames()
         self.shoot_frames = self._generate_shoot_frames()
 
+        # Reset current_frame to prevent index out of bounds errors
+        # Different animation states have different frame counts
+        self.current_frame = 0
+
         # Set current image based on animation state
         if not self.is_grounded:
             # In air - use jump/fall animation (US-049)
@@ -388,9 +392,15 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.fall_frame.copy()  # Descending
         elif self.is_walking:
+            # Safety check for walking frames
+            if self.current_frame >= len(self.walk_frames):
+                self.current_frame = 0
             self.image = self.walk_frames[self.current_frame].copy()
         else:
             # Idle - use idle animation (US-050)
+            # Safety check for idle frames
+            if self.current_frame >= len(self.idle_frames):
+                self.current_frame = 0
             self.image = self.idle_frames[self.current_frame].copy()
 
         # If powered up, add golden border/glow effect
