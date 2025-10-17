@@ -5,10 +5,10 @@
 **So that** collection feels special
 
 ## Acceptance Criteria
-- [ ] Sparkle effect appears at collection point
-- [ ] Effect is bright and noticeable
-- [ ] Particles rise and fade out
-- [ ] Effect conveys "power acquired" feeling
+- [x] Sparkle effect appears at collection point
+- [x] Effect is bright and noticeable
+- [x] Particles rise and fade out
+- [x] Effect conveys "power acquired" feeling
 
 ## Technical Notes
 - Create sparkle/star particles

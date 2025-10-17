@@ -562,9 +562,10 @@ def main():
                     # Player collected the power-up!
                     player.collect_powerup()  # Enter powered-up state
                     score += POWERUP_SCORE  # Increase score
+                    # Create particle effect at powerup collection point (US-059)
+                    ParticleSystem.create_powerup_particles(powerup.rect.centerx, powerup.rect.centery, particles)
                     powerup.kill()  # Remove from sprite groups (disappears)
                     audio_manager.play_powerup()  # US-044: Play powerup collection sound effect
-                    # TODO (US-059): Add particle effect for powerup collection (visual polish in Epic 8)
 
             # Check for level completion (US-023, US-029)
             for goal in goals:

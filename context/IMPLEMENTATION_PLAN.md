@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 58
+- **Completed:** 59
 - **In Progress:** 0
-- **Remaining:** 14
-- **Progress:** 80.6%
+- **Remaining:** 13
+- **Progress:** 81.9%
 
 ---
 
@@ -350,7 +350,7 @@
   - Path: `context/user_stories/epic_08_visual_polish/US-058_particle_effects_stomping.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-058_particle_effects_stomping.md)
 
-- [ ] **US-059** - Particle Effects: Powerup Collection
+- [x] **US-059** - Particle Effects: Powerup Collection
   - *Add particle effects when collecting power-ups*
   - Path: `context/user_stories/epic_08_visual_polish/US-059_particle_effects_powerup_collection.md`
   - [Details](context/user_stories/epic_08_visual_polish/US-059_particle_effects_powerup_collection.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 8 - Visual Polish and Animation (in progress)
-**Current Story:** US-059 - Particle Effects: Powerup Collection
-**Last Completed Story:** US-058 - Particle Effects: Stomping
-**Last Completed Epic:** Epic 7 - Audio System (100% complete)
+**Current Epic:** Epic 8 - Visual Polish and Animation (100% complete)
+**Current Story:** N/A - Epic 8 complete
+**Last Completed Story:** US-059 - Particle Effects: Powerup Collection
+**Last Completed Epic:** Epic 8 - Visual Polish and Animation (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera
