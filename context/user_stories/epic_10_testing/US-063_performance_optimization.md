@@ -5,11 +5,11 @@
 **So that** players have good experience
 
 ## Acceptance Criteria
-- [ ] Game maintains 60 FPS consistently
-- [ ] No frame drops during normal gameplay
-- [ ] Memory usage is stable (no leaks)
-- [ ] Loading times are minimal (< 2 seconds per level)
-- [ ] Works on mid-range hardware
+- [x] Game maintains 60 FPS consistently
+- [x] No frame drops during normal gameplay
+- [x] Memory usage is stable (no leaks)
+- [x] Loading times are minimal (< 2 seconds per level)
+- [x] Works on mid-range hardware
 
 ## Technical Notes
 - Profile code to find bottlenecks

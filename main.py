@@ -14,6 +14,8 @@ from src.level_name_display import LevelNameDisplay
 from src.audio_manager import AudioManager
 from src.settings_manager import SettingsManager
 from src.draw_utils import draw_tiled_background, draw_hearts
+from src.performance_monitor import PerformanceMonitor
+from src.optimization import OptimizedRenderer, limit_particle_count
 
 
 def main():
@@ -27,6 +29,13 @@ def main():
 
     # Create clock for FPS control
     clock = pygame.time.Clock()
+
+    # Initialize performance monitoring system (US-063)
+    performance_monitor = PerformanceMonitor(target_fps=FPS)
+    show_performance_overlay = False  # Toggle with F3 key for debugging
+
+    # Initialize optimized renderer (US-063)
+    optimized_renderer = OptimizedRenderer(screen)
 
     # Initialize settings manager for persistent settings (US-061)
     settings_manager = SettingsManager()
@@ -101,6 +110,11 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
+                # Toggle performance overlay with F3 key (US-063)
+                if event.key == pygame.K_F3:
+                    show_performance_overlay = not show_performance_overlay
+                    print(f"Performance overlay: {'ON' if show_performance_overlay else 'OFF'}")
+
                 # Handle ESC key based on game state
                 if event.key == pygame.K_ESCAPE:
                     print(f"ESC pressed! Current game state: {game_state}")
@@ -422,11 +436,8 @@ def main():
                 level_width = level.metadata.get("width", WINDOW_WIDTH)
                 draw_tiled_background(screen, level.background_image, camera_x, level_width, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-            # Draw all sprites at their frozen positions with camera offset
-            for sprite in all_sprites:
-                offset_rect = sprite.rect.copy()
-                offset_rect.x -= camera_x
-                screen.blit(sprite.image, offset_rect)
+            # Draw all sprites at their frozen positions with camera offset (US-063: optimized)
+            optimized_renderer.draw_sprites_with_offset(all_sprites, camera_x)
 
             # Draw HUD elements (so player can see their current state)
             score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))
@@ -485,11 +496,8 @@ def main():
                 level_width = level.metadata.get("width", WINDOW_WIDTH)
                 draw_tiled_background(screen, level.background_image, camera_x, level_width, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-            # Draw all sprites at their frozen positions with camera offset
-            for sprite in all_sprites:
-                offset_rect = sprite.rect.copy()
-                offset_rect.x -= camera_x
-                screen.blit(sprite.image, offset_rect)
+            # Draw all sprites at their frozen positions with camera offset (US-063: optimized)
+            optimized_renderer.draw_sprites_with_offset(all_sprites, camera_x)
 
             # Draw game over menu overlay on top
             game_over_menu.draw(screen, score)
@@ -576,6 +584,9 @@ def main():
             # Update all particles (US-058) - handles position, fading, and lifetime
             for particle in particles:
                 particle.update()
+
+            # Limit particle count for performance (US-063)
+            limit_particle_count(particles, max_particles=100)
 
             # Check for laser-enemy collisions (US-020)
             for laser in lasers:
@@ -678,19 +689,11 @@ def main():
             level_width = level.metadata.get("width", WINDOW_WIDTH)
             draw_tiled_background(screen, level.background_image, camera_x, level_width, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-        # Draw all sprites with camera offset (US-038)
-        for sprite in all_sprites:
-            # Create a temporary rect with camera offset applied
-            offset_rect = sprite.rect.copy()
-            offset_rect.x -= camera_x
-            screen.blit(sprite.image, offset_rect)
+        # Draw all sprites with camera offset using optimized renderer (US-038, US-063)
+        optimized_renderer.draw_sprites_with_offset(all_sprites, camera_x)
 
-        # Draw particles with camera offset (US-058)
-        for particle in particles:
-            # Create a temporary rect with camera offset applied
-            offset_rect = particle.rect.copy()
-            offset_rect.x -= camera_x
-            screen.blit(particle.image, offset_rect)
+        # Draw particles with camera offset using optimized renderer (US-058, US-063)
+        optimized_renderer.draw_sprites_with_offset(particles, camera_x)
 
         # Draw HUD - Score Display (US-031)
         score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))  # White text, zero-padded to 5 digits
@@ -854,6 +857,13 @@ def main():
             quit_text = small_font.render("Press Q or ESC to Quit", True, (200, 200, 200))  # Light gray
             quit_rect = quit_text.get_rect(center=(WINDOW_WIDTH // 2, 530))
             screen.blit(quit_text, quit_rect)
+
+        # Update performance monitoring (US-063)
+        performance_monitor.update()
+
+        # Draw performance overlay if enabled (US-063)
+        if show_performance_overlay:
+            performance_monitor.draw_debug_overlay(screen)
 
         # Update display
         pygame.display.flip()

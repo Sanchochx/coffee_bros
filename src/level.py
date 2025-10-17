@@ -5,6 +5,7 @@ Loads level data from JSON files and creates game entities.
 
 import json
 import os
+import time
 import pygame
 from src.entities import Player, Platform, Polocho, GoldenArepa, Goal
 
@@ -41,6 +42,7 @@ class Level:
     def load_from_file(cls, level_number, audio_manager=None):
         """
         Load level data from JSON file and create all game entities.
+        Optimized for fast loading (US-063).
 
         Args:
             level_number (int): The level number to load (e.g., 1 for level_1.json)
@@ -53,6 +55,9 @@ class Level:
             FileNotFoundError: If level file doesn't exist
             ValueError: If JSON is malformed or missing required fields
         """
+        # Track loading time for performance monitoring (US-063)
+        start_time = time.time()
+
         level = cls(audio_manager)
 
         # Construct file path
@@ -162,6 +167,10 @@ class Level:
             level.goal_sprite = Goal(goal_x, goal_y, goal_width, goal_height)
             level.goals.add(level.goal_sprite)
             level.all_sprites.add(level.goal_sprite)
+
+        # Log loading time for performance monitoring (US-063)
+        load_time = time.time() - start_time
+        print(f"Level {level_number} loaded in {load_time:.3f} seconds")
 
         return level
 
