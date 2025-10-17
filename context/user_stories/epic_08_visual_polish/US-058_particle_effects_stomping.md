@@ -5,10 +5,10 @@
 **So that** combat feels impactful
 
 ## Acceptance Criteria
-- [ ] Small particles emit when enemy stomped
-- [ ] Particles spread outward from impact point
-- [ ] Particles fade out over time
-- [ ] Effect is brief and doesn't lag game
+- [x] Small particles emit when enemy stomped
+- [x] Particles spread outward from impact point
+- [x] Particles fade out over time
+- [x] Effect is brief and doesn't lag game
 
 ## Technical Notes
 - Create 5-10 small particle sprites

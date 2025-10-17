@@ -7,6 +7,7 @@ import pygame
 import sys
 from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS, LEVEL_COMPLETE_DELAY
 from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
+from src.entities.particle import ParticleSystem
 from src.level import Level
 from src.menu import MainMenu, PauseMenu, GameOverMenu
 from src.level_name_display import LevelNameDisplay
@@ -80,6 +81,7 @@ def main():
     powerups = None
     goals = None
     lasers = pygame.sprite.Group()  # Create laser sprite group (US-019)
+    particles = pygame.sprite.Group()  # Create particle sprite group (US-058)
 
     # Game loop
     running = True
@@ -511,6 +513,10 @@ def main():
             for laser in lasers:
                 laser.update(level_width)
 
+            # Update all particles (US-058) - handles position, fading, and lifetime
+            for particle in particles:
+                particle.update()
+
             # Check for laser-enemy collisions (US-020)
             for laser in lasers:
                 # Check collision with all enemies
@@ -521,8 +527,9 @@ def main():
                         laser.kill()  # Remove laser from sprite groups
                         enemy.squash()  # Mark enemy as squashed (will disappear after animation)
                         score += STOMP_SCORE  # Award same points as stomp kill
+                        # Create particle effect at impact point (US-058)
+                        ParticleSystem.create_stomp_particles(enemy.rect.centerx, enemy.rect.top, particles)
                         # TODO (US-042): Play enemy defeat sound effect (audio system in Epic 7)
-                        # TODO (US-058): Add explosion particle effect at impact point (visual polish in Epic 8)
                         break  # One laser can only hit one enemy (exit inner loop)
 
             # Check for player-enemy collisions
@@ -535,6 +542,8 @@ def main():
                             enemy.squash()  # Mark as squashed (will disappear after animation)
                             player.velocity_y = -8  # Small upward bounce after stomp
                             score += STOMP_SCORE  # Increase score
+                            # Create particle effect at stomp point (US-058)
+                            ParticleSystem.create_stomp_particles(enemy.rect.centerx, enemy.rect.top, particles)
                             # TODO (US-042): Play stomp sound effect (audio system in Epic 7)
                     else:
                         # Side or bottom collision - player takes damage
@@ -614,6 +623,13 @@ def main():
             offset_rect = sprite.rect.copy()
             offset_rect.x -= camera_x
             screen.blit(sprite.image, offset_rect)
+
+        # Draw particles with camera offset (US-058)
+        for particle in particles:
+            # Create a temporary rect with camera offset applied
+            offset_rect = particle.rect.copy()
+            offset_rect.x -= camera_x
+            screen.blit(particle.image, offset_rect)
 
         # Draw HUD - Score Display (US-031)
         score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))  # White text, zero-padded to 5 digits
