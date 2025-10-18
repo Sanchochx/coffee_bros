@@ -140,6 +140,7 @@ sancho_bros/
 ├── main.py                 # Main game entry point
 ├── config.py              # Game configuration and constants
 ├── requirements.txt       # Python dependencies
+├── build.py               # Build script for creating executables
 ├── assets/               # Game assets (images, sounds)
 │   ├── images/          # Sprite and background images
 │   └── sounds/          # Sound effects and music
@@ -149,6 +150,33 @@ sancho_bros/
 │   └── ...             # Other game systems
 └── context/            # Project documentation and user stories
 ```
+
+## Building for Distribution
+
+Want to share the game with friends who don't have Python installed? You can create a standalone executable!
+
+### Quick Build
+
+```bash
+# Install build dependencies
+pip install -r requirements.txt
+
+# Run the build script
+python build.py
+```
+
+The executable will be in the `dist/` folder, ready to share!
+
+### For End Users (No Python Required)
+
+If you received the game as a standalone executable:
+1. Extract the downloaded archive
+2. Double-click `SanchoBros.exe` (Windows) or `SanchoBros` (Mac/Linux)
+3. Enjoy the game!
+
+For detailed build instructions, see:
+- `BUILD_INSTRUCTIONS.md` - Quick build guide
+- `DISTRIBUTION_GUIDE.md` - Comprehensive distribution manual
 
 ## Troubleshooting
 
