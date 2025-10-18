@@ -4,13 +4,13 @@ A 2D platformer game inspired by Super Mario Bros, featuring Colombian cultural 
 
 ## Game Description
 
-**Sancho Bros** is a classic 2D platformer that combines nostalgic gameplay with Colombian cultural elements. Play as Sancho, jump on enemies (Polochos), collect Golden Arepas for power-ups, and navigate through beautifully themed levels inspired by Colombia's coffee regions.
+**Sancho Bros** is a classic 2D platformer that combines nostalgic gameplay with Colombian cultural elements. Play as Sancho, a human hero on an adventure through Colombia's coffee regions. Jump on evil demon-like enemies (Polochos), collect authentic Colombian Arepas for power-ups, and reach the castle goal at the end of each level.
 
 ### Features
 
-- **5 Unique Levels**: From tutorial Coffee Hills to the challenging El Pico del Café
-- **Power-Up System**: Collect Golden Arepas to gain laser shooting abilities
-- **Enemy Combat**: Stomp on Polochos or blast them with lasers
+- **5 Unique Levels**: From tutorial Coffee Hills to the challenging El Pico del Café, each ending with a castle goal
+- **Power-Up System**: Collect authentic Colombian Arepas (circular grilled corn cakes) to gain laser shooting abilities
+- **Enemy Combat**: Stomp on evil demon-like Polochos (with horns and glowing eyes) or blast them with lasers
 - **Lives System**: Start with 3 hearts and earn more through gameplay
 - **Score Tracking**: Compete for high scores across levels
 - **Save System**: Your progress is automatically saved
@@ -91,7 +91,7 @@ deactivate
 ## Gameplay
 
 ### Objective
-Complete all 5 levels by reaching the goal flag at the end of each level while collecting points and avoiding enemies.
+Guide the human hero Sancho through all 5 levels by reaching the castle at the end of each level while collecting points and defeating evil demon-like enemies.
 
 ### Levels
 1. **Coffee Hills** - Tutorial level to learn the basics
@@ -106,7 +106,7 @@ Complete all 5 levels by reaching the goal flag at the end of each level while c
 - **Collect Golden Arepa**: 200 points
 
 ### Power-Ups
-- **Golden Arepa**: Grants Sancho the ability to shoot lasers for a limited time (indicated by golden color and timer)
+- **Colombian Arepa**: A traditional Colombian grilled corn cake that grants Sancho the ability to shoot lasers for a limited time (indicated by golden glow and timer). Features authentic arepa design with grill marks and corn texture.
 
 ### Lives System
 - Start with 3 hearts

@@ -83,12 +83,20 @@ class Player(pygame.sprite.Sprite):
         self.facing_direction = 1  # 1 = right, -1 = left
         self.shoot_cooldown = 0  # Frames until can shoot again
 
+        # Super Saiyan aura effect (DBZ-style)
+        self.aura_frames = []  # List of aura animation frames
+        self.aura_frame_index = 0  # Current aura frame
+        self.aura_animation_timer = 0  # Timer for aura animation
+        self.aura_animation_speed = 3  # Change aura frame every 3 game frames
+        self._generate_aura_frames()  # Generate aura animation
+
     def _generate_walk_frames(self):
         """
         Generate 6 walking animation frames programmatically (US-048).
 
-        Creates a simple walking animation with leg movement using sine wave motion.
-        Each frame has different leg positions to create a walking effect.
+        Creates a human-like character with short hair, grey t-shirt, blue jeans,
+        head, body, arms, and legs. Each frame has different leg positions to
+        create a walking effect.
 
         Returns:
             list: List of 6 pygame.Surface objects representing walk cycle
@@ -96,34 +104,82 @@ class Player(pygame.sprite.Sprite):
         frames = []
 
         for i in range(6):
-            # Create a new surface for each frame
-            frame = pygame.Surface((self.width, self.height))
-            frame.fill(YELLOW)
+            # Create a new surface for each frame with transparency
+            frame = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+            frame.fill((0, 0, 0, 0))  # Transparent background
 
             # Calculate leg positions based on frame number
             # Create a walking effect by varying leg positions
             leg_offset = math.sin(i * math.pi / 3) * 5  # Oscillate between -5 and 5 pixels
+            arm_offset = math.sin(i * math.pi / 3) * 3  # Arms swing opposite to legs
 
-            # Draw simple legs (black rectangles) to show walking motion
-            leg_width = 8
-            leg_height = 15
+            # Color palette
+            skin_color = (255, 220, 177)  # Light skin tone
+            hair_color = (101, 67, 33)  # Dark brown hair
+            shirt_color = (128, 128, 128)  # Grey t-shirt
+            jeans_color = (70, 130, 180)  # Blue jeans
 
-            # Left leg
-            left_leg_x = self.width // 2 - 10 + int(leg_offset)
+            # Draw legs (blue jeans) with walking motion
+            leg_width = 7
+            leg_height = 18
+
+            # Left leg (jeans)
+            left_leg_x = self.width // 2 - 9 + int(leg_offset)
             left_leg_y = self.height - leg_height
-            pygame.draw.rect(frame, (0, 0, 0),
+            pygame.draw.rect(frame, jeans_color,
                            (left_leg_x, left_leg_y, leg_width, leg_height))
 
-            # Right leg (opposite phase)
+            # Right leg (jeans)
             right_leg_x = self.width // 2 + 2 - int(leg_offset)
             right_leg_y = self.height - leg_height
-            pygame.draw.rect(frame, (0, 0, 0),
+            pygame.draw.rect(frame, jeans_color,
                            (right_leg_x, right_leg_y, leg_width, leg_height))
 
-            # Draw body (slightly darker yellow rectangle)
-            body_color = (230, 189, 0)
-            body_rect = pygame.Rect(5, 10, self.width - 10, self.height - 25)
-            pygame.draw.rect(frame, body_color, body_rect)
+            # Draw body/torso (grey t-shirt)
+            body_rect = pygame.Rect(8, 16, self.width - 16, 26)
+            pygame.draw.rect(frame, shirt_color, body_rect, border_radius=3)
+
+            # Draw arms (skin tone) with swing motion
+            arm_width = 5
+            arm_height = 20
+
+            # Left arm (swings opposite to right leg)
+            left_arm_x = 5
+            left_arm_y = 20 - int(arm_offset)
+            pygame.draw.rect(frame, skin_color,
+                           (left_arm_x, left_arm_y, arm_width, arm_height))
+
+            # Right arm (swings opposite to left leg)
+            right_arm_x = self.width - 10
+            right_arm_y = 20 + int(arm_offset)
+            pygame.draw.rect(frame, skin_color,
+                           (right_arm_x, right_arm_y, arm_width, arm_height))
+
+            # Draw head (circular, skin tone)
+            head_radius = 9
+            head_center = (self.width // 2, 10)
+            pygame.draw.circle(frame, skin_color, head_center, head_radius)
+
+            # Draw short hair on top of head
+            hair_rect = pygame.Rect(self.width // 2 - 8, 2, 16, 8)
+            pygame.draw.ellipse(frame, hair_color, hair_rect)
+
+            # Draw eyes (small black dots with white highlights)
+            eye_color = (0, 0, 0)
+            left_eye_pos = (self.width // 2 - 3, 10)
+            right_eye_pos = (self.width // 2 + 3, 10)
+            pygame.draw.circle(frame, eye_color, left_eye_pos, 2)
+            pygame.draw.circle(frame, eye_color, right_eye_pos, 2)
+
+            # Eye highlights (small white dots)
+            pygame.draw.circle(frame, (255, 255, 255), (left_eye_pos[0] - 1, left_eye_pos[1] - 1), 1)
+            pygame.draw.circle(frame, (255, 255, 255), (right_eye_pos[0] - 1, right_eye_pos[1] - 1), 1)
+
+            # Draw simple smile
+            mouth_color = (100, 50, 50)  # Dark red
+            pygame.draw.arc(frame, mouth_color,
+                          (self.width // 2 - 4, 11, 8, 5),
+                          3.14, 6.28, 2)
 
             frames.append(frame)
 
@@ -133,28 +189,77 @@ class Player(pygame.sprite.Sprite):
         """
         Generate jumping animation frame for ascending motion (US-049).
 
-        Shows player with legs tucked in/bent for jumping pose when velocity_y < 0.
+        Shows human-like player with legs tucked in/bent for jumping pose when velocity_y < 0.
         Used when player is moving upward in the air.
 
         Returns:
             pygame.Surface: Jump frame surface
         """
-        frame = pygame.Surface((self.width, self.height))
-        frame.fill(YELLOW)
+        # Create a new surface with transparency
+        frame = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        frame.fill((0, 0, 0, 0))  # Transparent background
 
-        # Draw body (slightly darker yellow rectangle) - higher up for jump
-        body_color = (230, 189, 0)
-        body_rect = pygame.Rect(5, 8, self.width - 10, self.height - 20)
-        pygame.draw.rect(frame, body_color, body_rect)
+        # Color palette
+        skin_color = (255, 220, 177)  # Light skin tone
+        hair_color = (101, 67, 33)  # Dark brown hair
+        shirt_color = (128, 128, 128)  # Grey t-shirt
+        jeans_color = (70, 130, 180)  # Blue jeans
 
-        # Draw legs tucked/bent (both legs together for jump pose)
-        leg_width = 16  # Wider combined legs
-        leg_height = 12  # Shorter legs (tucked)
+        # Draw legs tucked/bent (both legs together, bent at knees) - jeans
+        leg_width = 7
+        leg_height = 14  # Shorter than walking (tucked)
 
-        # Centered legs tucked under body
-        leg_x = (self.width - leg_width) // 2
-        leg_y = self.height - leg_height
-        pygame.draw.rect(frame, (0, 0, 0), (leg_x, leg_y, leg_width, leg_height))
+        # Left leg (bent, close together)
+        left_leg_x = self.width // 2 - 8
+        left_leg_y = self.height - leg_height - 2
+        pygame.draw.rect(frame, jeans_color, (left_leg_x, left_leg_y, leg_width, leg_height))
+
+        # Right leg (bent, close together)
+        right_leg_x = self.width // 2 + 1
+        right_leg_y = self.height - leg_height - 2
+        pygame.draw.rect(frame, jeans_color, (right_leg_x, right_leg_y, leg_width, leg_height))
+
+        # Draw body/torso (grey t-shirt)
+        body_rect = pygame.Rect(8, 14, self.width - 16, 26)
+        pygame.draw.rect(frame, shirt_color, body_rect, border_radius=3)
+
+        # Draw arms raised up (jumping pose)
+        arm_width = 5
+        arm_height = 18
+
+        # Left arm (raised up)
+        left_arm_x = 6
+        left_arm_y = 10
+        pygame.draw.rect(frame, skin_color, (left_arm_x, left_arm_y, arm_width, arm_height))
+
+        # Right arm (raised up)
+        right_arm_x = self.width - 11
+        right_arm_y = 10
+        pygame.draw.rect(frame, skin_color, (right_arm_x, right_arm_y, arm_width, arm_height))
+
+        # Draw head (circular, skin tone)
+        head_radius = 9
+        head_center = (self.width // 2, 10)
+        pygame.draw.circle(frame, skin_color, head_center, head_radius)
+
+        # Draw short hair on top of head
+        hair_rect = pygame.Rect(self.width // 2 - 8, 2, 16, 8)
+        pygame.draw.ellipse(frame, hair_color, hair_rect)
+
+        # Draw eyes (small black dots with highlights)
+        eye_color = (0, 0, 0)
+        left_eye_pos = (self.width // 2 - 3, 10)
+        right_eye_pos = (self.width // 2 + 3, 10)
+        pygame.draw.circle(frame, eye_color, left_eye_pos, 2)
+        pygame.draw.circle(frame, eye_color, right_eye_pos, 2)
+
+        # Eye highlights
+        pygame.draw.circle(frame, (255, 255, 255), (left_eye_pos[0] - 1, left_eye_pos[1] - 1), 1)
+        pygame.draw.circle(frame, (255, 255, 255), (right_eye_pos[0] - 1, right_eye_pos[1] - 1), 1)
+
+        # Draw excited expression (open mouth - O shape)
+        mouth_color = (100, 50, 50)
+        pygame.draw.circle(frame, mouth_color, (self.width // 2, 13), 2)
 
         return frame
 
@@ -162,33 +267,79 @@ class Player(pygame.sprite.Sprite):
         """
         Generate falling animation frame for descending motion (US-049).
 
-        Shows player with legs slightly extended for landing preparation when velocity_y > 0.
+        Shows human-like player with legs slightly extended for landing preparation when velocity_y > 0.
         Used when player is moving downward in the air.
 
         Returns:
             pygame.Surface: Fall frame surface
         """
-        frame = pygame.Surface((self.width, self.height))
-        frame.fill(YELLOW)
+        # Create a new surface with transparency
+        frame = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        frame.fill((0, 0, 0, 0))  # Transparent background
 
-        # Draw body (slightly darker yellow rectangle)
-        body_color = (230, 189, 0)
-        body_rect = pygame.Rect(5, 10, self.width - 10, self.height - 25)
-        pygame.draw.rect(frame, body_color, body_rect)
+        # Color palette
+        skin_color = (255, 220, 177)  # Light skin tone
+        hair_color = (101, 67, 33)  # Dark brown hair
+        shirt_color = (128, 128, 128)  # Grey t-shirt
+        jeans_color = (70, 130, 180)  # Blue jeans
 
-        # Draw legs extended/spread for landing preparation
-        leg_width = 8
-        leg_height = 18  # Longer legs (extended)
+        # Draw legs extended/spread for landing preparation - jeans
+        leg_width = 7
+        leg_height = 19  # Longer legs (extended for landing)
 
         # Left leg (slightly spread)
-        left_leg_x = self.width // 2 - 12
+        left_leg_x = self.width // 2 - 10
         left_leg_y = self.height - leg_height
-        pygame.draw.rect(frame, (0, 0, 0), (left_leg_x, left_leg_y, leg_width, leg_height))
+        pygame.draw.rect(frame, jeans_color, (left_leg_x, left_leg_y, leg_width, leg_height))
 
         # Right leg (slightly spread)
-        right_leg_x = self.width // 2 + 4
+        right_leg_x = self.width // 2 + 3
         right_leg_y = self.height - leg_height
-        pygame.draw.rect(frame, (0, 0, 0), (right_leg_x, right_leg_y, leg_width, leg_height))
+        pygame.draw.rect(frame, jeans_color, (right_leg_x, right_leg_y, leg_width, leg_height))
+
+        # Draw body/torso (grey t-shirt)
+        body_rect = pygame.Rect(8, 16, self.width - 16, 26)
+        pygame.draw.rect(frame, shirt_color, body_rect, border_radius=3)
+
+        # Draw arms extended down (bracing for landing)
+        arm_width = 5
+        arm_height = 20
+
+        # Left arm (extended downward)
+        left_arm_x = 7
+        left_arm_y = 24
+        pygame.draw.rect(frame, skin_color, (left_arm_x, left_arm_y, arm_width, arm_height))
+
+        # Right arm (extended downward)
+        right_arm_x = self.width - 12
+        right_arm_y = 24
+        pygame.draw.rect(frame, skin_color, (right_arm_x, right_arm_y, arm_width, arm_height))
+
+        # Draw head (circular, skin tone)
+        head_radius = 9
+        head_center = (self.width // 2, 10)
+        pygame.draw.circle(frame, skin_color, head_center, head_radius)
+
+        # Draw short hair on top of head
+        hair_rect = pygame.Rect(self.width // 2 - 8, 2, 16, 8)
+        pygame.draw.ellipse(frame, hair_color, hair_rect)
+
+        # Draw eyes (small black dots with highlights)
+        eye_color = (0, 0, 0)
+        left_eye_pos = (self.width // 2 - 3, 10)
+        right_eye_pos = (self.width // 2 + 3, 10)
+        pygame.draw.circle(frame, eye_color, left_eye_pos, 2)
+        pygame.draw.circle(frame, eye_color, right_eye_pos, 2)
+
+        # Eye highlights
+        pygame.draw.circle(frame, (255, 255, 255), (left_eye_pos[0] - 1, left_eye_pos[1] - 1), 1)
+        pygame.draw.circle(frame, (255, 255, 255), (right_eye_pos[0] - 1, right_eye_pos[1] - 1), 1)
+
+        # Draw concerned expression (small line mouth)
+        mouth_color = (100, 50, 50)
+        pygame.draw.line(frame, mouth_color,
+                        (self.width // 2 - 3, 13),
+                        (self.width // 2 + 3, 13), 2)
 
         return frame
 
@@ -196,7 +347,7 @@ class Player(pygame.sprite.Sprite):
         """
         Generate 4-frame idle animation with subtle breathing effect (US-050).
 
-        Creates a gentle breathing animation when player is standing still.
+        Creates a gentle breathing animation for human-like player when standing still.
         Uses sine wave motion to create subtle vertical body movement.
 
         Returns:
@@ -205,34 +356,78 @@ class Player(pygame.sprite.Sprite):
         frames = []
 
         for i in range(4):
-            # Create a new surface for each frame
-            frame = pygame.Surface((self.width, self.height))
-            frame.fill(YELLOW)
+            # Create a new surface with transparency
+            frame = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+            frame.fill((0, 0, 0, 0))  # Transparent background
+
+            # Color palette
+            skin_color = (255, 220, 177)  # Light skin tone
+            hair_color = (101, 67, 33)  # Dark brown hair
+            shirt_color = (128, 128, 128)  # Grey t-shirt
+            jeans_color = (70, 130, 180)  # Blue jeans
 
             # Subtle breathing effect - body moves up/down slightly
             # Creates a sine wave pattern: 0 -> 1 -> 0 -> -1 -> 0
-            breathing_offset = int(math.sin(i * math.pi / 2) * 2)  # Oscillate between -2 and 2 pixels
+            breathing_offset = int(math.sin(i * math.pi / 2) * 1)  # Oscillate between -1 and 1 pixels
 
-            # Draw body (slightly darker yellow rectangle) with breathing offset
-            body_color = (230, 189, 0)
-            body_y = 10 + breathing_offset
-            body_height = self.height - 25
-            body_rect = pygame.Rect(5, body_y, self.width - 10, body_height)
-            pygame.draw.rect(frame, body_color, body_rect)
-
-            # Draw legs (stationary, no movement during idle)
-            leg_width = 8
-            leg_height = 15
+            # Draw legs (stationary, no movement during idle) - jeans
+            leg_width = 7
+            leg_height = 18
 
             # Left leg (stationary position)
-            left_leg_x = self.width // 2 - 10
+            left_leg_x = self.width // 2 - 9
             left_leg_y = self.height - leg_height
-            pygame.draw.rect(frame, (0, 0, 0), (left_leg_x, left_leg_y, leg_width, leg_height))
+            pygame.draw.rect(frame, jeans_color, (left_leg_x, left_leg_y, leg_width, leg_height))
 
             # Right leg (stationary position)
             right_leg_x = self.width // 2 + 2
             right_leg_y = self.height - leg_height
-            pygame.draw.rect(frame, (0, 0, 0), (right_leg_x, right_leg_y, leg_width, leg_height))
+            pygame.draw.rect(frame, jeans_color, (right_leg_x, right_leg_y, leg_width, leg_height))
+
+            # Draw body/torso (grey t-shirt) with breathing offset
+            body_y = 16 + breathing_offset
+            body_rect = pygame.Rect(8, body_y, self.width - 16, 26)
+            pygame.draw.rect(frame, shirt_color, body_rect, border_radius=3)
+
+            # Draw arms at sides (relaxed position)
+            arm_width = 5
+            arm_height = 20
+
+            # Left arm (at side)
+            left_arm_x = 5
+            left_arm_y = 18 + breathing_offset
+            pygame.draw.rect(frame, skin_color, (left_arm_x, left_arm_y, arm_width, arm_height))
+
+            # Right arm (at side)
+            right_arm_x = self.width - 10
+            right_arm_y = 18 + breathing_offset
+            pygame.draw.rect(frame, skin_color, (right_arm_x, right_arm_y, arm_width, arm_height))
+
+            # Draw head (circular, skin tone) with breathing offset
+            head_radius = 9
+            head_center = (self.width // 2, 10 + breathing_offset)
+            pygame.draw.circle(frame, skin_color, head_center, head_radius)
+
+            # Draw short hair on top of head
+            hair_rect = pygame.Rect(self.width // 2 - 8, 2 + breathing_offset, 16, 8)
+            pygame.draw.ellipse(frame, hair_color, hair_rect)
+
+            # Draw eyes (small black dots with highlights)
+            eye_color = (0, 0, 0)
+            left_eye_pos = (self.width // 2 - 3, 10 + breathing_offset)
+            right_eye_pos = (self.width // 2 + 3, 10 + breathing_offset)
+            pygame.draw.circle(frame, eye_color, left_eye_pos, 2)
+            pygame.draw.circle(frame, eye_color, right_eye_pos, 2)
+
+            # Eye highlights
+            pygame.draw.circle(frame, (255, 255, 255), (left_eye_pos[0] - 1, left_eye_pos[1] - 1), 1)
+            pygame.draw.circle(frame, (255, 255, 255), (right_eye_pos[0] - 1, right_eye_pos[1] - 1), 1)
+
+            # Draw neutral expression (small smile)
+            mouth_color = (100, 50, 50)
+            pygame.draw.arc(frame, mouth_color,
+                          (self.width // 2 - 4, 11 + breathing_offset, 8, 5),
+                          3.14, 6.28, 2)
 
             frames.append(frame)
 
@@ -242,7 +437,7 @@ class Player(pygame.sprite.Sprite):
         """
         Generate 4-frame shooting animation (US-051).
 
-        Shows player with extended arm/hands for laser shooting pose.
+        Shows human-like player with extended arm/hand for laser shooting pose.
         Animation progresses: extend -> hold -> hold -> retract.
 
         Returns:
@@ -251,55 +446,220 @@ class Player(pygame.sprite.Sprite):
         frames = []
 
         for i in range(4):
-            # Create a new surface for each frame
-            frame = pygame.Surface((self.width, self.height))
-            frame.fill(YELLOW)
+            # Create a new surface with transparency
+            frame = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+            frame.fill((0, 0, 0, 0))  # Transparent background
 
-            # Draw body (slightly darker yellow rectangle)
-            body_color = (230, 189, 0)
-            body_rect = pygame.Rect(5, 10, self.width - 10, self.height - 25)
-            pygame.draw.rect(frame, body_color, body_rect)
+            # Color palette
+            skin_color = (255, 220, 177)  # Light skin tone
+            hair_color = (101, 67, 33)  # Dark brown hair
+            shirt_color = (128, 128, 128)  # Grey t-shirt
+            jeans_color = (70, 130, 180)  # Blue jeans
 
-            # Draw legs (stationary during shooting)
-            leg_width = 8
-            leg_height = 15
+            # Draw legs (stationary during shooting) - jeans
+            leg_width = 7
+            leg_height = 18
 
             # Left leg (stationary position)
-            left_leg_x = self.width // 2 - 10
+            left_leg_x = self.width // 2 - 9
             left_leg_y = self.height - leg_height
-            pygame.draw.rect(frame, (0, 0, 0), (left_leg_x, left_leg_y, leg_width, leg_height))
+            pygame.draw.rect(frame, jeans_color, (left_leg_x, left_leg_y, leg_width, leg_height))
 
             # Right leg (stationary position)
             right_leg_x = self.width // 2 + 2
             right_leg_y = self.height - leg_height
-            pygame.draw.rect(frame, (0, 0, 0), (right_leg_x, right_leg_y, leg_width, leg_height))
+            pygame.draw.rect(frame, jeans_color, (right_leg_x, right_leg_y, leg_width, leg_height))
 
-            # Draw extended arm/hand for shooting pose (US-051)
-            # Hand extends from body center, pointing outward
-            # Animation progresses: extend -> hold -> hold -> retract
+            # Draw body/torso (grey t-shirt)
+            body_rect = pygame.Rect(8, 16, self.width - 16, 26)
+            pygame.draw.rect(frame, shirt_color, body_rect, border_radius=3)
+
+            # Calculate arm extension based on frame
             if i == 0:
-                # Frame 0: Start extending hand
-                hand_offset = 8
+                # Frame 0: Start extending arm
+                arm_extension = 8
             elif i == 1:
                 # Frame 1: Fully extended (shooting pose)
-                hand_offset = 12
+                arm_extension = 14
             elif i == 2:
                 # Frame 2: Hold extended position
-                hand_offset = 12
+                arm_extension = 14
             else:
-                # Frame 3: Retracting hand
-                hand_offset = 6
+                # Frame 3: Retracting arm
+                arm_extension = 6
 
-            # Draw hand rectangle extending from body (will face correct direction when flipped)
-            hand_width = 10 + hand_offset
-            hand_height = 6
-            hand_x = self.width - 5  # Right side of body (will flip for left direction)
-            hand_y = self.height // 2 - 5  # Center height (where laser emanates)
-            pygame.draw.rect(frame, (200, 150, 0), (hand_x - hand_width, hand_y, hand_width, hand_height))
+            # Draw extended shooting arm (right side)
+            arm_width = 5 + arm_extension
+            arm_height = 5
+            arm_x = self.width - 8  # Right side of body (will flip for left direction)
+            arm_y = self.height // 2 - 3  # Center height (where laser emanates)
+            pygame.draw.rect(frame, skin_color, (arm_x - arm_width, arm_y, arm_width, arm_height))
+
+            # Draw non-shooting arm (left side, at side)
+            left_arm_width = 5
+            left_arm_height = 18
+            left_arm_x = 5
+            left_arm_y = 20
+            pygame.draw.rect(frame, skin_color, (left_arm_x, left_arm_y, left_arm_width, left_arm_height))
+
+            # Draw head (circular, skin tone)
+            head_radius = 9
+            head_center = (self.width // 2, 10)
+            pygame.draw.circle(frame, skin_color, head_center, head_radius)
+
+            # Draw short hair on top of head
+            hair_rect = pygame.Rect(self.width // 2 - 8, 2, 16, 8)
+            pygame.draw.ellipse(frame, hair_color, hair_rect)
+
+            # Draw eyes (focused, determined look with highlights)
+            eye_color = (0, 0, 0)
+            left_eye_pos = (self.width // 2 - 3, 10)
+            right_eye_pos = (self.width // 2 + 3, 10)
+            pygame.draw.circle(frame, eye_color, left_eye_pos, 2)
+            pygame.draw.circle(frame, eye_color, right_eye_pos, 2)
+
+            # Eye highlights
+            pygame.draw.circle(frame, (255, 255, 255), (left_eye_pos[0] - 1, left_eye_pos[1] - 1), 1)
+            pygame.draw.circle(frame, (255, 255, 255), (right_eye_pos[0] - 1, right_eye_pos[1] - 1), 1)
+
+            # Draw determined expression (straight line mouth)
+            mouth_color = (100, 50, 50)
+            pygame.draw.line(frame, mouth_color,
+                            (self.width // 2 - 3, 13),
+                            (self.width // 2 + 3, 13), 2)
 
             frames.append(frame)
 
         return frames
+
+    def _generate_aura_frames(self):
+        """
+        Generate Dragon Ball Z-style Super Saiyan aura animation frames.
+        Creates a pulsing golden energy aura around the player with flame-like shapes.
+
+        Returns:
+            None (stores frames in self.aura_frames)
+        """
+        self.aura_frames = []
+
+        # Generate 8 frames for smooth aura animation
+        for frame_num in range(8):
+            # Create aura surface (larger than player to fit aura around them)
+            aura_width = self.width + 30  # Extra space for aura
+            aura_height = self.height + 30
+            aura_surface = pygame.Surface((aura_width, aura_height), pygame.SRCALPHA)
+            aura_surface.fill((0, 0, 0, 0))  # Transparent background
+
+            # Golden aura colors (similar to Super Saiyan)
+            aura_colors = [
+                (255, 223, 0, 120),   # Bright gold (outer, more transparent)
+                (255, 215, 0, 160),   # Gold
+                (255, 200, 0, 180),   # Deeper gold
+                (255, 180, 0, 140),   # Orange-gold (inner flames)
+            ]
+
+            # Center position (where player will be)
+            center_x = aura_width // 2
+            center_y = aura_height // 2
+
+            # Animation phase (0.0 to 1.0)
+            phase = frame_num / 8.0
+
+            # Draw multiple layers of aura for depth
+            for layer in range(4):
+                # Layer-specific animation offset
+                layer_phase = (phase + layer * 0.25) % 1.0
+
+                # Pulsing size based on animation phase
+                pulse = math.sin(layer_phase * math.pi * 2) * 3 + 3
+
+                # Draw flame-like shapes around the player
+                num_flames = 8 + layer * 2  # More flames in outer layers
+
+                for i in range(num_flames):
+                    angle = (i / num_flames) * math.pi * 2 + layer_phase * math.pi * 0.5
+
+                    # Distance from center (varies by layer)
+                    base_distance = 22 + layer * 5
+                    distance = base_distance + pulse
+
+                    # Flame position
+                    flame_x = center_x + int(math.cos(angle) * distance)
+                    flame_y = center_y + int(math.sin(angle) * distance)
+
+                    # Flame size (varies with animation)
+                    flame_size = int(8 + math.sin(angle + layer_phase * math.pi * 4) * 3)
+
+                    # Flame shape (ellipse for upward flame effect)
+                    flame_width = flame_size
+                    flame_height = flame_size + 4
+
+                    # Get color for this layer
+                    color_idx = min(layer, len(aura_colors) - 1)
+                    color = aura_colors[color_idx]
+
+                    # Create flame surface with alpha
+                    flame_surf = pygame.Surface((flame_width * 2, flame_height * 2), pygame.SRCALPHA)
+                    pygame.draw.ellipse(flame_surf, color,
+                                      (flame_width // 2, flame_height // 2,
+                                       flame_width, flame_height))
+
+                    # Blit flame to aura surface
+                    aura_surface.blit(flame_surf,
+                                    (flame_x - flame_width, flame_y - flame_height))
+
+            # Draw energy glow in the center (brightest part)
+            for radius_layer in range(5, 0, -1):
+                alpha = int(40 + radius_layer * 15)
+                glow_color = (255, 223, 0, alpha)
+                glow_surf = pygame.Surface((aura_width, aura_height), pygame.SRCALPHA)
+                pygame.draw.circle(glow_surf, glow_color,
+                                 (center_x, center_y),
+                                 18 + radius_layer * 2)
+                aura_surface.blit(glow_surf, (0, 0))
+
+            # Add some random energy sparks for extra effect
+            for spark in range(5):
+                spark_angle = (spark / 5.0) * math.pi * 2 + phase * math.pi * 4
+                spark_dist = 20 + (spark % 3) * 5
+                spark_x = center_x + int(math.cos(spark_angle) * spark_dist)
+                spark_y = center_y + int(math.sin(spark_angle) * spark_dist)
+
+                # Draw small spark circle
+                pygame.draw.circle(aura_surface, (255, 255, 200, 200),
+                                 (spark_x, spark_y), 2)
+
+            self.aura_frames.append(aura_surface)
+
+    def get_aura_surface(self):
+        """
+        Get the current aura animation frame for rendering.
+        Returns None if player is not powered up.
+
+        Returns:
+            pygame.Surface or None: Current aura frame or None
+        """
+        if not self.is_powered_up or not self.aura_frames:
+            return None
+
+        return self.aura_frames[self.aura_frame_index]
+
+    def get_aura_position(self):
+        """
+        Get the position where the aura should be drawn (centered on player).
+
+        Returns:
+            tuple: (x, y) position for aura blit
+        """
+        if not self.is_powered_up or not self.aura_frames:
+            return None
+
+        aura_surface = self.aura_frames[self.aura_frame_index]
+        # Center aura on player
+        aura_x = self.rect.centerx - aura_surface.get_width() // 2
+        aura_y = self.rect.centery - aura_surface.get_height() // 2
+
+        return (aura_x, aura_y)
 
     def take_damage(self, knockback_direction=0):
         """
@@ -426,10 +786,11 @@ class Player(pygame.sprite.Sprite):
                 self.current_frame = 0
             self.image = self.idle_frames[self.current_frame].copy()
 
-        # If powered up, add golden border/glow effect
+        # If powered up, add DBZ Super Saiyan aura effect
         if self.is_powered_up:
-            # Draw golden border around current image
-            pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)  # 3-pixel border
+            # No need to modify self.image here - aura will be drawn separately
+            # Just keep the base character image clean
+            pass
 
         # Update original image for blinking effect
         self.original_image = self.image.copy()
@@ -571,6 +932,13 @@ class Player(pygame.sprite.Sprite):
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1
 
+        # Update aura animation if powered up
+        if self.is_powered_up:
+            self.aura_animation_timer += 1
+            if self.aura_animation_timer >= self.aura_animation_speed:
+                self.aura_animation_timer = 0
+                self.aura_frame_index = (self.aura_frame_index + 1) % len(self.aura_frames)
+
         # Handle shooting animation timer (US-051)
         if self.is_shooting:
             self.shoot_animation_timer -= 1
@@ -591,10 +959,6 @@ class Player(pygame.sprite.Sprite):
 
             self.image = self.shoot_frames[frame_index].copy()
 
-            # Add powered-up border if applicable
-            if self.is_powered_up:
-                pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
-
             # Flip sprite horizontally based on facing direction
             if self.facing_direction == -1:
                 self.image = pygame.transform.flip(self.image, True, False)
@@ -609,10 +973,6 @@ class Player(pygame.sprite.Sprite):
             else:
                 # Descending (falling down)
                 self.image = self.fall_frame.copy()
-
-            # Add powered-up border if applicable
-            if self.is_powered_up:
-                pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
 
             # Flip sprite horizontally based on facing direction
             if self.facing_direction == -1:
@@ -637,10 +997,6 @@ class Player(pygame.sprite.Sprite):
             # Update image to current frame
             self.image = self.walk_frames[self.current_frame].copy()
 
-            # Add powered-up border if applicable
-            if self.is_powered_up:
-                pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
-
             # Flip sprite horizontally based on facing direction (US-048)
             if self.facing_direction == -1:
                 self.image = pygame.transform.flip(self.image, True, False)
@@ -663,10 +1019,6 @@ class Player(pygame.sprite.Sprite):
 
             # Update image to current idle frame
             self.image = self.idle_frames[self.current_frame].copy()
-
-            # Add powered-up border if applicable
-            if self.is_powered_up:
-                pygame.draw.rect(self.image, GOLD, self.image.get_rect(), 3)
 
             # Flip sprite horizontally based on facing direction
             if self.facing_direction == -1:

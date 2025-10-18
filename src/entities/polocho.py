@@ -58,7 +58,7 @@ class Polocho(pygame.sprite.Sprite):
     def _generate_walk_frames(self):
         """
         Generate 4 walking animation frames for Polocho enemy (US-052)
-        Creates a simple walking animation with leg/body movement
+        Creates an evil, menacing creature with horns, sharp features, and glowing eyes
 
         Returns:
             list: List of 4 pygame.Surface objects representing walk cycle
@@ -66,47 +66,101 @@ class Polocho(pygame.sprite.Sprite):
         frames = []
 
         for i in range(4):
-            # Create a new surface for each frame
-            frame = pygame.Surface((self.width, self.height))
-            frame.fill(RED)
+            # Create a new surface with transparency
+            frame = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+            frame.fill((0, 0, 0, 0))  # Transparent background
 
             # Calculate leg positions based on frame number
             # Create a walking effect by varying leg positions
             leg_offset = math.sin(i * math.pi / 2) * 4  # Oscillate between -4 and 4 pixels
 
-            # Draw simple legs (darker red rectangles) to show walking motion
+            # Evil color palette
+            dark_red = (139, 0, 0)  # Dark red body
+            blood_red = (180, 0, 0)  # Blood red accents
+            evil_red = (220, 20, 60)  # Crimson red
+            black = (0, 0, 0)  # Black details
+            evil_glow = (255, 50, 50)  # Red glow for eyes
+
+            # Draw legs with clawed feet (darker red)
             leg_width = 6
             leg_height = 12
-            darker_red = (180, 0, 0)
 
             # Left leg
             left_leg_x = self.width // 2 - 8 + int(leg_offset)
             left_leg_y = self.height - leg_height
-            pygame.draw.rect(frame, darker_red,
-                           (left_leg_x, left_leg_y, leg_width, leg_height))
+            pygame.draw.rect(frame, blood_red, (left_leg_x, left_leg_y, leg_width, leg_height))
+            # Left claw (small triangle at bottom)
+            pygame.draw.polygon(frame, black, [
+                (left_leg_x - 2, self.height),
+                (left_leg_x + leg_width // 2, self.height - 3),
+                (left_leg_x, self.height)
+            ])
 
             # Right leg (opposite phase)
             right_leg_x = self.width // 2 + 2 - int(leg_offset)
             right_leg_y = self.height - leg_height
-            pygame.draw.rect(frame, darker_red,
-                           (right_leg_x, right_leg_y, leg_width, leg_height))
+            pygame.draw.rect(frame, blood_red, (right_leg_x, right_leg_y, leg_width, leg_height))
+            # Right claw
+            pygame.draw.polygon(frame, black, [
+                (right_leg_x + leg_width, self.height),
+                (right_leg_x + leg_width // 2, self.height - 3),
+                (right_leg_x + leg_width + 2, self.height)
+            ])
 
-            # Draw body (slightly darker red ellipse for better visual)
-            body_color = (200, 0, 0)
+            # Draw body (menacing ellipse shape)
             body_rect = pygame.Rect(4, 4, self.width - 8, self.height - 16)
-            pygame.draw.ellipse(frame, body_color, body_rect)
+            pygame.draw.ellipse(frame, evil_red, body_rect)
 
-            # Draw eyes (small white circles)
-            eye_color = (255, 255, 255)
-            left_eye_pos = (self.width // 2 - 8, self.height // 3)
-            right_eye_pos = (self.width // 2 + 8, self.height // 3)
-            pygame.draw.circle(frame, eye_color, left_eye_pos, 3)
-            pygame.draw.circle(frame, eye_color, right_eye_pos, 3)
+            # Draw darker inner shadow for depth
+            inner_shadow_rect = pygame.Rect(6, 6, self.width - 12, self.height - 20)
+            pygame.draw.ellipse(frame, dark_red, inner_shadow_rect)
 
-            # Draw pupils (small black circles)
-            pupil_color = (0, 0, 0)
-            pygame.draw.circle(frame, pupil_color, left_eye_pos, 1)
-            pygame.draw.circle(frame, pupil_color, right_eye_pos, 1)
+            # Draw evil horns on top of head
+            horn_color = black
+            # Left horn
+            left_horn_points = [
+                (self.width // 2 - 8, 8),  # Base
+                (self.width // 2 - 10, 2),  # Tip
+                (self.width // 2 - 6, 6)   # Inner point
+            ]
+            pygame.draw.polygon(frame, horn_color, left_horn_points)
+
+            # Right horn
+            right_horn_points = [
+                (self.width // 2 + 8, 8),  # Base
+                (self.width // 2 + 10, 2),  # Tip
+                (self.width // 2 + 6, 6)   # Inner point
+            ]
+            pygame.draw.polygon(frame, horn_color, right_horn_points)
+
+            # Draw menacing glowing eyes (larger, evil looking)
+            left_eye_pos = (self.width // 2 - 7, self.height // 3)
+            right_eye_pos = (self.width // 2 + 7, self.height // 3)
+
+            # Outer glow
+            pygame.draw.circle(frame, evil_glow, left_eye_pos, 5)
+            pygame.draw.circle(frame, evil_glow, right_eye_pos, 5)
+
+            # Inner pupil (vertical slit like a demon)
+            pygame.draw.ellipse(frame, black, (left_eye_pos[0] - 1, left_eye_pos[1] - 3, 2, 6))
+            pygame.draw.ellipse(frame, black, (right_eye_pos[0] - 1, right_eye_pos[1] - 3, 2, 6))
+
+            # Draw evil fanged mouth (jagged teeth)
+            mouth_y = self.height // 2 + 2
+            pygame.draw.line(frame, black,
+                           (self.width // 2 - 6, mouth_y),
+                           (self.width // 2 + 6, mouth_y), 2)
+            # Fangs (small triangles)
+            pygame.draw.polygon(frame, (255, 255, 255), [
+                (self.width // 2 - 4, mouth_y),
+                (self.width // 2 - 3, mouth_y + 3),
+                (self.width // 2 - 2, mouth_y)
+            ])
+            pygame.draw.polygon(frame, (255, 255, 255), [
+                (self.width // 2 + 2, mouth_y),
+                (self.width // 2 + 3, mouth_y + 3),
+                (self.width // 2 + 4, mouth_y)
+            ])
 
             frames.append(frame)
 
@@ -124,38 +178,50 @@ class Polocho(pygame.sprite.Sprite):
         squashed_width = int(self.width * 1.5)  # 50% wider
         squashed_height = int(self.height * 0.25)  # 25% of original height (very flat)
 
-        # Create squashed frame surface
-        frame = pygame.Surface((squashed_width, squashed_height))
-        frame.fill(RED)
+        # Create squashed frame surface with transparency
+        frame = pygame.Surface((squashed_width, squashed_height), pygame.SRCALPHA)
+        frame.fill((0, 0, 0, 0))  # Transparent background
+
+        # Evil color palette (same as walk frames)
+        dark_red = (139, 0, 0)
+        evil_red = (220, 20, 60)
 
         # Draw flattened body (ellipse stretched horizontally)
-        body_color = (200, 0, 0)
         body_rect = pygame.Rect(2, 2, squashed_width - 4, squashed_height - 4)
-        pygame.draw.ellipse(frame, body_color, body_rect)
+        pygame.draw.ellipse(frame, evil_red, body_rect)
+
+        # Draw darker inner
+        inner_rect = pygame.Rect(4, 3, squashed_width - 8, squashed_height - 6)
+        pygame.draw.ellipse(frame, dark_red, inner_rect)
 
         # Draw squashed eyes (X's to show defeat)
-        eye_color = (255, 255, 255)
-        darker_color = (100, 0, 0)
+        black = (0, 0, 0)
 
         # Left eye X
         left_eye_x = squashed_width // 3
         eye_y = squashed_height // 2
         # Draw X by drawing two small lines
-        pygame.draw.line(frame, darker_color,
+        pygame.draw.line(frame, black,
                         (left_eye_x - 3, eye_y - 2),
                         (left_eye_x + 3, eye_y + 2), 2)
-        pygame.draw.line(frame, darker_color,
+        pygame.draw.line(frame, black,
                         (left_eye_x - 3, eye_y + 2),
                         (left_eye_x + 3, eye_y - 2), 2)
 
         # Right eye X
         right_eye_x = squashed_width * 2 // 3
-        pygame.draw.line(frame, darker_color,
+        pygame.draw.line(frame, black,
                         (right_eye_x - 3, eye_y - 2),
                         (right_eye_x + 3, eye_y + 2), 2)
-        pygame.draw.line(frame, darker_color,
+        pygame.draw.line(frame, black,
                         (right_eye_x - 3, eye_y + 2),
                         (right_eye_x + 3, eye_y - 2), 2)
+
+        # Draw flattened broken horns
+        pygame.draw.line(frame, black, (squashed_width // 3 - 5, eye_y - 1),
+                        (squashed_width // 3 - 8, eye_y), 2)
+        pygame.draw.line(frame, black, (squashed_width * 2 // 3 + 5, eye_y - 1),
+                        (squashed_width * 2 // 3 + 8, eye_y), 2)
 
         return frame
 

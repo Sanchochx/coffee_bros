@@ -255,6 +255,21 @@ class OptimizedRenderer:
                 sprite.rect.y > screen_height + margin):
                 continue
 
+            # Check if sprite is a Player with powered-up aura (DBZ Super Saiyan style)
+            # Import Player class locally to avoid circular imports
+            from src.entities.player import Player
+
+            if isinstance(sprite, Player):
+                # Draw aura behind the player if powered up
+                aura_surface = sprite.get_aura_surface()
+                if aura_surface is not None:
+                    aura_pos = sprite.get_aura_position()
+                    if aura_pos:
+                        # Apply camera offset to aura position
+                        aura_screen_x = aura_pos[0] - camera_x
+                        aura_screen_y = aura_pos[1]
+                        self.screen.blit(aura_surface, (aura_screen_x, aura_screen_y))
+
             # Draw sprite at offset position
             offset_rect = sprite.rect.copy()
             offset_rect.x = screen_x

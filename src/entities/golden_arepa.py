@@ -53,9 +53,41 @@ class GoldenArepa(pygame.sprite.Sprite):
         self.glow_frame_delay = 6  # Frames between glow updates (middle of 5-8 range)
 
     def _create_base_image(self):
-        """Create the base arepa image (solid gold square)."""
-        self.base_image = pygame.Surface((self.width, self.height))
-        self.base_image.fill(GOLD)
+        """Create the base arepa image - circular Colombian arepa with texture."""
+        self.base_image = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        self.base_image.fill((0, 0, 0, 0))  # Transparent background
+
+        # Colombian arepa colors
+        arepa_color = (255, 223, 128)  # Golden corn color
+        darker_arepa = (230, 200, 100)  # Darker toasted edges
+        grill_marks = (180, 140, 70)  # Dark brown grill marks
+
+        # Draw main circular arepa body
+        center = (self.width // 2, self.height // 2)
+        radius = self.width // 2 - 1
+        pygame.draw.circle(self.base_image, arepa_color, center, radius)
+
+        # Draw slightly darker inner circle for depth
+        pygame.draw.circle(self.base_image, darker_arepa, center, radius - 2)
+
+        # Draw toasted edges (darker ring around the edge)
+        pygame.draw.circle(self.base_image, darker_arepa, center, radius, 2)
+
+        # Add grill mark texture (characteristic of Colombian arepas)
+        # Horizontal grill marks
+        for i in range(-8, 9, 4):
+            y_pos = center[1] + i
+            x_start = center[0] - int(math.sqrt(max(0, radius**2 - i**2)))
+            x_end = center[0] + int(math.sqrt(max(0, radius**2 - i**2)))
+            if x_end > x_start:
+                pygame.draw.line(self.base_image, grill_marks,
+                               (x_start + 2, y_pos), (x_end - 2, y_pos), 1)
+
+        # Add some corn texture dots
+        for i in range(8):
+            dot_x = center[0] + int(math.cos(i * math.pi / 4) * (radius - 6))
+            dot_y = center[1] + int(math.sin(i * math.pi / 4) * (radius - 6))
+            pygame.draw.circle(self.base_image, darker_arepa, (dot_x, dot_y), 1)
 
     def _create_glow_frames(self):
         """
