@@ -5,11 +5,11 @@
 **So that** I can continue later
 
 ## Acceptance Criteria
-- [ ] Highest completed level is saved
-- [ ] High score is saved
-- [ ] Settings preferences are saved
-- [ ] Save persists between game sessions
-- [ ] Save file is human-readable (JSON)
+- [x] Highest completed level is saved
+- [x] High score is saved
+- [x] Settings preferences are saved
+- [x] Save persists between game sessions
+- [x] Save file is human-readable (JSON)
 
 ## Technical Notes
 - Save to JSON file in user directory

@@ -13,6 +13,7 @@ from src.menu import MainMenu, PauseMenu, GameOverMenu, SettingsMenu, ControlsMe
 from src.level_name_display import LevelNameDisplay
 from src.audio_manager import AudioManager
 from src.settings_manager import SettingsManager
+from src.save_manager import SaveManager
 from src.draw_utils import draw_tiled_background, draw_hearts
 from src.performance_monitor import PerformanceMonitor
 from src.optimization import OptimizedRenderer, limit_particle_count
@@ -40,22 +41,26 @@ def main():
     # Initialize settings manager for persistent settings (US-061)
     settings_manager = SettingsManager()
 
+    # Initialize save manager for game progress (US-068)
+    save_manager = SaveManager()
+
     # Initialize audio manager (US-040, US-041)
     audio_manager = AudioManager()
 
-    # Load saved volume settings into audio manager (US-061)
-    audio_manager.set_music_volume(settings_manager.get_music_volume())
-    audio_manager.set_sfx_volume(settings_manager.get_sfx_volume())
+    # Load saved volume settings into audio manager (US-061, US-068)
+    # Try loading from save manager first (includes settings), fallback to settings manager
+    audio_manager.set_music_volume(save_manager.get_music_volume())
+    audio_manager.set_sfx_volume(save_manager.get_sfx_volume())
 
     # Start menu music (US-047)
     audio_manager.play_menu_music()
 
-    # Game state management (US-034, US-035, US-036, US-060, US-061, US-062)
+    # Game state management (US-034, US-035, US-036, US-060, US-061, US-062, US-068)
     game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings", "controls", "game_over"
     main_menu = MainMenu()  # Initialize main menu
     pause_menu = PauseMenu()  # Initialize pause menu (US-035)
     game_over_menu = GameOverMenu()  # Initialize game over menu (US-036)
-    settings_menu = SettingsMenu(audio_manager, settings_manager)  # Initialize settings menu (US-060, US-061)
+    settings_menu = SettingsMenu(audio_manager, save_manager)  # Initialize settings menu - uses save_manager for persistence (US-060, US-061, US-068)
     controls_menu = ControlsMenu()  # Initialize controls menu (US-062)
 
     # Initialize game state
@@ -638,7 +643,7 @@ def main():
                     powerup.kill()  # Remove from sprite groups (disappears)
                     audio_manager.play_powerup()  # US-044: Play powerup collection sound effect
 
-            # Check for level completion (US-023, US-029)
+            # Check for level completion (US-023, US-029, US-068)
             for goal in goals:
                 if player.rect.colliderect(goal.rect):
                     # Player reached the goal - complete the level!
@@ -651,6 +656,10 @@ def main():
                         score_earned_in_level = score - level_start_score
                         # Play level complete sound effect (US-046)
                         audio_manager.play_level_complete()
+
+                        # Save game progress (US-068)
+                        save_manager.set_highest_level_completed(current_level_number)
+                        save_manager.update_high_score(score)
 
             # Check for pit/fall death (US-015)
             if player.rect.top > WINDOW_HEIGHT:
@@ -870,6 +879,10 @@ def main():
 
         # Maintain consistent FPS
         clock.tick(FPS)
+
+    # Save game on exit (US-068)
+    print("Saving game progress before exit...")
+    save_manager.save_game()
 
     # Quit pygame
     pygame.quit()
