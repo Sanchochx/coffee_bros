@@ -5,10 +5,10 @@
 **So that** dependencies are clear
 
 ## Acceptance Criteria
-- [ ] requirements.txt lists all dependencies
-- [ ] Version constraints are specified
-- [ ] File is in project root
-- [ ] `pip install -r requirements.txt` works
+- [x] requirements.txt lists all dependencies
+- [x] Version constraints are specified
+- [x] File is in project root
+- [x] `pip install -r requirements.txt` works
 
 ## Technical Notes
 - Include pygame version

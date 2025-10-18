@@ -13,10 +13,10 @@
 ## Implementation Progress
 
 - **Total Stories:** 72
-- **Completed:** 70
+- **Completed:** 71
 - **In Progress:** 0
-- **Remaining:** 2
-- **Progress:** 97.2%
+- **Remaining:** 1
+- **Progress:** 98.6%
 
 ---
 
@@ -425,7 +425,7 @@
   - Path: `context/user_stories/epic_11_documentation/US-070_code_documentation.md`
   - [Details](context/user_stories/epic_11_documentation/US-070_code_documentation.md)
 
-- [ ] **US-071** - Requirements File
+- [x] **US-071** - Requirements File
   - *Create requirements.txt for dependencies*
   - Path: `context/user_stories/epic_11_documentation/US-071_requirements_file.md`
   - [Details](context/user_stories/epic_11_documentation/US-071_requirements_file.md)
@@ -476,8 +476,8 @@ After completing each epic:
 
 **Project Start Date:** 2025-10-13
 **Target Completion Date:** TBD
-**Current Epic:** Epic 11 - Documentation and Deployment (2/4 stories complete, 50%)
-**Current Story:** US-070 Complete! Moving to US-071 - Requirements File
-**Last Completed Story:** US-070 - Code Documentation
+**Current Epic:** Epic 11 - Documentation and Deployment (3/4 stories complete, 75%)
+**Current Story:** US-071 Complete! Moving to US-072 - Game Distribution
+**Last Completed Story:** US-071 - Requirements File
 **Last Completed Epic:** Epic 10 - Testing and Quality Assurance (100% complete)
 **Note:** Epic 6 (Camera) completed early due to blocking playability issue - levels were unplayable without scrolling camera

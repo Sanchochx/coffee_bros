@@ -12,7 +12,8 @@
       "Bash(git checkout:*)",
       "Bash(findstr:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(cat \"C:\\Users\\santi\\OneDrive\\Documents\\devv\\claude_ai\\sancho_bros\\requirements.txt\")"
     ],
     "deny": [],
     "ask": []
