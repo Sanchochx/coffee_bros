@@ -20,7 +20,40 @@ from src.optimization import OptimizedRenderer, limit_particle_count
 
 
 def main():
-    """Main game function"""
+    """
+    Main game entry point and game loop for Sancho Bros.
+
+    Initializes pygame, sets up the game window, loads all managers and systems,
+    and runs the main game loop handling different game states (menu, playing,
+    paused, settings, game over, victory).
+
+    Game States:
+        - "menu": Main menu screen with game start options
+        - "playing": Active gameplay with player control
+        - "paused": Game paused overlay (accessed via ESC during gameplay)
+        - "settings": Settings menu for volume controls (US-060, US-061)
+        - "controls": Controls display screen (US-062)
+        - "game_over": Game over screen when lives depleted (US-036)
+
+    Systems Initialized:
+        - Performance monitoring system (US-063)
+        - Optimized renderer for efficient sprite drawing (US-063)
+        - Settings manager for persistent configuration (US-061)
+        - Save manager for game progress (US-068)
+        - Audio manager for music and sound effects (US-040-047)
+        - Menu systems (main, pause, settings, controls, game over)
+
+    Game Loop (60 FPS):
+        - Event processing (keyboard input, window events)
+        - State-specific updates and rendering
+        - Camera system for scrolling levels (US-038, US-039)
+        - Physics and collision detection
+        - HUD rendering (score, lives, powerup timer)
+        - Performance monitoring overlay (toggle with F3)
+
+    Returns:
+        None: Exits via pygame.quit() and sys.exit()
+    """
     # Initialize pygame
     pygame.init()
 

@@ -85,8 +85,10 @@ class Player(pygame.sprite.Sprite):
 
     def _generate_walk_frames(self):
         """
-        Generate 6 walking animation frames programmatically
-        Creates a simple walking animation with leg movement
+        Generate 6 walking animation frames programmatically (US-048).
+
+        Creates a simple walking animation with leg movement using sine wave motion.
+        Each frame has different leg positions to create a walking effect.
 
         Returns:
             list: List of 6 pygame.Surface objects representing walk cycle
@@ -129,8 +131,10 @@ class Player(pygame.sprite.Sprite):
 
     def _generate_jump_frame(self):
         """
-        Generate jumping animation frame (ascending - velocity_y < 0)
-        Shows player with legs tucked in/bent for jumping pose
+        Generate jumping animation frame for ascending motion (US-049).
+
+        Shows player with legs tucked in/bent for jumping pose when velocity_y < 0.
+        Used when player is moving upward in the air.
 
         Returns:
             pygame.Surface: Jump frame surface
@@ -156,8 +160,10 @@ class Player(pygame.sprite.Sprite):
 
     def _generate_fall_frame(self):
         """
-        Generate falling animation frame (descending - velocity_y > 0)
-        Shows player with legs slightly extended for landing preparation
+        Generate falling animation frame for descending motion (US-049).
+
+        Shows player with legs slightly extended for landing preparation when velocity_y > 0.
+        Used when player is moving downward in the air.
 
         Returns:
             pygame.Surface: Fall frame surface
@@ -188,8 +194,10 @@ class Player(pygame.sprite.Sprite):
 
     def _generate_idle_frames(self):
         """
-        Generate 4-frame idle animation with subtle breathing effect (US-050)
-        Creates a gentle breathing animation when player is standing still
+        Generate 4-frame idle animation with subtle breathing effect (US-050).
+
+        Creates a gentle breathing animation when player is standing still.
+        Uses sine wave motion to create subtle vertical body movement.
 
         Returns:
             list: List of 4 pygame.Surface objects representing idle cycle
@@ -232,8 +240,10 @@ class Player(pygame.sprite.Sprite):
 
     def _generate_shoot_frames(self):
         """
-        Generate 4-frame shooting animation (US-051)
-        Shows player with extended arm/hands for laser shooting pose
+        Generate 4-frame shooting animation (US-051).
+
+        Shows player with extended arm/hands for laser shooting pose.
+        Animation progresses: extend -> hold -> hold -> retract.
 
         Returns:
             list: List of 4 pygame.Surface objects representing shooting animation
@@ -319,8 +329,12 @@ class Player(pygame.sprite.Sprite):
 
     def collect_powerup(self):
         """
-        Handle player collecting a power-up (Golden Arepa)
-        Enters powered-up state for POWERUP_DURATION frames
+        Handle player collecting a power-up (Golden Arepa) (US-017, US-018).
+
+        Enters powered-up state for POWERUP_DURATION frames, enabling:
+        - Laser shooting capability (US-019)
+        - Golden border visual effect (US-018)
+        - Powerup timer countdown (US-033)
         """
         # Enter powered-up state
         self.is_powered_up = True
@@ -334,8 +348,9 @@ class Player(pygame.sprite.Sprite):
 
     def can_shoot(self):
         """
-        Check if player can shoot a laser
-        Must be powered up and cooldown must be 0
+        Check if player can shoot a laser (US-019).
+
+        Player must be powered up and cooldown must be 0 to shoot.
 
         Returns:
             bool: True if player can shoot, False otherwise
@@ -344,11 +359,13 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         """
-        Attempt to shoot a laser
-        Returns laser spawn position and direction if successful
+        Attempt to shoot a laser (US-019, US-051).
+
+        Triggers shooting animation and returns laser spawn position if successful.
+        Applies shooting cooldown to prevent spamming.
 
         Returns:
-            tuple or None: (x, y, direction) if shot successful, None otherwise
+            tuple or None: (x, y, direction) tuple if shot successful, None if cannot shoot
         """
         if not self.can_shoot():
             return None
@@ -372,7 +389,13 @@ class Player(pygame.sprite.Sprite):
         return (laser_x, laser_y, self.facing_direction)
 
     def _update_appearance(self):
-        """Update player visual appearance based on current state"""
+        """
+        Update player visual appearance based on current state (US-018, US-048-051).
+
+        Regenerates all animation frames with current powered-up state.
+        Adds golden border when powered up, removes it when normal.
+        Handles state transitions between all animation types.
+        """
         # Regenerate animation frames with current powered-up state (US-048, US-049, US-050, US-051)
         self.walk_frames = self._generate_walk_frames()
         self.jump_frame = self._generate_jump_frame()
