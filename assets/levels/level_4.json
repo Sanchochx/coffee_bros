@@ -1,13 +1,13 @@
 {
   "metadata": {
-    "name": "Harvest Heights",
+    "name": "Bogo-Trash",
     "level_number": 4,
-    "description": "A challenging combined level requiring mastery of both platforming and combat - multiple paths to victory!",
+    "description": "Navigate the grey, depressing streets of Bogota - a city shrouded in smog and sadness",
     "width": 5000,
     "height": 600,
-    "background_type": "harvest_heights",
-    "background_color": [180, 140, 80],
-    "music_track": "harvest_heights_theme"
+    "background_type": "bogota_city",
+    "background_color": [120, 120, 130],
+    "music_track": "bogota_theme"
   },
   "player": {
     "spawn_x": 100,
@@ -16,9 +16,9 @@
   "goal": {
     "x": 4850,
     "y": 450,
-    "width": 50,
-    "height": 80,
-    "type": "flag"
+    "width": 80,
+    "height": 100,
+    "type": "chiva"
   },
   "platforms": [
     {

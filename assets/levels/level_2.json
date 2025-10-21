@@ -1,13 +1,13 @@
 {
   "metadata": {
-    "name": "Mountain Paths",
+    "name": "Cordillera de los Andes",
     "level_number": 2,
-    "description": "Platforming-focused level with precision jumps and vertical challenges",
+    "description": "Journey through the majestic Andes mountain range with snow-capped peaks",
     "width": 4000,
     "height": 600,
-    "background_type": "mountain_paths",
-    "background_color": [150, 180, 200],
-    "music_track": "mountain_theme"
+    "background_type": "andes_mountains",
+    "background_color": [135, 206, 235],
+    "music_track": "andes_theme"
   },
   "player": {
     "spawn_x": 100,
@@ -16,9 +16,9 @@
   "goal": {
     "x": 3850,
     "y": 400,
-    "width": 50,
-    "height": 80,
-    "type": "flag"
+    "width": 80,
+    "height": 100,
+    "type": "chiva"
   },
   "platforms": [
     {

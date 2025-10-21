@@ -438,6 +438,10 @@ def main():
                             # Create level name display (US-037)
                             level_name = level.metadata.get("name", f"Level {current_level_number}")
                             level_name_display = LevelNameDisplay(current_level_number, level_name)
+                            # Switch to boss battle music for level 5
+                            if current_level_number == 5:
+                                audio_manager.stop_music(fade_ms=500)
+                                audio_manager.play_boss_battle_music()
                             # Score carries over between levels
                         except (FileNotFoundError, ValueError) as e:
                             print(f"Error loading level {current_level_number}: {e}")

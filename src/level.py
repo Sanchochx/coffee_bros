@@ -176,8 +176,9 @@ class Level:
             goal_y = level.goal_data.get("y", 0)
             goal_width = level.goal_data.get("width", 40)
             goal_height = level.goal_data.get("height", 80)
+            goal_type = level.goal_data.get("type", "castle")
 
-            level.goal_sprite = Goal(goal_x, goal_y, goal_width, goal_height)
+            level.goal_sprite = Goal(goal_x, goal_y, goal_width, goal_height, goal_type)
             level.goals.add(level.goal_sprite)
             level.all_sprites.add(level.goal_sprite)
 
@@ -316,7 +317,8 @@ class Level:
                 goal_y = self.goal_data.get("y", 0)
                 goal_width = self.goal_data.get("width", 40)
                 goal_height = self.goal_data.get("height", 80)
+                goal_type = self.goal_data.get("type", "castle")
 
-                self.goal_sprite = Goal(goal_x, goal_y, goal_width, goal_height)
+                self.goal_sprite = Goal(goal_x, goal_y, goal_width, goal_height, goal_type)
                 self.goals.add(self.goal_sprite)
                 self.all_sprites.add(self.goal_sprite)

@@ -13,7 +13,7 @@ class Goal(pygame.sprite.Sprite):
     Visually represents the end goal of a level (flag, door, etc.)
     """
 
-    def __init__(self, x, y, width=40, height=80):
+    def __init__(self, x, y, width=40, height=80, goal_type="castle"):
         """
         Initialize the goal sprite.
 
@@ -22,19 +22,59 @@ class Goal(pygame.sprite.Sprite):
             y: Y position (bottom of goal)
             width: Width of goal sprite (default 40)
             height: Height of goal sprite (default 80)
+            goal_type: Type of goal ("castle", "chiva", etc.)
         """
         super().__init__()
 
         self.width = width
         self.height = height
+        self.goal_type = goal_type
 
-        # Create castle-style goal sprite (Mario Bros inspired)
-        self.image = self._create_castle_sprite()
+        # Create goal sprite based on type
+        if goal_type == "chiva":
+            self.image = self._load_chiva_sprite()
+        elif goal_type == "jam":
+            self.image = self._load_jam_jar_sprite()
+        else:
+            # Default castle-style goal sprite (Mario Bros inspired)
+            self.image = self._create_castle_sprite()
 
         # Position the goal - x is center, y is bottom
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
+
+    def _load_chiva_sprite(self):
+        """
+        Load the Colombian Chiva bus sprite for goal.
+
+        Returns:
+            pygame.Surface: Chiva bus sprite image
+        """
+        import os
+        chiva_path = os.path.join("assets", "images", "chiva_bus.png")
+        if os.path.exists(chiva_path):
+            return pygame.image.load(chiva_path).convert_alpha()
+        else:
+            # Fallback to castle if Chiva not found
+            print(f"Warning: Chiva bus sprite not found at {chiva_path}, using castle")
+            return self._create_castle_sprite()
+
+    def _load_jam_jar_sprite(self):
+        """
+        Load the purple jam jar sprite for goal.
+
+        Returns:
+            pygame.Surface: Jam jar sprite image
+        """
+        import os
+        jam_path = os.path.join("assets", "images", "purple_jam_jar.png")
+        if os.path.exists(jam_path):
+            return pygame.image.load(jam_path).convert_alpha()
+        else:
+            # Fallback to castle if jam jar not found
+            print(f"Warning: Jam jar sprite not found at {jam_path}, using castle")
+            return self._create_castle_sprite()
 
     def _create_castle_sprite(self):
         """

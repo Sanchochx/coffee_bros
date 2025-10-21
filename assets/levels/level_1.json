@@ -1,13 +1,13 @@
 {
   "metadata": {
-    "name": "Coffee Hills",
+    "name": "Medallo",
     "level_number": 1,
-    "description": "Tutorial level introducing basic mechanics",
+    "description": "Welcome to Medellin - The City of Eternal Spring",
     "width": 3200,
     "height": 600,
-    "background_type": "coffee_hills",
+    "background_type": "medellin_city",
     "background_color": [135, 206, 235],
-    "music_track": "coffee_hills_theme"
+    "music_track": "medellin_theme"
   },
   "player": {
     "spawn_x": 100,
@@ -15,10 +15,10 @@
   },
   "goal": {
     "x": 3000,
-    "y": 400,
-    "width": 50,
-    "height": 80,
-    "type": "flag"
+    "y": 500,
+    "width": 80,
+    "height": 100,
+    "type": "chiva"
   },
   "platforms": [
     {

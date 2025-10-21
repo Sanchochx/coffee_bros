@@ -1,13 +1,13 @@
 {
   "metadata": {
-    "name": "Bean Valley",
+    "name": "Amazonas",
     "level_number": 3,
-    "description": "Combat-focused level with multiple enemies in succession - master fighting!",
+    "description": "Navigate through the lush Amazon jungle filled with dense vegetation and wildlife",
     "width": 4800,
     "height": 600,
-    "background_type": "bean_valley",
-    "background_color": [120, 160, 100],
-    "music_track": "bean_valley_theme"
+    "background_type": "amazon_jungle",
+    "background_color": [40, 80, 45],
+    "music_track": "amazon_theme"
   },
   "player": {
     "spawn_x": 100,
@@ -16,9 +16,9 @@
   "goal": {
     "x": 4650,
     "y": 450,
-    "width": 50,
-    "height": 80,
-    "type": "flag"
+    "width": 80,
+    "height": 100,
+    "type": "chiva"
   },
   "platforms": [
     {
