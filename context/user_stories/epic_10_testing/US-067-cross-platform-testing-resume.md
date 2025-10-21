@@ -9,7 +9,7 @@
 
 ## Summary
 
-Successfully implemented and verified cross-platform compatibility for Sancho Bros game across Windows, macOS, and Linux platforms. All file path handling has been updated to use OS-agnostic methods, pygame compatibility has been verified, and comprehensive testing documentation has been created.
+Successfully implemented and verified cross-platform compatibility for Coffee Bros game across Windows, macOS, and Linux platforms. All file path handling has been updated to use OS-agnostic methods, pygame compatibility has been verified, and comprehensive testing documentation has been created.
 
 ## Changes Made
 
@@ -189,8 +189,8 @@ with open(os.path.join("path", "to", "file.txt"), 'r') as f:
 ### Settings File Locations
 
 Settings are saved to platform-specific locations:
-- **Windows:** `%USERPROFILE%\.sancho_bros_settings.json`
-- **macOS/Linux:** `~/.sancho_bros_settings.json`
+- **Windows:** `%USERPROFILE%\.coffee_bros_settings.json`
+- **macOS/Linux:** `~/.coffee_bros_settings.json`
 
 This is handled automatically by `src/settings_manager.py` using `os.path.expanduser("~")`.
 
@@ -203,7 +203,7 @@ US-067 (Cross-Platform Testing) has been successfully completed. The game now ha
 - ✅ All acceptance criteria met
 - ✅ Development tools updated for consistency
 
-The Sancho Bros game is now ready to run on Windows, macOS, and Linux platforms without modification!
+The Coffee Bros game is now ready to run on Windows, macOS, and Linux platforms without modification!
 
 ---
 

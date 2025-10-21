@@ -1,5 +1,5 @@
 """
-Generate placeholder music tracks for Sancho Bros game (US-047).
+Generate placeholder music tracks for Coffee Bros game (US-047).
 Creates simple synthesized music using wave files.
 """
 
@@ -263,7 +263,7 @@ def main():
         os.makedirs(music_dir)
         print(f"Created directory: {music_dir}")
 
-    print("Generating music files for Sancho Bros (US-047)...")
+    print("Generating music files for Coffee Bros (US-047)...")
     print("=" * 60)
 
     # Generate menu music (30 seconds, will loop)

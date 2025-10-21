@@ -1,5 +1,5 @@
 """
-Performance testing script for Sancho Bros (US-063).
+Performance testing script for Coffee Bros (US-063).
 Tests frame rate, load times, and memory usage to ensure game meets performance targets.
 """
 

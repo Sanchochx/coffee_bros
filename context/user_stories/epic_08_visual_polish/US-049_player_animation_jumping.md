@@ -1,7 +1,7 @@
 # US-049: Player Animation - Jumping
 
 **As a** player
-**I want** to see Sancho's jump animation
+**I want** to see Coffee's jump animation
 **So that** jumping looks dynamic
 
 ## Acceptance Criteria

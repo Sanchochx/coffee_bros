@@ -1,8 +1,8 @@
-# Sancho Bros - Implementation Plan
+# Coffee Bros - Implementation Plan
 
 ## Project Overview
 
-**Sancho Bros** is a 2D platformer game inspired by Super Mario Bros, featuring Colombian cultural themes. The player controls Sancho through five levels, jumping on enemies (Polochos), collecting power-ups (Golden Arepas), and reaching the end goal.
+**Coffee Bros** is a 2D platformer game inspired by Super Mario Bros, featuring Colombian cultural themes. The player controls Coffee through five levels, jumping on enemies (Polochos), collecting power-ups (Golden Arepas), and reaching the end goal.
 
 **Technology Stack:** Python with Pygame
 **Total User Stories:** 72
@@ -486,6 +486,6 @@ After completing each epic:
 
 ## 🎉 PROJECT COMPLETE! 🎉
 
-**Sancho Bros is now fully implemented!**
+**Coffee Bros is now fully implemented!**
 
 All 72 user stories across 11 epics have been successfully completed. The game is feature-complete, tested, documented, and ready for distribution!

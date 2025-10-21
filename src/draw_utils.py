@@ -1,5 +1,5 @@
 """
-Drawing utility functions for Sancho Bros
+Drawing utility functions for Coffee Bros
 Helper functions for rendering backgrounds, HUD elements, etc.
 """
 

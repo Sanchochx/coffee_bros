@@ -1,5 +1,5 @@
 """
-Particle system for Sancho Bros game
+Particle system for Coffee Bros game
 Handles visual effects like stomping particles and powerup collection particles
 """
 import pygame

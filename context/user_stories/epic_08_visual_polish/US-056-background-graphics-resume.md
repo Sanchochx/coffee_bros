@@ -1,7 +1,7 @@
 # US-056: Background Graphics - Implementation Summary
 
 ## Overview
-Successfully implemented background graphics for all 5 levels of Sancho Bros, featuring Colombian highlands themes with sky, mountains, and coffee plants.
+Successfully implemented background graphics for all 5 levels of Coffee Bros, featuring Colombian highlands themes with sky, mountains, and coffee plants.
 
 ## Changes Made
 

@@ -1,5 +1,5 @@
 """
-Sancho Bros - Main Menu System
+Coffee Bros - Main Menu System
 Displays menu screen with navigation options.
 """
 
@@ -98,11 +98,11 @@ class MainMenu:
         overlay.fill(BLACK)
         screen.blit(overlay, (0, 0))
 
-        # Draw game title "Sancho Bros"
-        title_text = self.title_font.render("Sancho Bros", True, self.title_color)
+        # Draw game title "Coffee Bros"
+        title_text = self.title_font.render("Coffee Bros", True, self.title_color)
         title_rect = title_text.get_rect(center=(WINDOW_WIDTH // 2, 120))
         # Add shadow effect for title
-        shadow_text = self.title_font.render("Sancho Bros", True, (50, 50, 50))
+        shadow_text = self.title_font.render("Coffee Bros", True, (50, 50, 50))
         shadow_rect = shadow_text.get_rect(center=(WINDOW_WIDTH // 2 + 3, 120 + 3))
         screen.blit(shadow_text, shadow_rect)
         screen.blit(title_text, title_rect)

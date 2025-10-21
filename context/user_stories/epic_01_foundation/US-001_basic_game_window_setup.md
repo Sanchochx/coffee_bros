@@ -7,7 +7,7 @@
 ## Acceptance Criteria
 - [x] Pygame is installed and imported successfully
 - [x] Game window opens at 800x600 resolution
-- [x] Window title displays "Sancho Bros"
+- [x] Window title displays "Coffee Bros"
 - [x] Game loop runs at consistent 60 FPS
 - [x] Window can be closed using the X button or ESC key
 - [x] Black background is displayed initially

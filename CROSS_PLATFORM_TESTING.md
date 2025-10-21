@@ -1,8 +1,8 @@
-# Cross-Platform Testing Guide - Sancho Bros
+# Cross-Platform Testing Guide - Coffee Bros
 
 ## Overview
 
-Sancho Bros has been designed and tested to work across Windows, macOS, and Linux platforms. This document outlines the cross-platform compatibility measures implemented and provides testing guidance.
+Coffee Bros has been designed and tested to work across Windows, macOS, and Linux platforms. This document outlines the cross-platform compatibility measures implemented and provides testing guidance.
 
 ## Platform Compatibility
 
@@ -140,7 +140,7 @@ The game targets 60 FPS on all platforms with:
    - [ ] Player controls respond correctly
    - [ ] All 5 levels load without errors
    - [ ] Sound effects and music play correctly (requires ALSA or PulseAudio)
-   - [ ] Settings save and load properly (`~/.sancho_bros_settings.json`)
+   - [ ] Settings save and load properly (`~/.coffee_bros_settings.json`)
    - [ ] Game exits cleanly
 
 ## Common Cross-Platform Issues and Solutions
@@ -179,7 +179,7 @@ SDL_VIDEODRIVER=wayland python3 main.py
 **Problem:** Cannot save settings
 **Solution:** Ensure write permissions in home directory:
 ```bash
-chmod 755 ~/.sancho_bros_settings.json
+chmod 755 ~/.coffee_bros_settings.json
 ```
 
 ## Performance Benchmarks
@@ -219,16 +219,16 @@ python tests/test_edge_cases.py
 
 ### Windows
 - Paths use backslashes (`\`) internally but `os.path.join()` handles this automatically
-- Settings saved to: `%USERPROFILE%\.sancho_bros_settings.json`
+- Settings saved to: `%USERPROFILE%\.coffee_bros_settings.json`
 
 ### macOS
 - May require security permissions for audio input (grant in System Preferences)
-- Settings saved to: `~/.sancho_bros_settings.json`
+- Settings saved to: `~/.coffee_bros_settings.json`
 - Retina displays supported with automatic scaling
 
 ### Linux
 - Works on both X11 and Wayland display servers
-- Settings saved to: `~/.sancho_bros_settings.json`
+- Settings saved to: `~/.coffee_bros_settings.json`
 - Tested on Ubuntu 20.04+, Debian 11+, Fedora 35+
 
 ## Reporting Platform-Specific Issues
@@ -242,7 +242,7 @@ When reporting issues, please include:
 
 ## Conclusion
 
-Sancho Bros is fully cross-platform compatible thanks to:
+Coffee Bros is fully cross-platform compatible thanks to:
 - OS-agnostic file path handling
 - Pygame's cross-platform capabilities
 - Platform-independent controls

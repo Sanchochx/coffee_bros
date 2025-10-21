@@ -1,5 +1,5 @@
 """
-Player entity module for Sancho Bros
+Player entity module for Coffee Bros
 Contains the Player sprite class and related functionality.
 """
 
@@ -15,7 +15,7 @@ from config import (
 
 
 class Player(pygame.sprite.Sprite):
-    """Player character class for Sancho"""
+    """Player character class for Coffee"""
 
     def __init__(self, x, y, audio_manager=None):
         """

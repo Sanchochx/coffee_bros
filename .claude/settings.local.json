@@ -13,7 +13,9 @@
       "Bash(findstr:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(cat \"C:\\Users\\santi\\OneDrive\\Documents\\devv\\claude_ai\\sancho_bros\\requirements.txt\")"
+      "Bash(cat \"C:\\Users\\santi\\OneDrive\\Documents\\devv\\claude_ai\\sancho_bros\\requirements.txt\")",
+      "Bash(del rename_sancho_to_coffee.py)",
+      "Bash(del:*)"
     ],
     "deny": [],
     "ask": []

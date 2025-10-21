@@ -1,7 +1,7 @@
 # US-002: Player Character Creation
 
 **As a** player
-**I want** to see Sancho on screen
+**I want** to see Coffee on screen
 **So that** I can identify my character
 
 ## Acceptance Criteria

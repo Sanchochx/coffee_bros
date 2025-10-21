@@ -73,16 +73,16 @@ python build.py
 **Manual:**
 ```bash
 # Windows
-pyinstaller --name SanchoBros --onefile --windowed --add-data "assets;assets" --add-data "config.py;." main.py
+pyinstaller --name CoffeeBros --onefile --windowed --add-data "assets;assets" --add-data "config.py;." main.py
 
 # macOS/Linux
-pyinstaller --name SanchoBros --onefile --windowed --add-data "assets:assets" --add-data "config.py:." main.py
+pyinstaller --name CoffeeBros --onefile --windowed --add-data "assets:assets" --add-data "config.py:." main.py
 ```
 
 ### Distribution Package Contents
 
 After build, users receive:
-- `SanchoBros.exe` (Windows) or `SanchoBros` (Mac/Linux) - Standalone executable
+- `CoffeeBros.exe` (Windows) or `CoffeeBros` (Mac/Linux) - Standalone executable
 - `HOW_TO_PLAY.txt` - User instructions with controls and gameplay info
 - `README.md` - Full documentation
 

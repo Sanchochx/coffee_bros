@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Sancho Bros - A new project repository currently being initialized.
+Coffee Bros - A new project repository currently being initialized.
 
 ## Architecture
 

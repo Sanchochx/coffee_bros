@@ -1,5 +1,5 @@
 """
-Platform entity module for Sancho Bros
+Platform entity module for Coffee Bros
 Contains the Platform sprite class for ground and floating platforms.
 """
 
@@ -30,7 +30,7 @@ class Platform(pygame.sprite.Sprite):
             return cls._tile_cache[texture_type]
 
         # Construct paths to tile images
-        base_path = os.path.join('assets', 'tiles')
+        base_path = os.path.join('assets', 'images', 'tiles')
         tiles = {}
 
         try:

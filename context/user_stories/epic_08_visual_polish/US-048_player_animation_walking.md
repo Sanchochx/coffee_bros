@@ -1,7 +1,7 @@
 # US-048: Player Animation - Walking
 
 **As a** player
-**I want** to see Sancho's walking animation
+**I want** to see Coffee's walking animation
 **So that** movement looks natural
 
 ## Acceptance Criteria

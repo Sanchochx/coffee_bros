@@ -1,7 +1,7 @@
 # US-050: Player Animation - Idle
 
 **As a** player
-**I want** to see Sancho's idle animation when standing still
+**I want** to see Coffee's idle animation when standing still
 **So that** the character feels alive
 
 ## Acceptance Criteria

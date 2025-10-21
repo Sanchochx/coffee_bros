@@ -8,7 +8,7 @@
 
 ## Overview
 
-Epic 11 focused on comprehensive documentation and distribution preparation for Sancho Bros. This epic ensures the game is well-documented, easy to understand for new developers, and ready to be distributed to end users who don't have Python installed.
+Epic 11 focused on comprehensive documentation and distribution preparation for Coffee Bros. This epic ensures the game is well-documented, easy to understand for new developers, and ready to be distributed to end users who don't have Python installed.
 
 ---
 
@@ -132,7 +132,7 @@ Epic 11 focused on comprehensive documentation and distribution preparation for 
 #### End User Experience
 1. Download distribution archive (.zip or .tar.gz)
 2. Extract to any folder
-3. Double-click `SanchoBros.exe` (Windows) or `SanchoBros` (Mac/Linux)
+3. Double-click `CoffeeBros.exe` (Windows) or `CoffeeBros` (Mac/Linux)
 4. Play immediately!
 
 **No Python installation required. No dependencies to install. Just play!**
@@ -187,7 +187,7 @@ All major source files received comprehensive documentation:
 
 ### Why This Epic Matters
 
-Epic 11 is crucial for the long-term success and maintainability of Sancho Bros:
+Epic 11 is crucial for the long-term success and maintainability of Coffee Bros:
 
 1. **Developer Onboarding**
    - New developers can understand the codebase quickly
@@ -380,7 +380,7 @@ Epic 11 builds on all previous epics:
 
 ## Next Steps
 
-With Epic 11 complete, Sancho Bros is:
+With Epic 11 complete, Coffee Bros is:
 - ✅ **Feature-complete** - All 72 user stories implemented
 - ✅ **Well-tested** - Performance tested and optimized
 - ✅ **Fully documented** - Code and user documentation complete
@@ -414,7 +414,7 @@ With Epic 11 complete, Sancho Bros is:
 
 **Epic 11: Documentation and Deployment is 100% complete!**
 
-Sancho Bros now has:
+Coffee Bros now has:
 - 📚 Comprehensive documentation for developers and users
 - 🔧 Automated build system for easy distribution
 - 📦 Professional distribution packages
@@ -450,4 +450,4 @@ Sancho Bros now has:
 **Epic 11 Complete! 🎉**
 **All 11 Epics Complete! 🎉**
 **All 72 User Stories Complete! 🎉**
-**Sancho Bros is ready to play! ☕🎮**
+**Coffee Bros is ready to play! ☕🎮**

@@ -1,6 +1,6 @@
-# Sancho Bros - User Stories
+# Coffee Bros - User Stories
 
-This directory contains all 72 user stories for the Sancho Bros game project, organized by epic.
+This directory contains all 72 user stories for the Coffee Bros game project, organized by epic.
 
 ## Epic Structure
 

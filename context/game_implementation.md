@@ -1,4 +1,4 @@
-# SANCHO BROS - GAME IMPLEMENTATION PLAN
+# COFFEE BROS - GAME IMPLEMENTATION PLAN
 
 ## Table of Contents
 1. [Technical Overview](#technical-overview)
@@ -29,7 +29,7 @@
 ## Project Structure
 
 ```
-sancho_bros/
+coffee_bros/
 ├── main.py                 # Entry point
 ├── requirements.txt        # Dependencies
 ├── README.md              # Project documentation
@@ -38,7 +38,7 @@ sancho_bros/
 ├── src/
 │   ├── __init__.py
 │   ├── game.py            # Main game loop and state management
-│   ├── player.py          # Sancho (player character)
+│   ├── player.py          # Coffee (player character)
 │   ├── enemy.py           # Polocho enemy class
 │   ├── powerup.py         # La Arepa Dorada powerup
 │   ├── projectile.py      # Laser beam implementation
@@ -52,7 +52,7 @@ sancho_bros/
 │
 ├── assets/
 │   ├── images/
-│   │   ├── sancho/        # Player sprites (idle, walk, jump, shoot)
+│   │   ├── coffee/        # Player sprites (idle, walk, jump, shoot)
 │   │   ├── polocho/       # Enemy sprites (walk, squashed)
 │   │   ├── powerups/      # Golden Arepa sprite
 │   │   ├── tiles/         # Platform and block sprites
@@ -205,7 +205,7 @@ Game states:
 
 **Tasks:**
 1. Create/source all sprite assets
-   - Sancho animations (idle, walk, jump, shoot)
+   - Coffee animations (idle, walk, jump, shoot)
    - Polocho animations (walk, squashed)
    - Platform tiles
    - Background images
@@ -445,7 +445,7 @@ class Game:
 - **Tile Size:** 50x50 pixels
 - **Sprite Size:** Player 40x60px, Enemies 40x40px
 - **Animation Frames:**
-  - Sancho: Idle (4), Walk (6), Jump (2), Shoot (4)
+  - Coffee: Idle (4), Walk (6), Jump (2), Shoot (4)
   - Polocho: Walk (4), Squashed (1)
   - Golden Arepa: Glow (6 frames)
 
@@ -503,7 +503,7 @@ class Game:
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FPS = 60
-TITLE = "Sancho Bros"
+TITLE = "Coffee Bros"
 
 # Physics
 GRAVITY = 0.8

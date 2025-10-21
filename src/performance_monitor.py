@@ -1,5 +1,5 @@
 """
-Performance monitoring system for Sancho Bros.
+Performance monitoring system for Coffee Bros.
 Tracks FPS, frame time, and memory usage to ensure smooth gameplay.
 """
 

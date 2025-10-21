@@ -1,5 +1,5 @@
 """
-Edge Case Testing Suite for Sancho Bros (US-066)
+Edge Case Testing Suite for Coffee Bros (US-066)
 Tests unusual scenarios and edge cases to ensure the game handles them gracefully.
 
 Test Categories:
@@ -48,7 +48,7 @@ class EdgeCaseTester:
         """Initialize pygame and test environment"""
         pygame.init()
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-        pygame.display.set_caption("Edge Case Testing - Sancho Bros")
+        pygame.display.set_caption("Edge Case Testing - Coffee Bros")
         self.clock = pygame.time.Clock()
         self.audio_manager = AudioManager()
         # Mute audio during tests
@@ -538,7 +538,7 @@ class EdgeCaseTester:
     def run_all_tests(self):
         """Run all edge case tests"""
         print("\n" + "=" * 60)
-        print("SANCHO BROS - EDGE CASE TESTING SUITE (US-066)")
+        print("COFFEE BROS - EDGE CASE TESTING SUITE (US-066)")
         print("=" * 60)
 
         # Run all tests

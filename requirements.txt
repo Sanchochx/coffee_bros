@@ -1,4 +1,4 @@
-# Sancho Bros - Game Dependencies
+# Coffee Bros - Game Dependencies
 # Python 3.8+ required
 
 # Core game engine

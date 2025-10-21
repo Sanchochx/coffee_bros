@@ -1,4 +1,4 @@
 """
-Sancho Bros - Game Source Code
+Coffee Bros - Game Source Code
 Main source code package for the game.
 """

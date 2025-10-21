@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the JSON format used for defining levels in Sancho Bros. All level files are stored in the `assets/levels/` directory with the naming convention `level_X.json` where X is the level number.
+This document describes the JSON format used for defining levels in Coffee Bros. All level files are stored in the `assets/levels/` directory with the naming convention `level_X.json` where X is the level number.
 
 ---
 

@@ -1,5 +1,5 @@
 """
-Polocho enemy entity for Sancho Bros game.
+Polocho enemy entity for Coffee Bros game.
 """
 import pygame
 import math

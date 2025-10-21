@@ -1,7 +1,7 @@
 # US-063: Performance Optimization - Implementation Summary
 
 ## Overview
-This user story focused on optimizing Sancho Bros game performance to ensure smooth 60 FPS gameplay, fast level loading, and stable memory usage. All performance targets were successfully met.
+This user story focused on optimizing Coffee Bros game performance to ensure smooth 60 FPS gameplay, fast level loading, and stable memory usage. All performance targets were successfully met.
 
 ## Changes Made
 
@@ -245,7 +245,7 @@ All acceptance criteria verified:
 
 ## Summary
 
-US-063 successfully optimized Sancho Bros for smooth gameplay. The implementation added:
+US-063 successfully optimized Coffee Bros for smooth gameplay. The implementation added:
 - Real-time performance monitoring (F3 overlay)
 - Screen culling (60-80% fewer draw calls)
 - Particle limiting (prevents FPS degradation)

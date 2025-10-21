@@ -1,6 +1,6 @@
 """
 Audio Manager Module
-Handles loading and playing sound effects for Sancho Bros game.
+Handles loading and playing sound effects for Coffee Bros game.
 """
 
 import pygame

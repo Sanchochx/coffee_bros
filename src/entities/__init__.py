@@ -1,5 +1,5 @@
 """
-Entities module for Sancho Bros
+Entities module for Coffee Bros
 Contains all game entity classes (Player, Platform, enemies, power-ups, etc.)
 """
 
@@ -9,5 +9,6 @@ from .polocho import Polocho
 from .golden_arepa import GoldenArepa
 from .laser import Laser
 from .goal import Goal
+from .corruption_boss import CorruptionBoss
 
-__all__ = ['Player', 'Platform', 'Polocho', 'GoldenArepa', 'Laser', 'Goal']
+__all__ = ['Player', 'Platform', 'Polocho', 'GoldenArepa', 'Laser', 'Goal', 'CorruptionBoss']

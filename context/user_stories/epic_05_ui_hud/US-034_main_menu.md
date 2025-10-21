@@ -6,7 +6,7 @@
 
 ## Acceptance Criteria
 - [x] Menu appears on game start
-- [x] Shows game title "Sancho Bros"
+- [x] Shows game title "Coffee Bros"
 - [x] Includes "Start Game" option
 - [x] Includes "Settings" option
 - [x] Includes "Quit" option

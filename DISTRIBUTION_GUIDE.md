@@ -1,6 +1,6 @@
-# Sancho Bros - Distribution Guide
+# Coffee Bros - Distribution Guide
 
-This guide explains how to package and distribute Sancho Bros for end users.
+This guide explains how to package and distribute Coffee Bros for end users.
 
 ## Table of Contents
 
@@ -53,7 +53,7 @@ This script will:
 ### What Gets Packaged
 
 The build script automatically includes:
-- **Executable**: Single-file executable (`SanchoBros.exe` on Windows, `SanchoBros` on Mac/Linux)
+- **Executable**: Single-file executable (`CoffeeBros.exe` on Windows, `CoffeeBros` on Mac/Linux)
 - **Assets**: All game assets (graphics, sounds, music, levels)
 - **Configuration**: Game configuration files
 - **Documentation**: README and user instructions
@@ -67,7 +67,7 @@ If you prefer manual control, use PyInstaller directly:
 ### Windows
 
 ```bash
-pyinstaller --name SanchoBros ^
+pyinstaller --name CoffeeBros ^
             --onefile ^
             --windowed ^
             --add-data "assets;assets" ^
@@ -78,7 +78,7 @@ pyinstaller --name SanchoBros ^
 ### macOS / Linux
 
 ```bash
-pyinstaller --name SanchoBros \
+pyinstaller --name CoffeeBros \
             --onefile \
             --windowed \
             --add-data "assets:assets" \
@@ -88,7 +88,7 @@ pyinstaller --name SanchoBros \
 
 ### PyInstaller Options Explained
 
-- `--name SanchoBros`: Name of the executable
+- `--name CoffeeBros`: Name of the executable
 - `--onefile`: Bundle everything into a single executable
 - `--windowed`: Hide the console window (use `--console` for debugging)
 - `--clean`: Clean PyInstaller cache before building
@@ -101,16 +101,16 @@ pyinstaller --name SanchoBros \
 A complete distribution package includes:
 
 ```
-SanchoBros_windows/
-├── SanchoBros.exe          # Game executable
+CoffeeBros_windows/
+├── CoffeeBros.exe          # Game executable
 ├── HOW_TO_PLAY.txt         # User instructions
 └── README.md               # Full project documentation
 ```
 
 ### Creating the Package Manually
 
-1. Create a folder: `SanchoBros_[platform]`
-2. Copy the executable from `dist/SanchoBros[.exe]`
+1. Create a folder: `CoffeeBros_[platform]`
+2. Copy the executable from `dist/CoffeeBros[.exe]`
 3. Copy `README.md` and create `HOW_TO_PLAY.txt` with user instructions
 4. Create a ZIP or TAR.GZ archive
 
@@ -133,7 +133,7 @@ SanchoBros_windows/
 - **Archive Format**: `.tar.gz` or `.dmg`
 - **Notes**:
   - Users may need to allow the app in Security & Privacy settings
-  - Make the file executable: `chmod +x SanchoBros`
+  - Make the file executable: `chmod +x CoffeeBros`
   - Consider creating a `.dmg` or `.app` bundle for better user experience
   - May need to code sign for Gatekeeper compatibility
 
@@ -142,7 +142,7 @@ SanchoBros_windows/
 - **Executable Format**: Unix executable (no extension)
 - **Archive Format**: `.tar.gz` or `.AppImage`
 - **Notes**:
-  - Make the file executable: `chmod +x SanchoBros`
+  - Make the file executable: `chmod +x CoffeeBros`
   - Works on most distributions with standard libraries
   - Consider creating an AppImage for better portability
 
@@ -180,10 +180,10 @@ Before distributing, test the build thoroughly:
 **Run the executable directly:**
 ```bash
 # Windows
-dist\SanchoBros.exe
+dist\CoffeeBros.exe
 
 # macOS/Linux
-./dist/SanchoBros
+./dist/CoffeeBros
 ```
 
 **Check for missing dependencies:**

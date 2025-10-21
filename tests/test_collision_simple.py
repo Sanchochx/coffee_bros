@@ -1,5 +1,5 @@
 """
-Simplified Collision Detection Test for Sancho Bros
+Simplified Collision Detection Test for Coffee Bros
 Quick tests to verify all collision systems work correctly
 """
 
@@ -26,7 +26,7 @@ def main():
     keys = pygame.key.get_pressed()  # Empty key state
 
     print("\n" + "="*70)
-    print("SANCHO BROS - COLLISION TESTING")
+    print("COFFEE BROS - COLLISION TESTING")
     print("="*70 + "\n")
 
     tests_passed = 0

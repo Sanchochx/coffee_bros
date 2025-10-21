@@ -1,5 +1,5 @@
 """
-Sancho Bros - Build Script for Game Distribution
+Coffee Bros - Build Script for Game Distribution
 Creates standalone executables using PyInstaller for Windows, macOS, and Linux.
 """
 
@@ -10,7 +10,7 @@ import sys
 import platform
 
 # Build configuration
-APP_NAME = "SanchoBros"
+APP_NAME = "CoffeeBros"
 MAIN_SCRIPT = "main.py"
 ICON_FILE = None  # Set to path of .ico file if you have one (Windows)
 
@@ -154,14 +154,14 @@ def create_distribution_package():
 def create_user_instructions(package_path):
     """Create a simple user instructions file."""
     instructions = """
-SANCHO BROS - HOW TO PLAY
+COFFEE BROS - HOW TO PLAY
 =========================
 
-Thank you for downloading Sancho Bros!
+Thank you for downloading Coffee Bros!
 
 QUICK START
 -----------
-1. Double-click the SanchoBros executable to start the game
+1. Double-click the CoffeeBros executable to start the game
 2. Use arrow keys to move and jump
 3. Press X or J to shoot (when powered up)
 4. Collect Golden Arepas for power-ups!
@@ -196,7 +196,7 @@ TROUBLESHOOTING
 If the game doesn't start:
 1. Make sure you have extracted all files from the archive
 2. On macOS/Linux, you may need to mark the file as executable:
-   chmod +x SanchoBros
+   chmod +x CoffeeBros
 3. Check that your system meets the minimum requirements
 4. Try running from terminal/command prompt to see error messages
 
@@ -204,7 +204,7 @@ For more information, see the README.md file.
 
 CREDITS
 -------
-Game Design & Development: Sancho Bros Team
+Game Design & Development: Coffee Bros Team
 Technology: Python with Pygame
 Inspired by: Super Mario Bros
 
@@ -220,7 +220,7 @@ Enjoy the game!
 def main():
     """Main build process."""
     print("=" * 60)
-    print(f"SANCHO BROS - BUILD SCRIPT")
+    print(f"COFFEE BROS - BUILD SCRIPT")
     print("=" * 60)
 
     # Check if PyInstaller is installed

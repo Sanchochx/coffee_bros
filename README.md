@@ -1,10 +1,10 @@
-# Sancho Bros
+# Coffee Bros
 
-A 2D platformer game inspired by Super Mario Bros, featuring Colombian cultural themes. Guide Sancho through five exciting levels filled with challenges, enemies, and power-ups as you journey from Coffee Hills to the legendary El Pico del Café.
+A 2D platformer game inspired by Super Mario Bros, featuring Colombian cultural themes. Guide Coffee through five exciting levels filled with challenges, enemies, and power-ups as you journey from Coffee Hills to the legendary El Pico del Café.
 
 ## Game Description
 
-**Sancho Bros** is a classic 2D platformer that combines nostalgic gameplay with Colombian cultural elements. Play as Sancho, a human hero on an adventure through Colombia's coffee regions. Jump on evil demon-like enemies (Polochos), collect authentic Colombian Arepas for power-ups, and reach the castle goal at the end of each level.
+**Coffee Bros** is a classic 2D platformer that combines nostalgic gameplay with Colombian cultural elements. Play as Coffee, a human hero on an adventure through Colombia's coffee regions. Jump on evil demon-like enemies (Polochos), collect authentic Colombian Arepas for power-ups, and reach the castle goal at the end of each level.
 
 ### Features
 
@@ -28,7 +28,7 @@ A 2D platformer game inspired by Super Mario Bros, featuring Colombian cultural 
 
 ```bash
 git clone <repository-url>
-cd sancho_bros
+cd coffee_bros
 ```
 
 ### Step 2: Set Up Virtual Environment (Recommended)
@@ -91,7 +91,7 @@ deactivate
 ## Gameplay
 
 ### Objective
-Guide the human hero Sancho through all 5 levels by reaching the castle at the end of each level while collecting points and defeating evil demon-like enemies.
+Guide the human hero Coffee through all 5 levels by reaching the castle at the end of each level while collecting points and defeating evil demon-like enemies.
 
 ### Levels
 1. **Coffee Hills** - Tutorial level to learn the basics
@@ -106,7 +106,7 @@ Guide the human hero Sancho through all 5 levels by reaching the castle at the e
 - **Collect Golden Arepa**: 200 points
 
 ### Power-Ups
-- **Colombian Arepa**: A traditional Colombian grilled corn cake that grants Sancho the ability to shoot lasers for a limited time (indicated by golden glow and timer). Features authentic arepa design with grill marks and corn texture.
+- **Colombian Arepa**: A traditional Colombian grilled corn cake that grants Coffee the ability to shoot lasers for a limited time (indicated by golden glow and timer). Features authentic arepa design with grill marks and corn texture.
 
 ### Lives System
 - Start with 3 hearts
@@ -136,7 +136,7 @@ Guide the human hero Sancho through all 5 levels by reaching the castle at the e
 ## Project Structure
 
 ```
-sancho_bros/
+coffee_bros/
 ├── main.py                 # Main game entry point
 ├── config.py              # Game configuration and constants
 ├── requirements.txt       # Python dependencies
@@ -171,7 +171,7 @@ The executable will be in the `dist/` folder, ready to share!
 
 If you received the game as a standalone executable:
 1. Extract the downloaded archive
-2. Double-click `SanchoBros.exe` (Windows) or `SanchoBros` (Mac/Linux)
+2. Double-click `CoffeeBros.exe` (Windows) or `CoffeeBros` (Mac/Linux)
 3. Enjoy the game!
 
 For detailed build instructions, see:
@@ -201,7 +201,7 @@ This is an educational project created for learning purposes.
 
 ## Acknowledgments
 
-Special thanks to the Pygame community for excellent documentation and examples that helped bring Sancho Bros to life.
+Special thanks to the Pygame community for excellent documentation and examples that helped bring Coffee Bros to life.
 
 ---
 

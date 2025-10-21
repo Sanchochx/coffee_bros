@@ -191,7 +191,7 @@
   - **Display features:**
     - Mostly opaque black overlay (alpha 220) for clear victory message
     - Huge "¡FELICIDADES!" title in Colombian yellow (96pt font) at top
-    - "You completed Sancho Bros!" message in white (72pt font)
+    - "You completed Coffee Bros!" message in white (72pt font)
     - Total score across all levels displayed in gold
     - Total time played across all levels displayed in gold with 1 decimal precision
     - Colombian-themed celebration message: "¡Eres el mejor cafetero!" (You're the best coffee grower!)
@@ -1063,7 +1063,7 @@
 ### Epic 1: Foundation
 - **US-001: Basic Game Window Setup** ✓
   - Pygame initialization and main game loop
-  - 800x600 window with "Sancho Bros" title
+  - 800x600 window with "Coffee Bros" title
   - 60 FPS game loop with Clock control
   - Event handling for window close (X button and ESC key)
   - Black background rendering
@@ -1146,7 +1146,7 @@
 ## File Structure
 
 ```
-sancho_bros/
+coffee_bros/
 ├── main.py                          # Main game entry point - imports and runs game
 ├── config.py                        # All game constants and configuration
 ├── CLAUDE.md                        # Project documentation for Claude Code
@@ -1383,7 +1383,7 @@ sancho_bros/
 ### src/entities/player.py
 - **Purpose:** Player character entity
 - **Key Components:**
-  - `Player`: Sprite class for the player character (Sancho)
+  - `Player`: Sprite class for the player character (Coffee)
 - **Player Class:**
   - Extends pygame.sprite.Sprite
   - Properties: width (40), height (60), image, rect, velocity_y, is_grounded, lives, is_invulnerable, invulnerability_timer, blink_timer, visible, original_image, is_powered_up, powerup_timer, facing_direction, shoot_cooldown

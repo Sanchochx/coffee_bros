@@ -1,5 +1,5 @@
 """
-Script to generate all sound effects for Sancho Bros game
+Script to generate all sound effects for Coffee Bros game
 Creates actual audible sound effects to replace silent placeholders
 """
 
@@ -153,7 +153,7 @@ def generate_death_sound():
 
 
 if __name__ == '__main__':
-    print('Generating all sound effects for Sancho Bros...\n')
+    print('Generating all sound effects for Coffee Bros...\n')
 
     # Ensure sounds directory exists (US-067: cross-platform path)
     os.makedirs(os.path.join('assets', 'sounds'), exist_ok=True)

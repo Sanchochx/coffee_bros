@@ -1,5 +1,5 @@
 """
-Collision Detection Test Suite for Sancho Bros
+Collision Detection Test Suite for Coffee Bros
 Tests all collision detection systems in the game to ensure accuracy and prevent bugs.
 """
 
@@ -536,7 +536,7 @@ class CollisionTestSuite:
     def run_all_tests(self):
         """Run all collision detection tests"""
         print("\n" + "="*70)
-        print("SANCHO BROS - COLLISION DETECTION TEST SUITE")
+        print("COFFEE BROS - COLLISION DETECTION TEST SUITE")
         print("="*70 + "\n")
 
         # Player-Platform Tests

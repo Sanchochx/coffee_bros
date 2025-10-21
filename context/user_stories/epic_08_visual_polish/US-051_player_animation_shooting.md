@@ -1,7 +1,7 @@
 # US-051: Player Animation - Shooting
 
 **As a** player
-**I want** to see Sancho's shooting animation
+**I want** to see Coffee's shooting animation
 **So that** firing lasers looks cool
 
 ## Acceptance Criteria

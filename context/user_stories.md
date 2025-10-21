@@ -1,4 +1,4 @@
-# SANCHO BROS - USER STORIES
+# COFFEE BROS - USER STORIES
 
 ## Epic 1: Game Foundation and Core Mechanics
 
@@ -10,7 +10,7 @@
 **Acceptance Criteria:**
 - [ ] Pygame is installed and imported successfully
 - [ ] Game window opens at 800x600 resolution
-- [ ] Window title displays "Sancho Bros"
+- [ ] Window title displays "Coffee Bros"
 - [ ] Game loop runs at consistent 60 FPS
 - [ ] Window can be closed using the X button or ESC key
 - [ ] Black background is displayed initially
@@ -24,7 +24,7 @@
 
 ### US-002: Player Character Creation
 **As a** player
-**I want** to see Sancho on screen
+**I want** to see Coffee on screen
 **So that** I can identify my character
 
 **Acceptance Criteria:**
@@ -43,7 +43,7 @@
 
 ### US-003: Basic Player Movement
 **As a** player
-**I want** to move Sancho left and right
+**I want** to move Coffee left and right
 **So that** I can navigate the level
 
 **Acceptance Criteria:**
@@ -63,7 +63,7 @@
 
 ### US-004: Gravity System
 **As a** player
-**I want** Sancho to fall when not on solid ground
+**I want** Coffee to fall when not on solid ground
 **So that** the game feels realistic
 
 **Acceptance Criteria:**
@@ -82,7 +82,7 @@
 
 ### US-005: Jumping Mechanics
 **As a** player
-**I want** to make Sancho jump
+**I want** to make Coffee jump
 **So that** I can navigate obstacles and platforms
 
 **Acceptance Criteria:**
@@ -121,7 +121,7 @@
 
 ### US-007: Platform Collision Detection
 **As a** player
-**I want** Sancho to land on and stand on platforms
+**I want** Coffee to land on and stand on platforms
 **So that** I can navigate the level
 
 **Acceptance Criteria:**
@@ -686,7 +686,7 @@
 
 **Acceptance Criteria:**
 - [ ] Menu appears on game start
-- [ ] Shows game title "Sancho Bros"
+- [ ] Shows game title "Coffee Bros"
 - [ ] Includes "Start Game" option
 - [ ] Includes "Settings" option
 - [ ] Includes "Quit" option
@@ -766,7 +766,7 @@
 
 ### US-038: Scrolling Camera Implementation
 **As a** player
-**I want** the camera to follow Sancho
+**I want** the camera to follow Coffee
 **So that** I can see where I'm going in large levels
 
 **Acceptance Criteria:**
@@ -829,7 +829,7 @@
 
 ### US-041: Jump Sound Effect
 **As a** player
-**I want** to hear a sound when Sancho jumps
+**I want** to hear a sound when Coffee jumps
 **So that** jumping feels responsive
 
 **Acceptance Criteria:**
@@ -896,7 +896,7 @@
 
 ### US-045: Death Sound Effect
 **As a** player
-**I want** to hear a sound when Sancho dies
+**I want** to hear a sound when Coffee dies
 **So that** failure is clearly communicated
 
 **Acceptance Criteria:**
@@ -953,7 +953,7 @@
 
 ### US-048: Player Animation - Walking
 **As a** player
-**I want** to see Sancho's walking animation
+**I want** to see Coffee's walking animation
 **So that** movement looks natural
 
 **Acceptance Criteria:**
@@ -973,7 +973,7 @@
 
 ### US-049: Player Animation - Jumping
 **As a** player
-**I want** to see Sancho's jump animation
+**I want** to see Coffee's jump animation
 **So that** jumping looks dynamic
 
 **Acceptance Criteria:**
@@ -991,7 +991,7 @@
 
 ### US-050: Player Animation - Idle
 **As a** player
-**I want** to see Sancho's idle animation when standing still
+**I want** to see Coffee's idle animation when standing still
 **So that** the character feels alive
 
 **Acceptance Criteria:**
@@ -1008,7 +1008,7 @@
 
 ### US-051: Player Animation - Shooting
 **As a** player
-**I want** to see Sancho's shooting animation
+**I want** to see Coffee's shooting animation
 **So that** firing lasers looks cool
 
 **Acceptance Criteria:**

@@ -1,7 +1,7 @@
 # US-041: Jump Sound Effect
 
 **As a** player
-**I want** to hear a sound when Sancho jumps
+**I want** to hear a sound when Coffee jumps
 **So that** jumping feels responsive
 
 ## Acceptance Criteria

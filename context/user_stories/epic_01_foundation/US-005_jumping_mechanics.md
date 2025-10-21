@@ -1,7 +1,7 @@
 # US-005: Jumping Mechanics
 
 **As a** player
-**I want** to make Sancho jump
+**I want** to make Coffee jump
 **So that** I can navigate obstacles and platforms
 
 ## Acceptance Criteria

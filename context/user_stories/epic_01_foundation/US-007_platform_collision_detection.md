@@ -1,7 +1,7 @@
 # US-007: Platform Collision Detection
 
 **As a** player
-**I want** Sancho to land on and stand on platforms
+**I want** Coffee to land on and stand on platforms
 **So that** I can navigate the level
 
 ## Acceptance Criteria

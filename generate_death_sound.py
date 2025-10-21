@@ -1,5 +1,5 @@
 """
-Script to generate a death sound effect for Sancho Bros
+Script to generate a death sound effect for Coffee Bros
 Creates a descending tone that sounds sad/failure-like
 """
 

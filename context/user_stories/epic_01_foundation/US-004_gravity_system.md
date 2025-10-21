@@ -1,7 +1,7 @@
 # US-004: Gravity System
 
 **As a** player
-**I want** Sancho to fall when not on solid ground
+**I want** Coffee to fall when not on solid ground
 **So that** the game feels realistic
 
 ## Acceptance Criteria

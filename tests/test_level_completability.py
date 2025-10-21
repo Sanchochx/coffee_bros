@@ -1,5 +1,5 @@
 """
-Sancho Bros - Level Completability Testing
+Coffee Bros - Level Completability Testing
 Tests all 5 levels to ensure they are completable and fair.
 
 Acceptance Criteria:
@@ -63,7 +63,7 @@ class LevelCompletabilityTester:
     def run_all_tests(self):
         """Run completability tests on all 5 levels."""
         print("=" * 80)
-        print("SANCHO BROS - LEVEL COMPLETABILITY TESTING")
+        print("COFFEE BROS - LEVEL COMPLETABILITY TESTING")
         print("=" * 80)
         print(f"\nPlayer Physics:")
         print(f"  - Speed: {self.player_speed} pixels/frame")

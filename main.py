@@ -1,11 +1,12 @@
 """
-Sancho Bros - Main Game Entry Point
+Coffee Bros - Main Game Entry Point
 A 2D platformer game inspired by Super Mario Bros with Colombian cultural themes.
 """
 
 import pygame
 import sys
-from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS, LEVEL_COMPLETE_DELAY
+import random
+from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS, LEVEL_COMPLETE_DELAY, DEBUG_START_LEVEL
 from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
 from src.entities.particle import ParticleSystem
 from src.level import Level
@@ -21,7 +22,7 @@ from src.optimization import OptimizedRenderer, limit_particle_count
 
 def main():
     """
-    Main game entry point and game loop for Sancho Bros.
+    Main game entry point and game loop for Coffee Bros.
 
     Initializes pygame, sets up the game window, loads all managers and systems,
     and runs the main game loop handling different game states (menu, playing,
@@ -89,7 +90,8 @@ def main():
     audio_manager.play_menu_music()
 
     # Game state management (US-034, US-035, US-036, US-060, US-061, US-062, US-068)
-    game_state = "menu"  # Possible states: "menu", "playing", "paused", "settings", "controls", "game_over"
+    # If debug level is set, skip menu and go directly to playing
+    game_state = "playing" if DEBUG_START_LEVEL is not None else "menu"
     main_menu = MainMenu()  # Initialize main menu
     pause_menu = PauseMenu()  # Initialize pause menu (US-035)
     game_over_menu = GameOverMenu()  # Initialize game over menu (US-036)
@@ -99,7 +101,8 @@ def main():
     # Initialize game state
     score = 0
     font = pygame.font.Font(None, 36)  # Default font, size 36
-    current_level_number = 1  # Start with level 1 (US-025)
+    # Use debug start level if set, otherwise start at level 1
+    current_level_number = DEBUG_START_LEVEL if DEBUG_START_LEVEL is not None else 1
     max_level_number = 5  # Maximum level implemented (US-028)
 
     # Time tracking (for completion screen)
@@ -129,6 +132,10 @@ def main():
     # Level name display (US-037)
     level_name_display = None
 
+    # Boss fight power-up spawning (Level 5)
+    powerup_spawn_timer = 0  # Timer for spawning power-ups during boss fight
+    powerup_spawn_interval = 360  # Spawn every 6 seconds (360 frames at 60 FPS)
+
     # Level and entity references (initialized when game starts - US-034)
     level = None
     player = None
@@ -139,6 +146,28 @@ def main():
     goals = None
     lasers = pygame.sprite.Group()  # Create laser sprite group (US-019)
     particles = pygame.sprite.Group()  # Create particle sprite group (US-058)
+
+    # If debug start level is set, load it immediately
+    if DEBUG_START_LEVEL is not None:
+        try:
+            level = Level.load_from_file(current_level_number, audio_manager)
+            player = level.player
+            all_sprites = level.all_sprites
+            platforms = level.platforms
+            enemies = level.enemies
+            powerups = level.powerups
+            goals = level.goals
+            level_start_time = pygame.time.get_ticks()
+            level_start_score = 0
+            # Create level name display
+            level_name = level.metadata.get("name", f"Level {current_level_number}")
+            level_name_display = LevelNameDisplay(current_level_number, level_name)
+            # Play gameplay music
+            audio_manager.play_gameplay_music()
+            print(f"DEBUG: Started at Level {current_level_number}")
+        except Exception as e:
+            print(f"Error loading debug level {current_level_number}: {e}")
+            game_state = "menu"  # Fall back to menu if level load fails
 
     # Game loop
     running = True
@@ -626,12 +655,22 @@ def main():
             # Limit particle count for performance (US-063)
             limit_particle_count(particles, max_particles=100)
 
-            # Check for laser-enemy collisions (US-020)
+            # Check for laser-enemy collisions (US-020) and boss damage
             for laser in lasers:
                 # Check collision with all enemies
                 hit_enemies = pygame.sprite.spritecollide(laser, enemies, False)
                 for enemy in hit_enemies:
-                    if not enemy.is_squashed:  # Don't collide with already squashed enemies
+                    # Check if it's the boss
+                    if hasattr(enemy, 'take_damage'):  # Boss has take_damage method
+                        damage_dealt = enemy.take_damage(1)  # Boss takes damage
+                        laser.kill()
+                        # Always create particles on hit, even if invulnerable
+                        ParticleSystem.create_stomp_particles(laser.rect.centerx, laser.rect.centery, particles)
+                        # Create additional impact particles for boss hit
+                        for _ in range(5):
+                            ParticleSystem.create_powerup_particles(laser.rect.centerx, laser.rect.centery, particles)
+                        break
+                    elif not enemy.is_squashed:  # Regular enemy - Don't collide with already squashed
                         # Laser hit an enemy!
                         laser.kill()  # Remove laser from sprite groups
                         enemy.squash()  # Mark enemy as squashed (will disappear after animation)
@@ -643,7 +682,27 @@ def main():
 
             # Check for player-enemy collisions
             for enemy in enemies:
-                if player.rect.colliderect(enemy.rect) and not enemy.is_squashed:
+                # Handle boss collision differently
+                if hasattr(enemy, 'take_damage'):  # This is the boss
+                    # Check stomp collision with boss
+                    if player.velocity_y > 0:  # Player is falling
+                        stomp_rect = enemy.get_stomp_rect()
+                        if player.rect.colliderect(stomp_rect):
+                            # Player stomped the boss!
+                            damage_dealt = enemy.take_damage(1)
+                            player.velocity_y = -12  # Big bounce after boss stomp
+                            # Always create particles on stomp
+                            ParticleSystem.create_stomp_particles(enemy.rect.centerx, enemy.rect.top, particles)
+                            # Create extra burst particles for visual feedback
+                            for _ in range(8):
+                                ParticleSystem.create_powerup_particles(enemy.rect.centerx, enemy.rect.top, particles)
+                    # Check if player touches boss (damage)
+                    damage_rect = enemy.get_damage_rect()
+                    if player.rect.colliderect(damage_rect) and not player.is_invulnerable:
+                        knockback_direction = -1 if player.rect.centerx < enemy.rect.centerx else 1
+                        player.take_damage(knockback_direction)
+                elif player.rect.colliderect(enemy.rect) and not enemy.is_squashed:
+                    # Regular enemy collision
                     # Check if player is falling and hitting enemy from above (stomp)
                     if player.velocity_y > 0 and player.rect.bottom < enemy.rect.centery:
                         # Player stomped the enemy!
@@ -676,9 +735,38 @@ def main():
                     powerup.kill()  # Remove from sprite groups (disappears)
                     audio_manager.play_powerup()  # US-044: Play powerup collection sound effect
 
+            # Check for boss defeat (Level 5 only)
+            if level and hasattr(level, 'boss') and level.boss:
+                if level.boss.defeated and not is_level_complete:
+                    # Boss defeated! Unlock the goal
+                    is_level_complete = True
+                    completion_timer = 0
+                    completion_time = (pygame.time.get_ticks() - level_start_time) / 1000
+                    score_earned_in_level = score - level_start_score
+                    audio_manager.play_level_complete()
+                    save_manager.set_highest_level_completed(current_level_number)
+                    save_manager.update_high_score(score)
+                else:
+                    # Boss is still alive - spawn power-ups periodically
+                    powerup_spawn_timer += 1
+                    if powerup_spawn_timer >= powerup_spawn_interval:
+                        powerup_spawn_timer = 0
+                        # Spawn a power-up from the sky at random X position
+                        spawn_x = random.randint(200, level.metadata.get('width', 1600) - 200)
+                        spawn_y = -50  # Start above the screen
+                        new_powerup = GoldenArepa(spawn_x, spawn_y)
+                        new_powerup.platforms = platforms  # Set platform reference for collision detection
+                        powerups.add(new_powerup)
+                        all_sprites.add(new_powerup)
+
             # Check for level completion (US-023, US-029, US-068)
             for goal in goals:
-                if player.rect.colliderect(goal.rect):
+                # For level 5, require boss defeat first
+                boss_defeated = True
+                if level and hasattr(level, 'boss') and level.boss:
+                    boss_defeated = level.boss.defeated
+
+                if player.rect.colliderect(goal.rect) and boss_defeated:
                     # Player reached the goal - complete the level!
                     if not is_level_complete:  # Only trigger once
                         is_level_complete = True
@@ -736,6 +824,10 @@ def main():
 
         # Draw particles with camera offset using optimized renderer (US-058, US-063)
         optimized_renderer.draw_sprites_with_offset(particles, camera_x)
+
+        # Draw boss health bar if boss exists
+        if level and hasattr(level, 'boss') and level.boss:
+            level.boss.draw_health_bar(screen, camera_x)
 
         # Draw HUD - Score Display (US-031)
         score_text = font.render(f"SCORE: {score:05d}", True, (255, 255, 255))  # White text, zero-padded to 5 digits
@@ -871,8 +963,8 @@ def main():
             congrats_rect = congrats_text.get_rect(center=(WINDOW_WIDTH // 2, 80))
             screen.blit(congrats_text, congrats_rect)
 
-            # Display "You completed Sancho Bros!" message
-            completed_text = big_font.render("You completed Sancho Bros!", True, (255, 255, 255))  # White
+            # Display "You completed Coffee Bros!" message
+            completed_text = big_font.render("You completed Coffee Bros!", True, (255, 255, 255))  # White
             completed_rect = completed_text.get_rect(center=(WINDOW_WIDTH // 2, 180))
             screen.blit(completed_text, completed_rect)
 

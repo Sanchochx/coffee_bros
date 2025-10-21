@@ -7,7 +7,7 @@ import json
 import os
 import time
 import pygame
-from src.entities import Player, Platform, Polocho, GoldenArepa, Goal
+from src.entities import Player, Platform, Polocho, GoldenArepa, Goal, CorruptionBoss
 
 
 class Level:
@@ -33,6 +33,7 @@ class Level:
         self.all_sprites = pygame.sprite.Group()
         self.player = None
         self.goal_sprite = None  # Reference to the goal sprite
+        self.boss = None  # Reference to boss sprite (level 5 only)
         self.initial_enemy_positions = []
         self.level_data = None
         self.audio_manager = audio_manager  # Store audio manager reference (US-041)
@@ -143,6 +144,18 @@ class Level:
                 enemy = Polocho(spawn_x, spawn_y, patrol_distance, audio_manager)
                 level.enemies.add(enemy)
                 level.all_sprites.add(enemy)
+
+        # Create boss if present (level 5)
+        boss_data = level.level_data.get("boss")
+        if boss_data:
+            boss_type = boss_data.get("type", "corruption_boss")
+            spawn_x = boss_data.get("spawn_x", 400)
+            spawn_y = boss_data.get("spawn_y", 300)
+
+            if boss_type == "corruption_boss":
+                level.boss = CorruptionBoss(spawn_x, spawn_y, audio_manager)
+                level.enemies.add(level.boss)  # Add to enemies group for collision
+                level.all_sprites.add(level.boss)
 
         # Create powerups from JSON data
         powerups_data = level.level_data.get("powerups", [])

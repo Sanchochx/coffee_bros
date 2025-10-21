@@ -1,7 +1,7 @@
 # US-038: Scrolling Camera Implementation
 
 **As a** player
-**I want** the camera to follow Sancho
+**I want** the camera to follow Coffee
 **So that** I can see where I'm going in large levels
 
 ## Acceptance Criteria

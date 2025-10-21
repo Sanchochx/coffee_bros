@@ -1,4 +1,4 @@
-# 🎉 SANCHO BROS - PROJECT COMPLETION SUMMARY 🎉
+# 🎉 COFFEE BROS - PROJECT COMPLETION SUMMARY 🎉
 
 **Status:** ✅ **100% COMPLETE**
 **Start Date:** October 13, 2025
@@ -11,7 +11,7 @@
 
 ## Project Overview
 
-**Sancho Bros** is a complete 2D platformer game inspired by Super Mario Bros, featuring Colombian cultural themes. The game takes players on a journey through five exciting levels, from the Coffee Hills to the legendary El Pico del Café.
+**Coffee Bros** is a complete 2D platformer game inspired by Super Mario Bros, featuring Colombian cultural themes. The game takes players on a journey through five exciting levels, from the Coffee Hills to the legendary El Pico del Café.
 
 ### What Was Built
 
@@ -226,9 +226,9 @@ A fully-featured, polished, and professional 2D platformer game with:
 ### What Gets Distributed
 
 **Standalone Executable:**
-- Windows: `SanchoBros.exe`
-- macOS: `SanchoBros` (executable)
-- Linux: `SanchoBros` (executable)
+- Windows: `CoffeeBros.exe`
+- macOS: `CoffeeBros` (executable)
+- Linux: `CoffeeBros` (executable)
 
 **No Installation Required:**
 - ✅ Python runtime embedded
@@ -259,7 +259,7 @@ python build.py
 ## Project Structure (Final)
 
 ```
-sancho_bros/
+coffee_bros/
 ├── main.py                      # Main game entry point (927 lines)
 ├── config.py                    # Game configuration (100+ constants)
 ├── requirements.txt             # Python dependencies
@@ -520,7 +520,7 @@ sancho_bros/
 
 ## Conclusion
 
-**Sancho Bros is complete and ready for the world!**
+**Coffee Bros is complete and ready for the world!**
 
 This project demonstrates:
 - ✅ **Complete game development lifecycle** (concept to distribution)
@@ -542,7 +542,7 @@ This project demonstrates:
 ### For Players
 1. Download the game archive
 2. Extract to any folder
-3. Run `SanchoBros.exe` (Windows) or `SanchoBros` (Mac/Linux)
+3. Run `CoffeeBros.exe` (Windows) or `CoffeeBros` (Mac/Linux)
 4. Enjoy the adventure!
 
 ### For Developers
@@ -560,8 +560,8 @@ This project demonstrates:
 
 ---
 
-**Thank you for following the journey of Sancho Bros!**
-**¡Gracias por jugar Sancho Bros!**
+**Thank you for following the journey of Coffee Bros!**
+**¡Gracias por jugar Coffee Bros!**
 **¡Eres el mejor cafetero!** ☕🎮
 
 ---
@@ -571,4 +571,4 @@ This project demonstrates:
 **Ready for Distribution: ✅ YES**
 **Ready to Play: ✅ YES**
 
-**🎉 CONGRATULATIONS ON COMPLETING SANCHO BROS! 🎉**
+**🎉 CONGRATULATIONS ON COMPLETING COFFEE BROS! 🎉**

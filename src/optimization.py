@@ -1,5 +1,5 @@
 """
-Performance optimization utilities for Sancho Bros.
+Performance optimization utilities for Coffee Bros.
 Provides optimized collision detection and rendering techniques.
 """
 

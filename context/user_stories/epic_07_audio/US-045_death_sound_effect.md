@@ -1,7 +1,7 @@
 # US-045: Death Sound Effect
 
 **As a** player
-**I want** to hear a sound when Sancho dies
+**I want** to hear a sound when Coffee dies
 **So that** failure is clearly communicated
 
 ## Acceptance Criteria

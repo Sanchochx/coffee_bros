@@ -1,5 +1,5 @@
 """
-Tile sprite generator for Sancho Bros
+Tile sprite generator for Coffee Bros
 Generates platform tile graphics with proper textures
 """
 

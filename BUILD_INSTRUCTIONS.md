@@ -1,4 +1,4 @@
-# Sancho Bros - Build Instructions
+# Coffee Bros - Build Instructions
 
 Quick guide to building a standalone executable for distribution.
 
@@ -34,8 +34,8 @@ python build.py
 ### 3. Find Your Executable
 
 After the build completes, you'll find:
-- **Executable**: `dist/SanchoBros.exe` (Windows) or `dist/SanchoBros` (Mac/Linux)
-- **Distribution Package**: `dist/SanchoBros_[platform].zip` (or `.tar.gz`)
+- **Executable**: `dist/CoffeeBros.exe` (Windows) or `dist/CoffeeBros` (Mac/Linux)
+- **Distribution Package**: `dist/CoffeeBros_[platform].zip` (or `.tar.gz`)
 
 ### 4. Test the Build
 
@@ -43,10 +43,10 @@ Before distributing, test the executable:
 
 ```bash
 # Windows
-dist\SanchoBros.exe
+dist\CoffeeBros.exe
 
 # Mac/Linux
-./dist/SanchoBros
+./dist/CoffeeBros
 ```
 
 ### 5. Distribute
@@ -61,12 +61,12 @@ If you prefer to build manually without the script:
 
 ### Windows
 ```bash
-pyinstaller --name SanchoBros --onefile --windowed --add-data "assets;assets" --add-data "config.py;." main.py
+pyinstaller --name CoffeeBros --onefile --windowed --add-data "assets;assets" --add-data "config.py;." main.py
 ```
 
 ### macOS / Linux
 ```bash
-pyinstaller --name SanchoBros --onefile --windowed --add-data "assets:assets" --add-data "config.py:." main.py
+pyinstaller --name CoffeeBros --onefile --windowed --add-data "assets:assets" --add-data "config.py:." main.py
 ```
 
 ---
@@ -87,7 +87,7 @@ pip install -r requirements.txt
 ### Executable crashes on run
 Build with console enabled to see errors:
 ```bash
-pyinstaller --name SanchoBros --onefile --console --add-data "assets;assets" --add-data "config.py;." main.py
+pyinstaller --name CoffeeBros --onefile --console --add-data "assets;assets" --add-data "config.py;." main.py
 ```
 
 ---
@@ -95,18 +95,18 @@ pyinstaller --name SanchoBros --onefile --console --add-data "assets;assets" --a
 ## Platform-Specific Notes
 
 ### Windows
-- Creates `SanchoBros.exe`
+- Creates `CoffeeBros.exe`
 - Users may see Windows Defender warning (normal for unsigned executables)
 - Click "More info" → "Run anyway"
 
 ### macOS
-- Creates `SanchoBros` (no extension)
+- Creates `CoffeeBros` (no extension)
 - Users may need to allow in Security & Privacy settings
-- Make executable: `chmod +x SanchoBros`
+- Make executable: `chmod +x CoffeeBros`
 
 ### Linux
-- Creates `SanchoBros` (no extension)
-- Make executable: `chmod +x SanchoBros`
+- Creates `CoffeeBros` (no extension)
+- Make executable: `chmod +x CoffeeBros`
 - Works on most distributions
 
 ---

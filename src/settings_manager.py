@@ -1,5 +1,5 @@
 """
-Sancho Bros - Settings Manager
+Coffee Bros - Settings Manager
 Handles loading and saving game settings to persistent storage.
 """
 

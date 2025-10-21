@@ -1,7 +1,7 @@
 # US-003: Basic Player Movement
 
 **As a** player
-**I want** to move Sancho left and right
+**I want** to move Coffee left and right
 **So that** I can navigate the level
 
 ## Acceptance Criteria

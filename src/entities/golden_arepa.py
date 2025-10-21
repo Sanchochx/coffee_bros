@@ -52,6 +52,12 @@ class GoldenArepa(pygame.sprite.Sprite):
         self.glow_frame_counter = 0  # Counter for cycling frames
         self.glow_frame_delay = 6  # Frames between glow updates (middle of 5-8 range)
 
+        # Falling physics (for boss fight power-ups)
+        self.velocity_y = 0  # Vertical velocity
+        self.is_falling = y < 0  # If spawned above screen, it should fall
+        self.has_landed = False  # Track if power-up has landed
+        self.platforms = None  # Will be set by game loop for collision detection
+
     def _create_base_image(self):
         """Create the base arepa image - circular Colombian arepa with texture."""
         self.base_image = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
@@ -143,18 +149,49 @@ class GoldenArepa(pygame.sprite.Sprite):
         Update the power-up's floating animation and glow effect.
         Uses a sine wave to create smooth up and down motion.
         Cycles through glow frames for pulsing effect.
+        If spawned from the sky, applies gravity until it lands.
         """
-        # Increment the float timer
-        self.float_timer += POWERUP_FLOAT_SPEED
+        # If falling from the sky, apply gravity
+        if self.is_falling and not self.has_landed:
+            # Use reduced gravity for slower, more graceful falling
+            AREPA_GRAVITY = 0.3  # Much slower than player gravity (0.8)
+            self.velocity_y += AREPA_GRAVITY
+            # Cap maximum falling speed for smooth descent
+            if self.velocity_y > 5:
+                self.velocity_y = 5
+            self.rect.centery += self.velocity_y
+            self.base_y = self.rect.centery  # Update base position as it falls
 
-        # Calculate the floating offset using sine wave
-        # sin() returns value between -1 and 1, multiply by amplitude to get pixel offset
-        float_offset = math.sin(self.float_timer) * POWERUP_FLOAT_AMPLITUDE
+            # Check for platform collisions if platforms are available
+            landed_on_platform = False
+            if self.platforms:
+                for platform in self.platforms:
+                    if self.rect.colliderect(platform.rect):
+                        # Land on top of platform
+                        if self.velocity_y > 0 and self.rect.bottom > platform.rect.top:
+                            self.rect.bottom = platform.rect.top
+                            landed_on_platform = True
+                            break
 
-        # Update the y position based on base position and floating offset
-        self.rect.centery = self.base_y + float_offset
+            # Check if it's fallen far enough (landed on ground level ~550) or hit a platform
+            if self.rect.centery >= 520 or landed_on_platform:  # Stop before ground at y=550
+                self.has_landed = True
+                self.is_falling = False
+                self.velocity_y = 0
+                self.base_y = self.rect.centery
+        else:
+            # Normal floating behavior
+            # Increment the float timer
+            self.float_timer += POWERUP_FLOAT_SPEED
 
-        # Update glow animation
+            # Calculate the floating offset using sine wave
+            # sin() returns value between -1 and 1, multiply by amplitude to get pixel offset
+            float_offset = math.sin(self.float_timer) * POWERUP_FLOAT_AMPLITUDE
+
+            # Update the y position based on base position and floating offset
+            self.rect.centery = self.base_y + float_offset
+
+        # Update glow animation (always active)
         self.glow_frame_counter += 1
         if self.glow_frame_counter >= self.glow_frame_delay:
             self.glow_frame_counter = 0

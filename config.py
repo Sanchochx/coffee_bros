@@ -1,5 +1,5 @@
 """
-Sancho Bros - Game Configuration Constants
+Coffee Bros - Game Configuration Constants
 All game configuration values and constants.
 """
 
@@ -7,11 +7,15 @@ All game configuration values and constants.
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 FPS = 60
-WINDOW_TITLE = "Sancho Bros"
+WINDOW_TITLE = "Coffee Bros"
+
+# Debug/Testing settings
+# Set to specific level number (1-5) to start at that level, or None to start from level 1
+DEBUG_START_LEVEL = 5  # Change to 5 to test boss fight directly!
 
 # Color constants
 BLACK = (0, 0, 0)
-YELLOW = (255, 209, 0)  # Colombian yellow for Sancho
+YELLOW = (255, 209, 0)  # Colombian yellow for Coffee
 GREEN = (34, 139, 34)  # Forest green for platforms
 RED = (220, 20, 60)  # Crimson red for Polocho enemies
 GOLD = (255, 215, 0)  # Gold color for Golden Arepa power-up
