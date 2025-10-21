@@ -496,6 +496,13 @@ def main():
                         except (FileNotFoundError, ValueError) as e:
                             print(f"Error loading level 1: {e}")
                             running = False
+                    elif event.key == pygame.K_m:
+                        # Return to main menu
+                        is_victory_screen = False
+                        game_state = "menu"
+                        # Stop victory music and play menu music
+                        audio_manager.stop_music(fade_ms=500)
+                        audio_manager.play_menu_music()
                     elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
                         # Quit game
                         running = False
@@ -1029,11 +1036,15 @@ def main():
 
             # Display options
             restart_text = small_font.render("Press R to Restart", True, (200, 200, 200))  # Light gray
-            restart_rect = restart_text.get_rect(center=(WINDOW_WIDTH // 2, 480))
+            restart_rect = restart_text.get_rect(center=(WINDOW_WIDTH // 2, 460))
             screen.blit(restart_text, restart_rect)
 
+            menu_text = small_font.render("Press M to Return to Menu", True, (200, 200, 200))  # Light gray
+            menu_rect = menu_text.get_rect(center=(WINDOW_WIDTH // 2, 510))
+            screen.blit(menu_text, menu_rect)
+
             quit_text = small_font.render("Press Q or ESC to Quit", True, (200, 200, 200))  # Light gray
-            quit_rect = quit_text.get_rect(center=(WINDOW_WIDTH // 2, 530))
+            quit_rect = quit_text.get_rect(center=(WINDOW_WIDTH // 2, 560))
             screen.blit(quit_text, quit_rect)
 
         # Update performance monitoring (US-063)
