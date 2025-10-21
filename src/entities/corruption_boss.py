@@ -66,6 +66,10 @@ class CorruptionBoss(pygame.sprite.Sprite):
         self.alive = True
         self.defeated = False
 
+        # Mermelada throwing
+        self.throw_cooldown = 0
+        self.throw_interval = 90  # Throw every 1.5 seconds (90 frames at 60 FPS)
+
     def load_sprites(self):
         """Load boss sprite images"""
         boss_dir = "assets/images/boss"
@@ -87,12 +91,12 @@ class CorruptionBoss(pygame.sprite.Sprite):
 
     def create_fallback_sprite(self, color=(100, 50, 150)):
         """Create a simple fallback sprite if image files don't exist"""
-        surface = pygame.Surface((150, 180), pygame.SRCALPHA)
-        # Draw simple corruption blob
-        pygame.draw.circle(surface, color, (75, 90), 70)
+        surface = pygame.Surface((200, 240), pygame.SRCALPHA)
+        # Draw simple corruption blob (scaled to 200x240)
+        pygame.draw.circle(surface, color, (100, 120), 93)
         # Eyes
-        pygame.draw.circle(surface, (255, 0, 0), (55, 80), 10)
-        pygame.draw.circle(surface, (255, 0, 0), (95, 80), 10)
+        pygame.draw.circle(surface, (255, 0, 0), (73, 107), 13)
+        pygame.draw.circle(surface, (255, 0, 0), (127, 107), 13)
         return surface
 
     def take_damage(self, damage=1):
@@ -113,9 +117,9 @@ class CorruptionBoss(pygame.sprite.Sprite):
         self.invulnerable = True
         self.invulnerable_timer = self.invulnerable_duration
 
-        # Play hurt sound
+        # Play boss pain sound
         if self.audio_manager:
-            self.audio_manager.play_sound('stomp')  # Reuse stomp sound for boss hit
+            self.audio_manager.play_boss_pain()  # Boss pain/damage sound
 
         # Check if defeated
         if self.health <= 0:
@@ -178,11 +182,43 @@ class CorruptionBoss(pygame.sprite.Sprite):
                         self.vel_y = 0
                         self.on_ground = True
 
-        # Update sprite based on hit status
-        if self.hit_timer > 0:
-            self.image = self.hit_sprite
-        else:
-            self.image = self.normal_sprite
+        # Update sprite - always use normal sprite (hit effect removed per user request)
+        self.image = self.normal_sprite
+
+        # Update throw cooldown
+        if self.throw_cooldown > 0:
+            self.throw_cooldown -= 1
+
+    def can_throw(self):
+        """Check if boss can throw mermelada"""
+        return self.alive and self.throw_cooldown == 0
+
+    def throw_mermeladas_circular(self):
+        """
+        Throw mermeladas in a circular pattern around boss (old school arcade style)
+
+        Returns:
+            list: List of (x, y, angle) tuples for mermelada spawns, or None if can't throw
+        """
+        if not self.can_throw():
+            return None
+
+        # Reset cooldown
+        self.throw_cooldown = self.throw_interval
+
+        # Spawn position (boss center)
+        spawn_x = self.rect.centerx
+        spawn_y = self.rect.centery
+
+        # Create 8 mermeladas in a circular pattern (like old arcade games)
+        mermeladas = []
+        num_projectiles = 8
+        import math
+        for i in range(num_projectiles):
+            angle = (i / num_projectiles) * 2 * math.pi  # Distribute evenly in circle
+            mermeladas.append((spawn_x, spawn_y, angle))
+
+        return mermeladas
 
     def draw_health_bar(self, surface, camera_x=0):
         """
@@ -222,11 +258,7 @@ class CorruptionBoss(pygame.sprite.Sprite):
             health_rect = pygame.Rect(bar_x, bar_y, current_width, bar_height)
             pygame.draw.rect(surface, health_color, health_rect)
 
-        # Draw boss name label
-        font = pygame.font.Font(None, 24)
-        name_text = font.render("CORRUPTION BOSS", True, (200, 0, 200))
-        name_rect = name_text.get_rect(centerx=self.rect.centerx - camera_x, bottom=bar_y - 5)
-        surface.blit(name_text, name_rect)
+        # Boss name label removed per user request
 
     def get_damage_rect(self):
         """

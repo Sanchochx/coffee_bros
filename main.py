@@ -7,7 +7,7 @@ import pygame
 import sys
 import random
 from config import WINDOW_WIDTH, WINDOW_HEIGHT, FPS, WINDOW_TITLE, BLACK, STOMP_SCORE, DEATH_DELAY, PLAYER_STARTING_LIVES, POWERUP_SCORE, MAX_LASERS, LEVEL_COMPLETE_DELAY, DEBUG_START_LEVEL
-from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal
+from src.entities import Player, Platform, Polocho, GoldenArepa, Laser, Goal, Mermelada
 from src.entities.particle import ParticleSystem
 from src.level import Level
 from src.menu import MainMenu, PauseMenu, GameOverMenu, SettingsMenu, ControlsMenu
@@ -146,6 +146,7 @@ def main():
     goals = None
     lasers = pygame.sprite.Group()  # Create laser sprite group (US-019)
     particles = pygame.sprite.Group()  # Create particle sprite group (US-058)
+    mermeladas = pygame.sprite.Group()  # Create mermelada sprite group for boss projectiles
 
     # If debug start level is set, load it immediately
     if DEBUG_START_LEVEL is not None:
@@ -162,8 +163,11 @@ def main():
             # Create level name display
             level_name = level.metadata.get("name", f"Level {current_level_number}")
             level_name_display = LevelNameDisplay(current_level_number, level_name)
-            # Play gameplay music
-            audio_manager.play_gameplay_music()
+            # Play appropriate music
+            if current_level_number == 5:
+                audio_manager.play_boss_battle_music()  # Menacing boss battle music
+            else:
+                audio_manager.play_gameplay_music()
             print(f"DEBUG: Started at Level {current_level_number}")
         except Exception as e:
             print(f"Error loading debug level {current_level_number}: {e}")
@@ -231,6 +235,7 @@ def main():
                         powerups = level.powerups
                         goals = level.goals
                         lasers.empty()  # Clear any existing lasers
+                        mermeladas.empty()  # Clear any existing mermeladas
                         # Reset all game state flags
                         is_dead = False
                         is_level_complete = False
@@ -244,9 +249,13 @@ def main():
                         # Create level name display (US-037)
                         level_name = level.metadata.get("name", f"Level {current_level_number}")
                         level_name_display = LevelNameDisplay(current_level_number, level_name)
-                        # Start gameplay music (US-047)
+                        # Start music (US-047)
                         audio_manager.stop_music(fade_ms=500)  # Fade out menu music
-                        audio_manager.play_gameplay_music()  # Start gameplay music
+                        # Play boss battle music for level 5, gameplay music for others
+                        if current_level_number == 5:
+                            audio_manager.play_boss_battle_music()  # Menacing boss battle music
+                        else:
+                            audio_manager.play_gameplay_music()  # Start gameplay music
                     except (FileNotFoundError, ValueError) as e:
                         print(f"Error loading level: {e}")
                         running = False
@@ -290,6 +299,7 @@ def main():
                         powerups = level.powerups
                         goals = level.goals
                         lasers.empty()  # Clear all lasers
+                        mermeladas.empty()  # Clear all mermeladas
                         # Reset all state flags
                         is_dead = False
                         is_level_complete = False
@@ -363,6 +373,7 @@ def main():
                         powerups = level.powerups
                         goals = level.goals
                         lasers.empty()  # Clear all lasers
+                        mermeladas.empty()  # Clear all mermeladas
                         # Reset all state flags
                         is_dead = False
                         is_level_complete = False
@@ -414,6 +425,7 @@ def main():
                             powerups = level.powerups
                             goals = level.goals
                             lasers.empty()  # Clear all lasers from previous level
+                            mermeladas.empty()  # Clear all mermeladas from previous level
                             # Reset completion and transition state
                             is_level_complete = False
                             is_transition_screen = False
@@ -470,9 +482,13 @@ def main():
                             # Create level name display (US-037)
                             level_name = level.metadata.get("name", f"Level {current_level_number}")
                             level_name_display = LevelNameDisplay(current_level_number, level_name)
-                            # Start gameplay music (US-047)
+                            # Start music (US-047)
                             audio_manager.stop_music(fade_ms=500)
-                            audio_manager.play_gameplay_music()
+                            # Play boss battle music for level 5, gameplay music for others
+                            if current_level_number == 5:
+                                audio_manager.play_boss_battle_music()  # Menacing boss battle music
+                            else:
+                                audio_manager.play_gameplay_music()
                         except (FileNotFoundError, ValueError) as e:
                             print(f"Error loading level 1: {e}")
                             running = False
@@ -620,6 +636,7 @@ def main():
                 enemies = level.enemies
                 powerups = level.powerups
                 lasers.empty()  # Clear all lasers on respawn
+                mermeladas.empty()  # Clear all mermeladas on respawn
                 score = 0  # Reset score on respawn
                 is_dead = False
                 death_timer = 0
@@ -647,6 +664,10 @@ def main():
             # Update all lasers (US-019) - handles movement and off-screen removal
             for laser in lasers:
                 laser.update(level_width)
+
+            # Update all mermeladas (boss projectiles)
+            for mermelada in mermeladas:
+                mermelada.update(level_width)
 
             # Update all particles (US-058) - handles position, fading, and lifetime
             for particle in particles:
@@ -735,6 +756,17 @@ def main():
                     powerup.kill()  # Remove from sprite groups (disappears)
                     audio_manager.play_powerup()  # US-044: Play powerup collection sound effect
 
+            # Check for player-mermelada collisions (boss projectile damage)
+            for mermelada in mermeladas:
+                if player.rect.colliderect(mermelada.rect) and not player.is_invulnerable:
+                    # Mermelada hit the player!
+                    # Determine knockback direction based on mermelada velocity
+                    knockback_direction = 1 if mermelada.vel_x > 0 else -1
+                    player.take_damage(knockback_direction)
+                    # Create particle effect at impact point
+                    ParticleSystem.create_stomp_particles(mermelada.rect.centerx, mermelada.rect.centery, particles)
+                    mermelada.kill()  # Remove mermelada
+
             # Check for boss defeat (Level 5 only)
             if level and hasattr(level, 'boss') and level.boss:
                 if level.boss.defeated and not is_level_complete:
@@ -758,6 +790,14 @@ def main():
                         new_powerup.platforms = platforms  # Set platform reference for collision detection
                         powerups.add(new_powerup)
                         all_sprites.add(new_powerup)
+
+                    # Boss throws mermeladas in circular pattern (arcade-style)
+                    mermelada_list = level.boss.throw_mermeladas_circular()
+                    if mermelada_list is not None:
+                        for x, y, angle in mermelada_list:
+                            mermelada = Mermelada(x, y, angle)
+                            mermeladas.add(mermelada)
+                            all_sprites.add(mermelada)
 
             # Check for level completion (US-023, US-029, US-068)
             for goal in goals:

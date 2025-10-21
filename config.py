@@ -11,7 +11,7 @@ WINDOW_TITLE = "Coffee Bros"
 
 # Debug/Testing settings
 # Set to specific level number (1-5) to start at that level, or None to start from level 1
-DEBUG_START_LEVEL = 5  # Change to 5 to test boss fight directly!
+DEBUG_START_LEVEL = None  # Change to 5 to test boss fight directly!
 
 # Color constants
 BLACK = (0, 0, 0)

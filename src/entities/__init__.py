@@ -10,5 +10,6 @@ from .golden_arepa import GoldenArepa
 from .laser import Laser
 from .goal import Goal
 from .corruption_boss import CorruptionBoss
+from .mermelada import Mermelada
 
-__all__ = ['Player', 'Platform', 'Polocho', 'GoldenArepa', 'Laser', 'Goal', 'CorruptionBoss']
+__all__ = ['Player', 'Platform', 'Polocho', 'GoldenArepa', 'Laser', 'Goal', 'CorruptionBoss', 'Mermelada']

@@ -65,6 +65,7 @@ class AudioManager:
             "powerup": "powerup.wav",     # US-044: Powerup collection sound
             "death": "death.wav",         # US-045: Death sound effect
             "level_complete": "complete.wav",  # US-046: Level complete sound
+            "boss_pain": "boss_pain.wav",      # Boss pain/damage sound
         }
 
         # Load all sound effects (US-040)
@@ -82,6 +83,7 @@ class AudioManager:
             "menu": "menu_music.wav",      # Background music for menu screens
             "gameplay": "gameplay_music.wav",  # Background music for gameplay levels
             "victory": "victory_music.wav",    # Background music for victory screen
+            "boss_battle": "boss_battle.wav",  # Menacing boss battle music for final level
         }
 
         # Initialize music system (US-047)
@@ -264,6 +266,16 @@ class AudioManager:
             bool: True if sound played successfully, False otherwise
         """
         return self.play_sound("level_complete")
+
+    def play_boss_pain(self):
+        """
+        Play the boss pain sound effect.
+        Deep growl/grunt when boss takes damage.
+
+        Returns:
+            bool: True if sound played successfully, False otherwise
+        """
+        return self.play_sound("boss_pain")
 
     # Background Music Methods (US-047)
     def _init_music(self):
@@ -455,3 +467,13 @@ class AudioManager:
             bool: True if music started successfully, False otherwise
         """
         return self.play_music("victory", loops=-1, fade_ms=1000)
+
+    def play_boss_battle_music(self):
+        """
+        Play menacing boss battle music with infinite looping.
+        Used for final boss level (Level 5).
+
+        Returns:
+            bool: True if music started successfully, False otherwise
+        """
+        return self.play_music("boss_battle", loops=-1, fade_ms=1000)

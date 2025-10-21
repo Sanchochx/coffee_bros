@@ -23,6 +23,7 @@
   "platforms": [
     {"x": 0, "y": 550, "width": 1600, "height": 50, "type": "ground", "texture": "presidential_tile"},
     {"x": 300, "y": 400, "width": 200, "height": 30, "type": "floating", "texture": "presidential_tile"},
+    {"x": 700, "y": 300, "width": 200, "height": 30, "type": "floating", "texture": "presidential_tile"},
     {"x": 1100, "y": 400, "width": 200, "height": 30, "type": "floating", "texture": "presidential_tile"}
   ],
   "boss": {

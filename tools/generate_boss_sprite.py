@@ -11,13 +11,14 @@ import math
 pygame.init()
 
 # Boss sprite dimensions (much larger than regular enemies)
-BOSS_WIDTH = 150
-BOSS_HEIGHT = 180
+BOSS_WIDTH = 200
+BOSS_HEIGHT = 240
 
 def create_corruption_boss_sprite():
     """
     Create a corrupt politician boss sprite
     Human figure in suit with dollar sign eyes - representing political corruption
+    Scaled to 200x240 (33% larger than original 150x180)
     """
     surface = pygame.Surface((BOSS_WIDTH, BOSS_HEIGHT), pygame.SRCALPHA)
 
@@ -25,81 +26,81 @@ def create_corruption_boss_sprite():
     skin_color = (210, 180, 140)
     skin_shadow = (180, 150, 110)
 
-    # Draw head (oval)
-    head_center_x = 75
-    head_center_y = 50
-    pygame.draw.ellipse(surface, skin_color, (50, 25, 50, 60))  # Face
-    pygame.draw.ellipse(surface, skin_shadow, (50, 25, 50, 60), 2)  # Face outline
+    # Draw head (oval) - scaled
+    head_center_x = 100
+    head_center_y = 67
+    pygame.draw.ellipse(surface, skin_color, (67, 33, 67, 80))  # Face
+    pygame.draw.ellipse(surface, skin_shadow, (67, 33, 67, 80), 2)  # Face outline
 
     # Draw evil smirk
     mouth_color = (80, 20, 20)
-    pygame.draw.arc(surface, mouth_color, (60, 55, 30, 20), math.pi, 0, 3)  # Smirk
+    pygame.draw.arc(surface, mouth_color, (80, 73, 40, 27), math.pi, 0, 4)  # Smirk
 
     # Draw DOLLAR SIGN EYES (green money symbols)
     money_green = (0, 180, 0)
-    font = pygame.font.Font(None, 40)
+    font = pygame.font.Font(None, 53)  # Scaled font
     # Left eye
     dollar_left = font.render("$", True, money_green)
-    surface.blit(dollar_left, (55, 35))
+    surface.blit(dollar_left, (73, 47))
     # Right eye
     dollar_right = font.render("$", True, money_green)
-    surface.blit(dollar_right, (80, 35))
+    surface.blit(dollar_right, (107, 47))
 
     # Draw slicked-back hair (corrupt politician style)
     hair_color = (40, 40, 40)
-    pygame.draw.ellipse(surface, hair_color, (48, 20, 54, 30))  # Hair top
+    pygame.draw.ellipse(surface, hair_color, (64, 27, 72, 40))  # Hair top
 
     # Draw neck
-    pygame.draw.rect(surface, skin_shadow, (65, 80, 20, 15))
+    pygame.draw.rect(surface, skin_shadow, (87, 107, 27, 20))
 
     # Draw black suit jacket
     suit_color = (20, 20, 25)
     suit_highlight = (40, 40, 50)
 
-    # Jacket body (trapezoid shape)
+    # Jacket body (trapezoid shape) - scaled
     jacket_points = [
-        (45, 95),   # Top left shoulder
-        (105, 95),  # Top right shoulder
-        (120, 180), # Bottom right
-        (30, 180),  # Bottom left
+        (60, 127),   # Top left shoulder
+        (140, 127),  # Top right shoulder
+        (160, 240),  # Bottom right
+        (40, 240),   # Bottom left
     ]
     pygame.draw.polygon(surface, suit_color, jacket_points)
 
     # Jacket lapels
-    pygame.draw.polygon(surface, suit_highlight, [(45, 95), (60, 95), (70, 130)])  # Left lapel
-    pygame.draw.polygon(surface, suit_highlight, [(105, 95), (90, 95), (80, 130)])  # Right lapel
+    pygame.draw.polygon(surface, suit_highlight, [(60, 127), (80, 127), (93, 173)])  # Left lapel
+    pygame.draw.polygon(surface, suit_highlight, [(140, 127), (120, 127), (107, 173)])  # Right lapel
 
     # White dress shirt
     shirt_white = (240, 240, 245)
-    pygame.draw.polygon(surface, shirt_white, [(65, 95), (85, 95), (85, 140), (65, 140)])
+    pygame.draw.polygon(surface, shirt_white, [(87, 127), (113, 127), (113, 187), (87, 187)])
 
     # Red power tie (corrupt politician red tie)
     tie_red = (180, 0, 0)
-    pygame.draw.polygon(surface, tie_red, [(72, 95), (78, 95), (80, 140), (70, 140)])
+    pygame.draw.polygon(surface, tie_red, [(96, 127), (104, 127), (107, 187), (93, 187)])
 
     # Tie knot
-    pygame.draw.polygon(surface, (140, 0, 0), [(70, 95), (80, 95), (78, 102), (72, 102)])
+    pygame.draw.polygon(surface, (140, 0, 0), [(93, 127), (107, 127), (104, 136), (96, 136)])
 
     # Arms (reaching for money)
     # Left arm
-    pygame.draw.rect(surface, suit_color, (25, 110, 20, 50))
-    pygame.draw.circle(surface, skin_color, (35, 160), 10)  # Left hand
+    pygame.draw.rect(surface, suit_color, (33, 147, 27, 67))
+    pygame.draw.circle(surface, skin_color, (47, 213), 13)  # Left hand
 
     # Right arm
-    pygame.draw.rect(surface, suit_color, (105, 110, 20, 50))
-    pygame.draw.circle(surface, skin_color, (115, 160), 10)  # Right hand
+    pygame.draw.rect(surface, suit_color, (140, 147, 27, 67))
+    pygame.draw.circle(surface, skin_color, (153, 213), 13)  # Right hand
 
     # Money bags in hands (symbols of corruption)
     bag_color = (100, 200, 100)
     # Left money bag
-    pygame.draw.circle(surface, bag_color, (35, 165), 8)
-    money_font = pygame.font.Font(None, 20)
+    pygame.draw.circle(surface, bag_color, (47, 220), 11)
+    money_font = pygame.font.Font(None, 27)
     dollar = money_font.render("$", True, (0, 100, 0))
-    surface.blit(dollar, (31, 158))
+    surface.blit(dollar, (41, 211))
 
     # Right money bag
-    pygame.draw.circle(surface, bag_color, (115, 165), 8)
-    surface.blit(dollar, (111, 158))
+    pygame.draw.circle(surface, bag_color, (153, 220), 11)
+    surface.blit(dollar, (147, 211))
 
     return surface
 
