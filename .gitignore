@@ -151,3 +151,9 @@ cython_debug/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Game-specific files
+savegame.json
+settings.json
+game_output.txt
+*.log

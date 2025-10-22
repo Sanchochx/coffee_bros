@@ -16,7 +16,8 @@
       "Bash(cat \"C:\\Users\\santi\\OneDrive\\Documents\\devv\\claude_ai\\sancho_bros\\requirements.txt\")",
       "Bash(del rename_sancho_to_coffee.py)",
       "Bash(del:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
