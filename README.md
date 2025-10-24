@@ -93,13 +93,6 @@ deactivate
 ### Objective
 Guide the human hero Coffee through all 5 levels by reaching the castle at the end of each level while collecting points and defeating evil demon-like enemies.
 
-### Levels
-1. **Coffee Hills** - Tutorial level to learn the basics
-2. **Mountain Paths** - Increased difficulty with more platforming
-3. **Bean Valley** - Complex enemy patterns
-4. **Harvest Heights** - Challenging vertical gameplay
-5. **El Pico del Café** - Final level with ultimate challenges
-
 ### Scoring
 - **Stomp Enemy**: 100 points
 - **Laser Enemy**: 100 points
