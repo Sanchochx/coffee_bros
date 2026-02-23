@@ -157,3 +157,5 @@ savegame.json
 settings.json
 game_output.txt
 *.log
+
+.claude/
